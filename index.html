@@ -141,6 +141,7 @@ details[open] summary::after { content: "–"; }
 .guide ul { padding-left: 18px; margin: 6px 0 0; }
 .guide ul li { margin-bottom: 6px; }
 .en { color: var(--faint); font-size: 13px; }
+.kw { display: inline-block; margin-left: 4px; font-size: 12px; color: var(--muted); background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 0 8px; }
 code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 5px; overflow-wrap: anywhere; }
 .copy { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--accent); font-weight: 600; margin-left: 4px; vertical-align: middle; }
 .ver { text-align: center; color: var(--faint); font-size: 12px; margin-top: 20px; }
@@ -437,7 +438,12 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 
   var FLUFF = /(follow|folg(t|e)? (mir|uns)|link in (der )?bio|save (this|it|for later)|speicher(t)? (dir|euch)|share (this|with)|teil(e|t) (das|dieses|es)|comment|kommentier|recipe (below|in (the )?(caption|comments))|rezept (unten|in den kommentaren)|tag (a|someone|your)|markier|like (for|if)|turn on notifications|mehr rezepte|more recipes|^enjoy!*$|guten appetit|lass (es )?(dir|euch) schmecken|👇)/i;
 
+  // Bedienelemente, die beim Abfotografieren des Bildschirms (Instagram/TikTok) mit erkannt werden
+  var UI_NOISE = /^(?:folgen|follow(?:ing)?|abonniert|gefällt(?: mir)?(?:[\s\d.,]+mal)?|\d[\d.,]*\s*(?:mal\s+)?(?:likes?|gefällt|kommentare?|comments?|mal geteilt|shares?|aufrufe|views|mio\.?|tsd\.?|[kmb])|likes?|kommentare?|comments?|kommentieren|teilen|share|senden|send|speichern|gespeichert|save|original-?audio.*|audio|originalton.*|original sound.*|folge ich|folgst du|abonniert|mehr|more|weniger|less|übersetzung anzeigen|see translation|antworten|reply|remix|für dich|for you|entdecken|explore|reels?|home|startseite|suche|search|profil|profile|posteingang|inbox|live|freunde|friends|[\d.,]+\s*[kmb]?|\d{1,2}:\d{2}(?:\s*(?:uhr))?|vor \d+.*|\d+\s*(?:std|h|min|tag|tage|woche|wochen|w|d)\.?(?: ago| her)?|@[\w.]+(?:\s*[•·]\s*folgen)?|[\w.]+\s*[•·]\s*(?:folgen|follow)|.*\b(?:gefällt|liked by)\b.*\b(?:und|and)\b.*(?:weiteren|others).*)$/i;
+
   function isJunk(l) {
+    if (UI_NOISE.test(l.replace(/[\s.…]+$/, '').trim())) return true;
+    if (l.length < 22 && /(?:^|[^a-z])(?:5g|4g|3g|lte|wlan|wi-?fi)(?:[^a-z]|$)/i.test(l)) return true;
     var letters = l.replace(/#[\p{L}\p{N}_]+|@[\w.]+/gu, '').replace(/[^\p{L}\p{N}]/gu, '');
     if (letters.length < 2) return true;
     if (l.length < 90 && FLUFF.test(l)) return true;
@@ -1270,7 +1276,7 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
       (S.importHint ? '<div class="note-box">' + ic('info', 18) + '<span>' + S.importHint + '</span></div>' : '') +
       '<textarea class="big" data-bind="importText" placeholder="z. B. „Easy garlic pasta 🍝 Ingredients: 200g spaghetti, 4 cloves garlic, 1/4 cup olive oil …“" aria-label="Video-Beschreibung">' + esc(S.importText) + '</textarea>' +
       '<div class="btn-row">' +
-        '<button class="btn ghost" data-a="paste-into">' + ic('clipboard', 18) + 'Einfügen</button>' +
+        '<button class="btn ghost" data-a="paste-into">' + ic('clipboard', 18) + (S.importText.trim() ? 'Teil anhängen' : 'Einfügen') + '</button>' +
         '<button class="btn accent" data-a="parse">' + ic('wand', 18) + 'Rezept erkennen</button>' +
       '</div>' +
       (S.importHint && S.importText.trim() ? '<div class="btn-row"><button class="btn ghost" data-a="raw">Trotzdem als Rezept anlegen</button></div>' : '') +
@@ -1280,36 +1286,35 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
   function copyBtn(text) { return '<button class="copy" data-a="copy" data-text="' + esc(text) + '">' + ic('copy', 14) + 'kopieren</button>'; }
 
   function shareGuide() {
-    return '<p>Einmal einrichten (ca. 5 Minuten), danach geht es so: im Video auf <b>Teilen</b> → <b>Rezept speichern</b> → hier <b>Geteiltes Rezept einfügen</b> tippen → prüfen → speichern.</p>' +
-      '<details><summary>Kurzbefehl 1: „Rezept speichern“ – für TikTok &amp; Text</summary><ol class="guide">' +
-        '<li>Öffne die App <b>Kurzbefehle</b>, tippe auf <b>+</b> und benenne den Kurzbefehl oben in <b>Rezept speichern</b>.</li>' +
-        '<li>Tippe unten auf <b>ⓘ</b> und aktiviere <b>Im Share-Sheet anzeigen</b>. Oben steht dann „Empfangen: <b>Alle Typen</b>“ – tippe darauf und lass nur <b>Text</b> und <b>URLs</b> an.</li>' +
-        '<li>Füge die Aktion <b>Wenn</b> hinzu <span class="en">(If)</span>. Bedingung: <b>Kurzbefehleingabe</b> · <b>enthält</b> · <code>tiktok</code></li>' +
-        '<li>Zieh in den <b>Wenn</b>-Teil nacheinander diese Aktionen (über das Suchfeld unten finden):<ul>' +
-          '<li><b>URLs aus Eingabe abrufen</b> <span class="en">(Get URLs from Input)</span> – Eingabe: Kurzbefehleingabe</li>' +
-          '<li><b>URL erweitern</b> <span class="en">(Expand URL)</span></li>' +
-          '<li><b>Text</b> – Inhalt: <code>https://www.tiktok.com/oembed?url=</code>' + copyBtn('https://www.tiktok.com/oembed?url=') + ' und direkt dahinter die Variable <b>Erweiterte URL</b></li>' +
-          '<li><b>Inhalte von URL abrufen</b> <span class="en">(Get Contents of URL)</span></li>' +
-          '<li><b>Wörterbuchwert abrufen</b> <span class="en">(Get Dictionary Value)</span> – Schlüssel: <code>title</code>' + copyBtn('title') + '</li>' +
-          '<li><b>Text</b> – Inhalt: Variable <b>Wörterbuchwert</b>, neue Zeile, Variable <b>Erweiterte URL</b> (so bleibt der Video-Link im Rezept)</li>' +
-          '<li><b>In Zwischenablage kopieren</b> <span class="en">(Copy to Clipboard)</span></li></ul></li>' +
-        '<li>In den <b>Sonst</b>-Teil: <b>In Zwischenablage kopieren</b> mit <b>Kurzbefehleingabe</b>.</li>' +
-        '<li>Ganz unten nach <b>Ende</b>: <b>Mitteilung anzeigen</b> <span class="en">(Show Notification)</span> – Text: „Rezept kopiert – Karim’s Rezepte öffnen und einfügen“.</li>' +
+    var kw = function (w) { return ' <span class="kw">Suchwort: ' + w + '</span>'; };
+    return '<p>Tipp: In der Kurzbefehle-App findest du jede Aktion über das Suchfeld unten („Aktionen suchen“). Gib einfach das <b>Suchwort</b> ein – die genauen Namen können je nach iOS-Version leicht abweichen.</p>' +
+      '<details open><summary>Am einfachsten: „Rezept vom Bildschirm“ – für Instagram &amp; TikTok</summary>' +
+        '<p style="margin-top:10px">Du klappst die Beschreibung im Video auf und tippst zweimal auf die Rückseite des iPhones. Der Kurzbefehl macht im Hintergrund ein Bildschirmfoto, liest den Text heraus und kopiert ihn – ohne dass Screenshots in deinen Fotos landen.</p><ol class="guide">' +
+        '<li>App <b>Kurzbefehle</b> → unten <b>Kurzbefehle</b> → oben rechts <b>+</b>. Oben auf den Namen tippen → <b>Umbenennen</b> → <b>Rezept vom Bildschirm</b>.</li>' +
+        '<li>Aktion <b>Bildschirmfoto aufnehmen</b> hinzufügen.' + kw('Bildschirmfoto') + '</li>' +
+        '<li>Aktion <b>Text aus Bild extrahieren</b> hinzufügen – sie nimmt automatisch das Bildschirmfoto.' + kw('Text aus Bild') + '</li>' +
+        '<li>Aktion <b>In Zwischenablage kopieren</b>.' + kw('Zwischenablage') + '</li>' +
+        '<li>Aktion <b>Mitteilung anzeigen</b> – Text z. B. „Rezept kopiert“.' + kw('Mitteilung') + '</li>' +
+        '<li>Fertig tippen. Dann in den iPhone-<b>Einstellungen</b> → <b>Bedienungshilfen</b> → <b>Tippen</b> → ganz unten <b>Auf Rückseite tippen</b> → <b>Doppeltippen</b> → runterscrollen und <b>Rezept vom Bildschirm</b> wählen.</li>' +
+        '<li>Hast du ein iPhone mit <b>Aktionstaste</b> (seitlich links), geht es auch dort: Einstellungen → <b>Aktionstaste</b> → <b>Kurzbefehl</b> → Rezept vom Bildschirm.</li>' +
       '</ol></details>' +
-      '<details><summary>Kurzbefehl 2: „Rezept aus Screenshot“ – für Instagram</summary>' +
-        '<p style="margin-top:10px">Instagram gibt beim Teilen nur den Link weiter, nicht die Beschreibung. Darum liest dieser Kurzbefehl den Text aus einem Screenshot – komplett auf dem iPhone.</p><ol class="guide">' +
-        '<li>Neuer Kurzbefehl, Name <b>Rezept aus Screenshot</b>. Unter <b>ⓘ</b> <b>Im Share-Sheet anzeigen</b> aktivieren und als Typ nur <b>Bilder</b> lassen.</li>' +
-        '<li><b>Wiederholen mit jedem Objekt</b> <span class="en">(Repeat with Each)</span> – in: Kurzbefehleingabe</li>' +
-        '<li>Darin: <b>Text aus Bild extrahieren</b> <span class="en">(Extract Text from Image)</span> – Bild: Wiederholungsobjekt</li>' +
-        '<li>Nach <b>Wiederholung beenden</b>: <b>Text kombinieren</b> <span class="en">(Combine Text)</span> – Wiederholungsergebnisse, Trennzeichen: <b>Neue Zeile</b></li>' +
-        '<li><b>In Zwischenablage kopieren</b>, danach <b>Mitteilung anzeigen</b> wie bei Kurzbefehl 1.</li>' +
+      '<details><summary>Zusätzlich für TikTok: „Rezept speichern“ über Teilen</summary>' +
+        '<p style="margin-top:10px">Holt bei TikTok die komplette Beschreibung direkt über den Link – auch Text, der nicht auf den Bildschirm passt.</p><ol class="guide">' +
+        '<li>Neuer Kurzbefehl, Name <b>Rezept speichern</b>.</li>' +
+        '<li>Unten auf das <b>ⓘ</b>-Symbol (Details) → <b>Im Share-Sheet anzeigen</b> einschalten → <b>Fertig</b>. Oben erscheint ein Block „Empfangen … Eingabe von Share-Sheet“.</li>' +
+        '<li>Aktion <b>URL erweitern</b>.' + kw('erweitern') + ' Als URL die blaue Variable <b>Kurzbefehleingabe</b> wählen.</li>' +
+        '<li>Aktion <b>Text</b>.' + kw('Text') + ' Hineinschreiben: <code>https://www.tiktok.com/oembed?url=</code>' + copyBtn('https://www.tiktok.com/oembed?url=') + ' und direkt dahinter über die Leiste über der Tastatur die Variable <b>Erweiterte URL</b> einfügen.</li>' +
+        '<li>Aktion <b>Inhalte von URL abrufen</b>.' + kw('Inhalte') + '</li>' +
+        '<li>Aktion <b>Wörterbuchwert abrufen</b>.' + kw('Wörterbuch') + ' Auf „Schlüssel“ tippen und <code>title</code>' + copyBtn('title') + ' eintragen.</li>' +
+        '<li>Aktion <b>In Zwischenablage kopieren</b> und danach <b>Mitteilung anzeigen</b> wie oben.</li>' +
       '</ol></details>' +
       '<details><summary>So benutzt du es</summary><ol class="guide">' +
-        '<li><b>TikTok:</b> Video öffnen → Teilen-Pfeil → ggf. <b>Mehr</b> → <b>Rezept speichern</b>.</li>' +
-        '<li><b>Instagram:</b> Beschreibung mit „mehr“ aufklappen, Screenshot machen (bei langen Texten mehrere). Screenshot(s) in Fotos auswählen → Teilen → <b>Rezept aus Screenshot</b>.</li>' +
-        '<li>Karim’s Rezepte über das Symbol öffnen → <b>Geteiltes Rezept einfügen</b> → iPhone fragt kurz nach „Einfügen“ → bestätigen → Rezept prüfen → <b>Speichern</b>.</li>' +
+        '<li><b>Instagram / TikTok:</b> Video öffnen, Beschreibung mit „mehr“ aufklappen → zweimal auf die Rückseite tippen. Passt der Text nicht ganz auf den Bildschirm: erst den oberen Teil, in der App einfügen, dann hinunterscrollen, nochmal tippen und <b>Teil anhängen</b>.</li>' +
+        '<li><b>TikTok über Teilen:</b> Teilen-Pfeil → ganz rechts <b>Mehr</b> → <b>Rezept speichern</b>.</li>' +
+        '<li>Danach Karim’s Rezepte öffnen → <b>Geteiltes Rezept einfügen</b> → „Einfügen erlauben“ bestätigen → Rezept prüfen → <b>Speichern</b>.</li>' +
       '</ol></details>';
   }
+
 
   function viewSettings() {
     var n = S.recipes.length;
@@ -1588,7 +1593,7 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
     if (p.ingredients.length || p.steps.length) { go('form', { form: formFromParsed(p), importHint: '' }); return; }
     var hint;
     if (/instagram\.com/i.test(text)) {
-      hint = 'Von Instagram ist nur der Link angekommen – Instagram gibt die Beschreibung beim Teilen nicht weiter. Mach einen <b>Screenshot der Beschreibung</b> und teile ihn an den Kurzbefehl <b>„Rezept aus Screenshot“</b>.';
+      hint = 'Von Instagram ist nur der Link angekommen – Instagram gibt die Beschreibung beim Teilen nicht weiter. Klapp die Beschreibung im Video auf und tippe zweimal auf die Rückseite des iPhones (Kurzbefehl <b>„Rezept vom Bildschirm“</b>, Anleitung unter Hilfe &amp; Backup).';
     } else if (/tiktok\.com/i.test(text)) {
       hint = 'Von TikTok ist nur der Link angekommen. Prüfe im Kurzbefehl „Rezept speichern“ den TikTok-Teil (Hilfe &amp; Backup → Kurzbefehl 1) oder füge die Beschreibung hier ein.';
     } else {
@@ -1804,7 +1809,10 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
       case 'paste': pasteFlow(); break;
       case 'paste-into':
         readClipboard().then(function (t) {
-          S.importText = t || '';
+          t = t || '';
+          var had = S.importText.trim();
+          if (had && t.trim() && had.indexOf(t.trim()) === -1) { S.importText = had + '\n' + t; toast('Teil angehängt'); }
+          else S.importText = t || S.importText;
           S.importHint = '';
           render();
         }).catch(function () { toast('Tippe lange ins Textfeld und wähle „Einfügen“.'); });

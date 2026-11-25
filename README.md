@@ -12,39 +12,19 @@ Rezepte speichern, Koch-Videos von TikTok und Instagram übernehmen und Einkaufs
 
 ## Teilen aus TikTok und Instagram
 
-Die Schritt-für-Schritt-Anleitung für die zwei Kurzbefehle steht in der App unter dem **Regler-Symbol oben rechts → Hilfe & Backup**.
+Die Schritt-für-Schritt-Anleitung steht in der App unter dem **Regler-Symbol oben rechts → Hilfe & Backup**. Jede Aktion findest du in der Kurzbefehle-App über das Suchfeld unten („Aktionen suchen“) mit dem angegebenen Suchwort.
 
-### Kurzbefehl 1: „Rezept speichern“ (TikTok und Text)
+### Am einfachsten: „Rezept vom Bildschirm“ (Instagram & TikTok)
 
-1. App **Kurzbefehle** öffnen → **+** → Name: **Rezept speichern**.
-2. Unten auf **ⓘ** → **Im Share-Sheet anzeigen** aktivieren. Oben „Empfangen: Alle Typen“ antippen → nur **Text** und **URLs** anlassen.
-3. Aktion **Wenn** (If) hinzufügen. Bedingung: **Kurzbefehleingabe** · **enthält** · `tiktok`
-4. In den **Wenn**-Teil nacheinander:
-   - **URLs aus Eingabe abrufen** (Get URLs from Input) – Eingabe: Kurzbefehleingabe
-   - **URL erweitern** (Expand URL)
-   - **Text** – Inhalt: `https://www.tiktok.com/oembed?url=` und direkt dahinter die Variable **Erweiterte URL**
-   - **Inhalte von URL abrufen** (Get Contents of URL)
-   - **Wörterbuchwert abrufen** (Get Dictionary Value) – Schlüssel: `title`
-   - **Text** – Inhalt: Variable **Wörterbuchwert**, neue Zeile, Variable **Erweiterte URL**
-   - **In Zwischenablage kopieren** (Copy to Clipboard)
-5. In den **Sonst**-Teil: **In Zwischenablage kopieren** mit **Kurzbefehleingabe**.
-6. Ganz unten nach **Ende**: **Mitteilung anzeigen** (Show Notification) – „Rezept kopiert – Karim’s Rezepte öffnen und einfügen“.
+1. Kurzbefehle → **+** → oben auf den Namen → **Umbenennen** → „Rezept vom Bildschirm“.
+2. Aktionen hinzufügen: **Bildschirmfoto aufnehmen** (Suchwort „Bildschirmfoto“) → **Text aus Bild extrahieren** („Text aus Bild“) → **In Zwischenablage kopieren** („Zwischenablage“) → **Mitteilung anzeigen** („Mitteilung“).
+3. iPhone-Einstellungen → **Bedienungshilfen** → **Tippen** → **Auf Rückseite tippen** → **Doppeltippen** → „Rezept vom Bildschirm“. (Oder bei iPhones mit Aktionstaste: Einstellungen → **Aktionstaste** → **Kurzbefehl**.)
 
-### Kurzbefehl 2: „Rezept aus Screenshot“ (Instagram)
+Benutzen: Beschreibung im Video mit „mehr“ aufklappen → zweimal auf die Rückseite tippen → Karim’s Rezepte öffnen → **Geteiltes Rezept einfügen** → prüfen → **Speichern**. Passt der Text nicht auf einen Bildschirm: unter **+ Rezept → Aus Video-Beschreibung** den ersten Teil einfügen, weiterscrollen, nochmal tippen und **Teil anhängen**.
 
-Instagram gibt beim Teilen nur den Link weiter, nicht die Beschreibung. Dieser Kurzbefehl liest den Text deshalb aus Screenshots – direkt auf dem iPhone.
+### Zusätzlich für TikTok: „Rezept speichern“ über Teilen
 
-1. Neuer Kurzbefehl, Name **Rezept aus Screenshot**. Unter **ⓘ** „Im Share-Sheet anzeigen“ aktivieren, als Typ nur **Bilder**.
-2. **Wiederholen mit jedem Objekt** (Repeat with Each) – in: Kurzbefehleingabe
-3. Darin: **Text aus Bild extrahieren** (Extract Text from Image) – Bild: Wiederholungsobjekt
-4. Nach **Wiederholung beenden**: **Text kombinieren** (Combine Text) – Wiederholungsergebnisse, Trennzeichen: Neue Zeile
-5. **In Zwischenablage kopieren**, dann **Mitteilung anzeigen**.
-
-### So benutzt du es
-
-- **TikTok:** Video → Teilen-Pfeil → ggf. **Mehr** → **Rezept speichern**
-- **Instagram:** Beschreibung mit „mehr“ aufklappen → Screenshot (bei langen Texten mehrere) → in Fotos auswählen → Teilen → **Rezept aus Screenshot**
-- Dann: App öffnen → **Geteiltes Rezept einfügen** → „Einfügen“ bestätigen → prüfen → **Speichern**
+Holt die komplette Beschreibung über den Link. Aufbau: Details (ⓘ) → **Im Share-Sheet anzeigen** · **URL erweitern** (Kurzbefehleingabe) · **Text** `https://www.tiktok.com/oembed?url=` + Erweiterte URL · **Inhalte von URL abrufen** · **Wörterbuchwert abrufen** (Schlüssel `title`) · **In Zwischenablage kopieren** · **Mitteilung anzeigen**.
 
 ## Einkaufsliste und Preise
 
