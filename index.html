@@ -436,7 +436,7 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
       .trim();
   }
 
-  var FLUFF = /(follow|folg(t|e)? (mir|uns)|link in (der )?bio|save (this|it|for later)|speicher(t)? (dir|euch)|share (this|with)|teil(e|t) (das|dieses|es)|comment|kommentier|recipe (below|in (the )?(caption|comments))|rezept (unten|in den kommentaren)|tag (a|someone|your)|markier|like (for|if)|turn on notifications|mehr rezepte|more recipes|^enjoy!*$|guten appetit|lass (es )?(dir|euch) schmecken|👇)/i;
+  var FLUFF = /(follow|folg(t|e)? (mir|uns)|link in (der )?bio|save (this|it|for later)|speicher(t)? (dir|euch)|share (this|with)|teil(e|t) (das|dieses|es)|comment|kommentier|recipe (below|in (the )?(caption|comments))|rezept (unten|in den kommentaren)|tag (a|someone|your)|markier|like (for|if)|turn on notifications|get the [\w' ]{0,20}app|download (the|our) app|open in (the )?app|in der app öffnen|app (herunterladen|laden|holen)|jetzt herunterladen|cookies? (akzeptieren|zulassen|einstellungen)|accept (all )?cookies|datenschutz|impressum|newsletter|anmelden|login|sign (in|up)|mehr rezepte|more recipes|^enjoy!*$|guten appetit|lass (es )?(dir|euch) schmecken|👇)/i;
 
   // Bedienelemente, die beim Abfotografieren des Bildschirms (Instagram/TikTok) mit erkannt werden
   var UI_NOISE = /^(?:folgen|follow(?:ing)?|abonniert|gefällt(?: mir)?(?:[\s\d.,]+mal)?|\d[\d.,]*\s*(?:mal\s+)?(?:likes?|gefällt|kommentare?|comments?|mal geteilt|shares?|aufrufe|views|mio\.?|tsd\.?|[kmb])|likes?|kommentare?|comments?|kommentieren|teilen|share|senden|send|speichern|gespeichert|save|original-?audio.*|audio|originalton.*|original sound.*|folge ich|folgst du|abonniert|mehr|more|weniger|less|übersetzung anzeigen|see translation|antworten|reply|remix|für dich|for you|entdecken|explore|reels?|home|startseite|suche|search|profil|profile|posteingang|inbox|live|freunde|friends|[\d.,]+\s*[kmb]?|\d{1,2}:\d{2}(?:\s*(?:uhr))?|vor \d+.*|\d+\s*(?:std|h|min|tag|tage|woche|wochen|w|d)\.?(?: ago| her)?|@[\w.]+(?:\s*[•·]\s*folgen)?|[\w.]+\s*[•·]\s*(?:folgen|follow)|.*\b(?:gefällt|liked by)\b.*\b(?:und|and)\b.*(?:weiteren|others).*)$/i;
@@ -1285,6 +1285,8 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
 
   function copyBtn(text) { return '<button class="copy" data-a="copy" data-text="' + esc(text) + '">' + ic('copy', 14) + 'kopieren</button>'; }
 
+  var WEB_SCRIPT = "var out = '';\ntry {\n  var find = function (o) {\n    if (!o || typeof o !== 'object') return null;\n    if (Array.isArray(o)) { for (var i = 0; i < o.length; i++) { var r = find(o[i]); if (r) return r; } return null; }\n    var t = o['@type'];\n    if (t === 'Recipe' || (Array.isArray(t) && t.indexOf('Recipe') > -1)) return o;\n    return find(o['@graph']);\n  };\n  var steps = function (s, a) {\n    if (!s) return a;\n    if (typeof s === 'string') { a.push(s); return a; }\n    if (Array.isArray(s)) { s.forEach(function (x) { steps(x, a); }); return a; }\n    if (s.itemListElement) return steps(s.itemListElement, a);\n    if (s.text) a.push(s.text);\n    return a;\n  };\n  var min = function (d) {\n    var m = /PT(?:(\\d+)H)?(?:(\\d+)M)?/.exec(d || '');\n    return m ? (+(m[1] || 0)) * 60 + (+(m[2] || 0)) : 0;\n  };\n  var ld = document.querySelectorAll('script[type=\"application/ld+json\"]');\n  for (var i = 0; i < ld.length && !out; i++) {\n    var r = null;\n    try { r = find(JSON.parse(ld[i].textContent)); } catch (e) {}\n    if (r) {\n      var y = (String([].concat(r.recipeYield || '')[0]).match(/\\d+/) || [''])[0];\n      var z = min(r.totalTime) || min(r.cookTime) + min(r.prepTime);\n      out = [r.name || document.title,\n        y ? 'Portionen: ' + y : '',\n        z ? 'Zeit: ' + z + ' Minuten' : '',\n        'Zutaten:'].concat(r.recipeIngredient || [], ['Zubereitung:'], steps(r.recipeInstructions, []))\n        .filter(Boolean).join('\\n');\n    }\n  }\n} catch (e) {}\nif (!out) out = document.body.innerText;\ncompletion(out + '\\n' + location.href);";
+
   function shareGuide() {
     var kw = function (w) { return ' <span class="kw">Suchwort: ' + w + '</span>'; };
     return '<p>Tipp: In der Kurzbefehle-App findest du jede Aktion über das Suchfeld unten („Aktionen suchen“). Gib einfach das <b>Suchwort</b> ein – die genauen Namen können je nach iOS-Version leicht abweichen.</p>' +
@@ -1311,6 +1313,15 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
         '<li><b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Inhalt der URL</b>. Die App liest die Beschreibung daraus selbst heraus.</li>' +
         '<li><b>Mitteilung anzeigen</b>' + kw('Mitteilung') + ' – Text „Rezept kopiert“.</li>' +
       '</ol></details>' +
+      '<details><summary>Rezepte aus Webseiten &amp; Osta: „Rezept aus Webseite“</summary>' +
+        '<p style="margin-top:10px">Liest das Rezept aus einer Seite, die in Safari offen ist – z. B. Chefkoch, Rezeptblogs oder geteilte Osta-Links.</p><ol class="guide">' +
+        '<li>Neuer Kurzbefehl, Name <b>Rezept aus Webseite</b>. Unten auf <b>ⓘ</b> → <b>Im Share-Sheet anzeigen</b> → Fertig.</li>' +
+        '<li>Aktion <b>JavaScript auf Webseite ausführen</b>' + kw('JavaScript') + '. Sie nimmt automatisch die <b>Kurzbefehleingabe</b>.</li>' +
+        '<li>Hier das Skript kopieren: ' + copyBtn(WEB_SCRIPT) + ' – dann im grauen Code-Feld der Aktion alles markieren, löschen und das Skript einfügen.</li>' +
+        '<li>Aktion <b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Ergebnis von JavaScript</b>.</li>' +
+        '<li>Aktion <b>Mitteilung anzeigen</b>' + kw('Mitteilung') + ' – „Rezept kopiert“.</li>' +
+        '<li>Kommt beim ersten Mal die Meldung, dass Skripts nicht erlaubt sind: iPhone-Einstellungen → <b>Apps</b> → <b>Kurzbefehle</b> → <b>Erweitert</b> → Skripts ausführen erlauben. Fragt der Kurzbefehl, ob er auf die Webseite zugreifen darf: <b>Immer erlauben</b>.</li>' +
+      '</ol><p><b>Benutzen:</b> Seite in <b>Safari</b> öffnen (bei Osta: Rezept teilen → Link kopieren → in Safari einfügen) → warten, bis das Rezept zu sehen ist → <b>Teilen</b> → <b>Rezept aus Webseite</b> → in der App <b>Geteiltes Rezept einfügen</b>.</p></details>' +
       '<details><summary>So benutzt du es</summary><ol class="guide">' +
         '<li><b>Instagram / TikTok:</b> Video öffnen, Beschreibung mit „mehr“ aufklappen → zweimal auf die Rückseite tippen. Passt der Text nicht ganz auf den Bildschirm: erst den oberen Teil, in der App einfügen, dann hinunterscrollen, nochmal tippen und <b>Teil anhängen</b>.</li>' +
         '<li><b>TikTok über Teilen:</b> Teilen-Pfeil → ganz rechts <b>Mehr</b> → <b>Rezept speichern</b>.</li>' +

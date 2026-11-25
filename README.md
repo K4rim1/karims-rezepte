@@ -26,6 +26,10 @@ Benutzen: Beschreibung im Video mit „mehr“ aufklappen → zweimal auf die R�
 
 Holt die komplette Beschreibung über den Link. Aufbau: Details (ⓘ) → **Im Share-Sheet anzeigen** · **URLs aus Eingabe abrufen** (Kurzbefehleingabe) · **Objekt aus Liste abrufen** (Erstes Objekt) · **URL erweitern** · **URL codieren** · **Text** `https://www.tiktok.com/oembed?url=` + Text der codierten URL · **Inhalte von URL abrufen** (Text) · **In Zwischenablage kopieren** (Inhalt der URL) · **Mitteilung anzeigen**. Die App liest die Beschreibung aus der TikTok-Antwort selbst heraus.
 
+### Rezepte aus Webseiten & Osta: „Rezept aus Webseite“
+
+Liest das Rezept aus einer Seite, die in Safari offen ist (Chefkoch, Rezeptblogs, geteilte Osta-Links). Aufbau: Details (ⓘ) → **Im Share-Sheet anzeigen** · **JavaScript auf Webseite ausführen** (Skript per Kopierknopf aus der App unter Hilfe & Backup) · **In Zwischenablage kopieren** (Ergebnis von JavaScript) · **Mitteilung anzeigen**. Benutzen: Seite in Safari öffnen → Teilen → „Rezept aus Webseite“ → in der App einfügen.
+
 ## Einkaufsliste und Preise
 
 - Im Rezept die **Portionen** mit − / + einstellen und **Auf die Einkaufsliste** tippen – oder oben auf das **Wagen-Symbol**.
