@@ -52,7 +52,7 @@ Instagram gibt beim Teilen nur den Link weiter, nicht die Beschreibung. Dieser K
 - Gleiche Zutaten aus mehreren Rezepten werden zusammengezählt. Salz, Öl, Gewürze & Co. stehen unter „Hast du wahrscheinlich daheim“.
 - **Günstigste Mischung** zeigt jede Zutat beim billigsten Laden; tippst du auf einen Laden, siehst du alles dort.
 - Die Preise kommen jeden Morgen automatisch von **heisse-preise.io**, einem Open-Source-Preisvergleich für österreichische Supermärkte. Es sind Richtwerte; die Zuordnung Produkt ↔ Zutat passiert über den Produktnamen. Prüfen kannst du sie unter https://k4rim1.github.io/karims-rezepte/preise-check.txt
-- Bei Lidl und Penny enthalten die Daten oft nur Aktionen – dort fehlen eher Artikel.
+- Stand November 2026 liefert die Quelle nur für **Billa** tagesaktuelle Preise. **Spar** ist zuletzt vom 27.09.2026, **Hofer** vom 07.11.2025 – die App zeigt das Datum an und blendet Läden mit Daten älter als vier Monate standardmäßig aus (in Hilfe & Backup einschaltbar). **Lidl und Penny** sind in den Daten nicht enthalten. Sobald heisse-preise.io wieder aktuelle Daten liefert, übernimmt die App sie automatisch.
 
 ## Wartung
 
