@@ -24,7 +24,7 @@ Benutzen: Beschreibung im Video mit „mehr“ aufklappen → zweimal auf die R�
 
 ### Zusätzlich für TikTok: „Rezept speichern“ über Teilen
 
-Holt die komplette Beschreibung über den Link. Aufbau: Details (ⓘ) → **Im Share-Sheet anzeigen** · **URL erweitern** (Kurzbefehleingabe) · **Text** `https://www.tiktok.com/oembed?url=` + Erweiterte URL · **Inhalte von URL abrufen** · **Wörterbuchwert abrufen** (Schlüssel `title`) · **In Zwischenablage kopieren** · **Mitteilung anzeigen**.
+Holt die komplette Beschreibung über den Link. Aufbau: Details (ⓘ) → **Im Share-Sheet anzeigen** · **URLs aus Eingabe abrufen** (Kurzbefehleingabe) · **Objekt aus Liste abrufen** (Erstes Objekt) · **URL erweitern** · **URL codieren** · **Text** `https://www.tiktok.com/oembed?url=` + Text der codierten URL · **Inhalte von URL abrufen** (Text) · **In Zwischenablage kopieren** (Inhalt der URL) · **Mitteilung anzeigen**. Die App liest die Beschreibung aus der TikTok-Antwort selbst heraus.
 
 ## Einkaufsliste und Preise
 

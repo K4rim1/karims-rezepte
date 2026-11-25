@@ -1301,12 +1301,15 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
       '<details><summary>Zusätzlich für TikTok: „Rezept speichern“ über Teilen</summary>' +
         '<p style="margin-top:10px">Holt bei TikTok die komplette Beschreibung direkt über den Link – auch Text, der nicht auf den Bildschirm passt.</p><ol class="guide">' +
         '<li>Neuer Kurzbefehl, Name <b>Rezept speichern</b>.</li>' +
-        '<li>Unten auf das <b>ⓘ</b>-Symbol (Details) → <b>Im Share-Sheet anzeigen</b> einschalten → <b>Fertig</b>. Oben erscheint ein Block „Empfangen … Eingabe von Share-Sheet“.</li>' +
-        '<li>Aktion <b>URL erweitern</b>.' + kw('erweitern') + ' Als URL die blaue Variable <b>Kurzbefehleingabe</b> wählen.</li>' +
-        '<li>Aktion <b>Text</b>.' + kw('Text') + ' Hineinschreiben: <code>https://www.tiktok.com/oembed?url=</code>' + copyBtn('https://www.tiktok.com/oembed?url=') + ' und direkt dahinter über die Leiste über der Tastatur die Variable <b>Erweiterte URL</b> einfügen.</li>' +
-        '<li>Aktion <b>Inhalte von URL abrufen</b>.' + kw('Inhalte') + '</li>' +
-        '<li>Aktion <b>Wörterbuchwert abrufen</b>.' + kw('Wörterbuch') + ' Auf „Schlüssel“ tippen und <code>title</code>' + copyBtn('title') + ' eintragen.</li>' +
-        '<li>Aktion <b>In Zwischenablage kopieren</b> und danach <b>Mitteilung anzeigen</b> wie oben.</li>' +
+        '<li>Unten auf das <b>ⓘ</b>-Symbol (Details) → <b>Im Share-Sheet anzeigen</b> einschalten → <b>Fertig</b>. Oben erscheint ein Block „… von Share-Sheet erhalten“.</li>' +
+        '<li><b>URLs aus Eingabe abrufen</b>' + kw('URLs aus') + ' – mit <b>Kurzbefehleingabe</b>.</li>' +
+        '<li><b>Objekt aus Liste abrufen</b>' + kw('Objekt aus Liste') + ' – <b>Erstes Objekt</b> aus <b>URLs</b>.</li>' +
+        '<li><b>URL erweitern</b>' + kw('erweitern') + ' – mit <b>Objekt aus Liste</b>.</li>' +
+        '<li><b>URL codieren</b>' + kw('codieren') + ' – mit <b>Erweiterte URL</b>.</li>' +
+        '<li><b>Text</b>' + kw('Text') + ': <code>https://www.tiktok.com/oembed?url=</code>' + copyBtn('https://www.tiktok.com/oembed?url=') + ' und direkt dahinter (ohne Leerzeichen) die Variable <b>Text der codierten URL</b>.</li>' +
+        '<li><b>Inhalte von URL abrufen</b>' + kw('Inhalte') + ' – mit der gelben Variable <b>Text</b>.</li>' +
+        '<li><b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Inhalt der URL</b>. Die App liest die Beschreibung daraus selbst heraus.</li>' +
+        '<li><b>Mitteilung anzeigen</b>' + kw('Mitteilung') + ' – Text „Rezept kopiert“.</li>' +
       '</ol></details>' +
       '<details><summary>So benutzt du es</summary><ol class="guide">' +
         '<li><b>Instagram / TikTok:</b> Video öffnen, Beschreibung mit „mehr“ aufklappen → zweimal auf die Rückseite tippen. Passt der Text nicht ganz auf den Bildschirm: erst den oberen Teil, in der App einfügen, dann hinunterscrollen, nochmal tippen und <b>Teil anhängen</b>.</li>' +
@@ -1588,14 +1591,40 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; b
     return { mode: 'review', id: null, createdAt: null, title: p.title, minutes: p.minutes, servings: p.servings, source: p.source, notes: p.notes, ingredients: p.ingredients.join('\n'), steps: p.steps.join('\n') };
   }
 
+  // Antwort der TikTok-Schnittstelle (JSON) direkt verstehen: Beschreibung steht in "title"
+  function unwrapShared(text) {
+    var t = String(text || '').trim();
+    var start = t.indexOf('{'), end = t.lastIndexOf('}');
+    if (start === -1 || end <= start || !/"(title|provider_name|embed_product_id)"\s*:/.test(t)) return { text: t };
+    var j = null;
+    try { j = JSON.parse(t.slice(start, end + 1)); } catch (e) {
+      // Kurzbefehle zeigen Wörterbücher manchmal ohne gültiges JSON an – dann "title" direkt herausholen
+      var m = t.match(/"title"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+      if (m) { try { j = { title: JSON.parse('"' + m[1] + '"') }; } catch (e2) { j = { title: m[1] }; } }
+      var a = t.match(/"author_unique_id"\s*:\s*"([^"]+)"/), v = t.match(/"embed_product_id"\s*:\s*"?(\d+)/);
+      if (j && a && v) { j.author_unique_id = a[1]; j.embed_product_id = v[1]; }
+    }
+    if (!j || typeof j !== 'object') return { text: t };
+    var title = String(j.title || '').trim();
+    var src = j.author_unique_id && j.embed_product_id ? 'https://www.tiktok.com/@' + j.author_unique_id + '/video/' + j.embed_product_id : '';
+    if (!title) return { text: '', empty: true, src: src };
+    return { text: title + (src ? '\n' + src : '') };
+  }
+
   function startReview(text) {
+    var u = unwrapShared(text);
+    if (u.empty) {
+      go('import', { importText: u.src || '', importHint: 'TikTok hat für dieses Video keine Beschreibung mitgeschickt. Steht das Rezept im Video oder in den Kommentaren, nutze den Kurzbefehl <b>„Rezept vom Bildschirm“</b> (zweimal auf die Rückseite tippen) oder füge den Text hier ein.' });
+      return;
+    }
+    text = u.text;
     var p = P.parse(text);
     if (p.ingredients.length || p.steps.length) { go('form', { form: formFromParsed(p), importHint: '' }); return; }
     var hint;
     if (/instagram\.com/i.test(text)) {
       hint = 'Von Instagram ist nur der Link angekommen – Instagram gibt die Beschreibung beim Teilen nicht weiter. Klapp die Beschreibung im Video auf und tippe zweimal auf die Rückseite des iPhones (Kurzbefehl <b>„Rezept vom Bildschirm“</b>, Anleitung unter Hilfe &amp; Backup).';
     } else if (/tiktok\.com/i.test(text)) {
-      hint = 'Von TikTok ist nur der Link angekommen. Prüfe im Kurzbefehl „Rezept speichern“ den TikTok-Teil (Hilfe &amp; Backup → Kurzbefehl 1) oder füge die Beschreibung hier ein.';
+      hint = 'Von TikTok ist nur der Link angekommen. Prüfe den Kurzbefehl „Rezept speichern“ (Hilfe &amp; Backup) oder nutze „Rezept vom Bildschirm“ – oder füge die Beschreibung hier ein.';
     } else {
       hint = 'In diesem Text wurden keine Zutaten oder Schritte gefunden. Ergänze ihn oder leg das Rezept trotzdem an.';
     }
