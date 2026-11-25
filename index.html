@@ -486,7 +486,7 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
       .trim();
   }
 
-  var FLUFF = /(follow|folg(t|e)? (mir|uns)|link in (der )?bio|save (this|it|for later)|speicher(t)? (dir|euch)|share (this|with)|teil(e|t) (das|dieses|es)|comment|kommentier|recipe (below|in (the )?(caption|comments))|rezept (unten|in den kommentaren)|tag (a|someone|your)|markier|like (for|if)|turn on notifications|join (for free|now|us|today)|kostenlos (registrieren|beitreten|anmelden)|jetzt (beitreten|registrieren)|create (an |your )?(free )?account|get started|continue with|(save|add) (this |the )?(recipe|to (your )?(collection|cookbook|grocery|shopping|meal plan))|rezept (speichern|drucken|teilen)|print (this )?recipe|copy link|link kopieren|share (this )?recipe|jump to recipe|zum rezept springen|rate this recipe|rezept bewerten|made with|saved (with|in|to)|(?<![a-zäöüß])osta(?![a-zäöüß])|get the [\w' ]{0,20}app|download (the|our) app|open in (the )?app|in der app öffnen|app (herunterladen|laden|holen)|jetzt herunterladen|cookies? (akzeptieren|zulassen|einstellungen)|accept (all )?cookies|datenschutz|impressum|newsletter|anmelden|login|sign (in|up)|mehr rezepte|more recipes|^enjoy!*$|guten appetit|lass (es )?(dir|euch) schmecken|👇)/i;
+  var FLUFF = /(follow|folg(t|e)? (mir|uns)|link in (der )?bio|save (this|it|for later)|speicher(t)? (dir|euch)|share (this|with)|teil(e|t) (das|dieses|es)|comment|kommentier|recipe (below|in (the )?(caption|comments))|rezept (unten|in den kommentaren)|tag (a|someone|your)|markier|like (for|if)|turn on notifications|recipe (found )?in (the )?(caption|video|description|comments?)|rezept (steht )?in (der |den )?(beschreibung|caption|kommentaren|video)|join (for free|now|us|today)|kostenlos (registrieren|beitreten|anmelden)|jetzt (beitreten|registrieren)|create (an |your )?(free )?account|get started|continue with|(save|add) (this |the )?(recipe|to (your )?(collection|cookbook|grocery|shopping|meal plan))|rezept (speichern|drucken|teilen)|print (this )?recipe|copy link|link kopieren|share (this )?recipe|jump to recipe|zum rezept springen|rate this recipe|rezept bewerten|made with|saved (with|in|to)|(?<![a-zäöüß])osta(?![a-zäöüß])|get the [\w' ]{0,20}app|download (the|our) app|open in (the )?app|in der app öffnen|app (herunterladen|laden|holen)|jetzt herunterladen|cookies? (akzeptieren|zulassen|einstellungen)|accept (all )?cookies|datenschutz|impressum|newsletter|anmelden|login|sign (in|up)|mehr rezepte|more recipes|^enjoy!*$|guten appetit|lass (es )?(dir|euch) schmecken|👇)/i;
 
   // Bedienelemente, die beim Abfotografieren des Bildschirms (Instagram/TikTok) mit erkannt werden
   var UI_NOISE = /^(?:folgen|follow(?:ing)?|abonniert|gefällt(?: mir)?(?:[\s\d.,]+mal)?|\d[\d.,]*\s*(?:mal\s+)?(?:likes?|gefällt|kommentare?|comments?|mal geteilt|shares?|aufrufe|views|mio\.?|tsd\.?|[kmb])|likes?|kommentare?|comments?|kommentieren|teilen|share|senden|send|speichern|gespeichert|save|original-?audio.*|audio|originalton.*|original sound.*|folge ich|folgst du|abonniert|mehr|more|weniger|less|übersetzung anzeigen|see translation|antworten|reply|remix|für dich|for you|entdecken|explore|reels?|home|startseite|suche|search|profil|profile|posteingang|inbox|live|freunde|friends|[\d.,]+\s*[kmb]?|\d{1,2}:\d{2}(?:\s*(?:uhr))?|vor \d+.*|\d+\s*(?:std|tag|tage|woche|wochen|w|d)\.?(?: ago| her)?|@[\w.]+(?:\s*[•·]\s*folgen)?|[\w.]+\s*[•·]\s*(?:folgen|follow)|.*\b(?:gefällt|liked by)\b.*\b(?:und|and)\b.*(?:weiteren|others).*)$/i;
@@ -554,7 +554,13 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
   var NUMBERED = /^(?:\d️?⃣|\d{1,2}[.)]\s|(?:step|schritt)\s*\d+)/i;
 
   function wordCount(l) { return l.split(/\s+/).filter(Boolean).length; }
-  function isNumbered(raw) { return NUMBERED.test(raw.replace(LEAD_JUNK, '').trim()) || /^\s*\d️?⃣/.test(raw); }
+  // "1 Preheat the oven …" (Nummer ohne Punkt, ganzer Satz) ist ein Schritt, keine Zutat
+  var BARE_NUM_STEP = /^\d{1,2}\s+[A-ZÄÖÜ][a-zäöüß]+\s/;
+  function isNumbered(raw) {
+    var t = raw.replace(LEAD_JUNK, '').trim();
+    if (NUMBERED.test(t) || /^\s*\d\uFE0F?\u20E3/.test(raw)) return true;
+    return BARE_NUM_STEP.test(t) && (/[.!]$/.test(t) || t.split(/\s+/).length >= 7);
+  }
   function isQtyLine(raw) { var s = stripLead(raw); return QTY_START.test(s) && !/^\d{1,2}[.)]\s/.test(s); }
   function isLongSentence(raw) { var s = stripLead(raw); return wordCount(s) >= 8 || (wordCount(s) >= 5 && /[.!]$/.test(s)); }
   function isShortItem(raw) { var s = stripLead(raw); return wordCount(s) <= 5 && !/[.!?]$/.test(s) && s.length <= 45; }
@@ -632,6 +638,7 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
     return stripLead(l)
       .replace(/^(?:step|schritt)\s*\d+\s*[:.)-]?\s*/i, '')
       .replace(/^\d{1,2}[.)]\s+/, '')
+      .replace(/^\d{1,2}\s+(?=[A-ZÄÖÜ][a-zäöüß])/, '')
       .replace(LEAD_JUNK, '')
       .trim();
   }
@@ -697,9 +704,14 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
     if (url) res.source = url[0].replace(/[.,;!?]+$/, '');
     text = text.replace(/https?:\/\/[^\s)\]>"]+/gi, ' ');
 
+    text = text.replace(/\*\*|__/g, '').replace(/^#{1,6}\s+/gm, '').replace(/^\s*[-*]\s+(?=\S)/gm, '• ');
     text = explode(text);
     var lines = text.split('\n').map(tidy).filter(function (l) { return l && !isJunk(l); });
 
+    lines = lines.filter(function (l, i, a) {
+      var h = headerType(l), prev = i > 0 && headerType(a[i - 1]), next = i + 1 < a.length && headerType(a[i + 1]);
+      return !(h && ((next && next !== h) || (prev && prev !== h && !(i > 1 && headerType(a[i - 2])))));
+    });
     var hasIng = false, hasSteps = false;
     lines.forEach(function (l) { var h = headerType(l); if (h === 'ing') hasIng = true; if (h === 'steps') hasSteps = true; });
 
@@ -718,6 +730,8 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
       (state === 'pre' ? pre : state === 'ing' ? ing : steps).push(l);
     });
 
+    var GROUP = /^(?:for (?:the )?|für (?:den |die |das )?)[\p{L} '&-]{2,40}$/iu;
+    var isGroup = function (l) { var t = stripLead(l).trim(); return (GROUP.test(t) && wordCount(t) <= 6) || (/:\s*$/.test(t) && wordCount(t) <= 6 && !/\d/.test(t)); };
     ing = mergeQtyLines(ing);
     // Schritt-Nummern in eigenen Zeilen ("Step 1", "2") weglassen
     steps = steps.filter(function (l) { return !/^(?:step|schritt)?\s*\d{1,2}\s*[.):]?$/i.test(stripLead(l).trim()); });
@@ -763,6 +777,11 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
       pre.forEach(function (l) { (isMetaOnly(l) ? metaLines : notes).push(l); });
     }
     var preText = [titleRaw].concat(metaLines, notes).join('\n');
+
+    // Zwischenüberschriften ("For the Potatoes") als Gruppen; leere Gruppen und Gruppen in den Schritten weglassen
+    ing = ing.map(function (l) { return isGroup(l) ? stripLead(l).trim().replace(/\s*:?\s*$/, ':') : l; })
+      .filter(function (l, i, a) { return !(isGroup(l) && (i + 1 >= a.length || isGroup(a[i + 1]))); });
+    steps = steps.filter(function (l) { return !isGroup(l); });
 
     // Zutaten aufbereiten
     var ingredients = [], spillSteps = [];
@@ -1112,6 +1131,8 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
   var SHOP_KEY = 'kochbuch.shop.v1';
   var KEY = 'kochbuch.recipes.v1';
   var HINT_KEY = 'kochbuch.hintDismissed';
+  var DIRECT_KEY = 'kochbuch.directSave';
+  function directSave() { return lsGet(DIRECT_KEY) !== '0'; }
   var app = document.getElementById('app');
   var S = { view: 'list', recipes: [], id: null, query: '', form: null, importText: '', importHint: '', importParsed: null, sheet: null, checked: {}, done: {}, backTo: null,
     shop: { plan: {}, extras: [], checked: {}, buy: {}, mode: 'mix', off: {} }, prices: null, portions: {}, extraText: '' };
@@ -1381,21 +1402,24 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
 
   function copyBtn(text) { return '<button class="copy" data-a="copy" data-text="' + esc(text) + '">' + ic('copy', 14) + 'kopieren</button>'; }
 
-  var WEB_SCRIPT = "var out = '';\ntry {\n  var find = function (o) {\n    if (!o || typeof o !== 'object') return null;\n    if (Array.isArray(o)) { for (var i = 0; i < o.length; i++) { var r = find(o[i]); if (r) return r; } return null; }\n    var t = o['@type'];\n    if (t === 'Recipe' || (Array.isArray(t) && t.indexOf('Recipe') > -1)) return o;\n    return find(o['@graph']);\n  };\n  var steps = function (s, a) {\n    if (!s) return a;\n    if (typeof s === 'string') { a.push(s); return a; }\n    if (Array.isArray(s)) { s.forEach(function (x) { steps(x, a); }); return a; }\n    if (s.itemListElement) return steps(s.itemListElement, a);\n    if (s.text) a.push(s.text);\n    return a;\n  };\n  var min = function (d) {\n    var m = /PT(?:(\\d+)H)?(?:(\\d+)M)?/.exec(d || '');\n    return m ? (+(m[1] || 0)) * 60 + (+(m[2] || 0)) : 0;\n  };\n  var ld = document.querySelectorAll('script[type=\"application/ld+json\"]');\n  for (var i = 0; i < ld.length && !out; i++) {\n    var r = null;\n    try { r = find(JSON.parse(ld[i].textContent)); } catch (e) {}\n    if (r) {\n      var y = (String([].concat(r.recipeYield || '')[0]).match(/\\d+/) || [''])[0];\n      var z = min(r.totalTime) || min(r.cookTime) + min(r.prepTime);\n      out = [r.name || document.title,\n        y ? 'Portionen: ' + y : '',\n        z ? 'Zeit: ' + z + ' Minuten' : '',\n        'Zutaten:'].concat(r.recipeIngredient || [], ['Zubereitung:'], steps(r.recipeInstructions, []))\n        .filter(Boolean).join('\\n');\n    }\n  }\n} catch (e) {}\nif (!out) {\n  // Ohne Rezeptdaten: angezeigten Text nehmen, aber Menüs, Knöpfe, Fußzeilen & Co. weglassen\n  var root = document.querySelector('main, article, [role=main]') || document.body;\n  var t1 = root.querySelector('h1') || document.querySelector('h1');\n  var title = t1 ? t1.textContent.replace(/\\s+/g, ' ').trim() : '';\n  var c = root.cloneNode(true);\n  var bad = c.querySelectorAll('nav, header, footer, aside, button, form, dialog, select, svg, img, video, iframe, script, style, noscript, [role=button], [role=dialog], [role=navigation], [role=banner], [role=contentinfo], [aria-hidden=true], [hidden]');\n  for (var j = 0; j < bad.length; j++) if (bad[j].parentNode) bad[j].parentNode.removeChild(bad[j]);\n  var ln = c.querySelectorAll('a');\n  for (var k = 0; k < ln.length; k++) {\n    if (/sign ?up|log ?in|register|join|download|app ?store|play\\.google|apps\\.apple|install/i.test((ln[k].getAttribute('href') || '') + ' ' + ln[k].textContent)) ln[k].parentNode.removeChild(ln[k]);\n  }\n  document.body.appendChild(c);\n  c.style.cssText = 'position:absolute;left:-99999px;top:0;width:800px';\n  out = c.innerText;\n  if (title && out.indexOf(title) === -1) out = title + '\\n' + out;\n  c.parentNode.removeChild(c);\n  if (!out || out.replace(/\\s/g, '').length < 40) out = document.body.innerText;\n}\ncompletion(out + '\\n' + location.href);";
+  var WEB_SCRIPT = "var out = '';\ntry {\n  var find = function (o) {\n    if (!o || typeof o !== 'object') return null;\n    if (Array.isArray(o)) { for (var i = 0; i < o.length; i++) { var r = find(o[i]); if (r) return r; } return null; }\n    var t = o['@type'];\n    if (t === 'Recipe' || (Array.isArray(t) && t.indexOf('Recipe') > -1)) return o;\n    return find(o['@graph']);\n  };\n  var steps = function (s, a) {\n    if (!s) return a;\n    if (typeof s === 'string') { a.push(s); return a; }\n    if (Array.isArray(s)) { s.forEach(function (x) { steps(x, a); }); return a; }\n    if (s.itemListElement) { if (s.name) a.push(s.name + ':'); return steps(s.itemListElement, a); }\n    if (s.text) a.push(s.text);\n    return a;\n  };\n  var min = function (d) {\n    var m = /PT(?:(\\d+)H)?(?:(\\d+)M)?/.exec(d || '');\n    return m ? (+(m[1] || 0)) * 60 + (+(m[2] || 0)) : 0;\n  };\n  var ld = document.querySelectorAll('script[type=\"application/ld+json\"]');\n  for (var i = 0; i < ld.length && !out; i++) {\n    var r = null;\n    try { r = find(JSON.parse(ld[i].textContent)); } catch (e) {}\n    if (r) {\n      var y = (String([].concat(r.recipeYield || '')[0]).match(/\\d+/) || [''])[0];\n      var z = min(r.totalTime) || min(r.cookTime) + min(r.prepTime);\n      out = [r.name || document.title,\n        y ? 'Portionen: ' + y : '',\n        z ? 'Zeit: ' + z + ' Minuten' : '',\n        'Zutaten:'].concat(r.recipeIngredient || [], ['Zubereitung:'], steps(r.recipeInstructions, []))\n        .filter(Boolean).join('\\n');\n    }\n  }\n} catch (e) {}\nif (!out) {\n  // Ohne Rezeptdaten: angezeigten Text lesen, Menüs/Knöpfe/Fußzeilen weglassen\n  var root = document.querySelector('main, article, [role=main]') || document.body;\n  var t1 = root.querySelector('h1') || document.querySelector('h1');\n  var title = t1 ? t1.textContent.replace(/\\s+/g, ' ').trim() : '';\n  var c = root.cloneNode(true);\n  var bad = c.querySelectorAll('nav, footer, aside, button, form, dialog, select, svg, img, video, iframe, script, style, noscript, [role=button], [role=dialog], [role=navigation], [role=contentinfo], [aria-hidden=true], [hidden]');\n  for (var j = 0; j < bad.length; j++) if (bad[j].parentNode) bad[j].parentNode.removeChild(bad[j]);\n  var ln = c.querySelectorAll('a');\n  for (var k = 0; k < ln.length; k++) {\n    if (/sign ?up|log ?in|register|join|download|app ?store|play\\.google|apps\\.apple|install/i.test((ln[k].getAttribute('href') || '') + ' ' + ln[k].textContent)) ln[k].parentNode.removeChild(ln[k]);\n  }\n  // Leerzeichen zwischen allen Elementen, damit \"5\" + \"russet potatoes\" nicht zusammenkleben\n  var el = c.querySelectorAll('*');\n  for (var n = 0; n < el.length; n++) if (!/^(BR|HR|INPUT|WBR)$/.test(el[n].tagName)) el[n].appendChild(document.createTextNode(' '));\n  c.style.cssText = 'position:absolute;left:-99999px;top:0;width:800px';\n  document.body.appendChild(c);\n  var txt = function (x) { return (x.innerText || x.textContent || '').replace(/[ \\t ]+/g, ' ').replace(/ *\\n */g, '\\n').trim(); };\n  var items = c.querySelectorAll('li');\n  if (items.length >= 3) {\n    // Überschriften und Listenpunkte in Seitenreihenfolge\n    var parts = title ? [title] : [];\n    var all = c.querySelectorAll('h1, h2, h3, h4, h5, h6, li, p');\n    for (var q = 0; q < all.length; q++) {\n      var x = all[q], tag = x.tagName;\n      if (tag === 'LI' && x.querySelector('li')) continue;\n      if (tag === 'P' && x.closest('li')) continue;\n      var s = txt(x).replace(/\\n+/g, ' ');\n      if (!s || s === title) continue;\n      if (/^H[2-6]$/.test(tag)) s = s.replace(/[:\\s]*$/, ':');\n      parts.push(s);\n    }\n    out = parts.join('\\n');\n  } else {\n    out = txt(c);\n    if (title && out.indexOf(title) === -1) out = title + '\\n' + out;\n  }\n  c.parentNode.removeChild(c);\n  if (!out || out.replace(/\\s/g, '').length < 40) out = document.body.innerText;\n}\ncompletion(out + '\\n' + location.href);";
+  var MODEL_PROMPT = 'Hier ist Text, der von einem Handy-Bildschirm abgelesen wurde (z. B. Instagram, TikTok, Osta oder eine Webseite). Finde darin das Rezept und gib es auf Deutsch genau in diesem Format zurück, ohne Einleitung, ohne Sternchen und ohne Aufzählungszeichen:\n' +
+    'Titel des Rezepts\nPortionen: Zahl\nZeit: Zahl Minuten\nZutaten:\n(eine Zutat pro Zeile, Menge zuerst, z. B. 200 g Spaghetti)\nZubereitung:\n(ein Schritt pro Zeile)\n' +
+    'Lass Benutzernamen, Likes, Kommentare, Hashtags, Uhrzeit und Knöpfe weg. Erfinde nichts; fehlt eine Angabe, lass die Zeile weg. Hier der Text:\n';
 
   function shareGuide() {
     var kw = function (w) { return ' <span class="kw">Suchwort: ' + w + '</span>'; };
     return '<p>Tipp: In der Kurzbefehle-App findest du jede Aktion über das Suchfeld unten („Aktionen suchen“). Gib einfach das <b>Suchwort</b> ein – die genauen Namen können je nach iOS-Version leicht abweichen.</p>' +
-      '<details open><summary>Am einfachsten: „Rezept vom Bildschirm“ – für Instagram &amp; TikTok</summary>' +
-        '<p style="margin-top:10px">Du klappst die Beschreibung im Video auf und tippst zweimal auf die Rückseite des iPhones. Der Kurzbefehl macht im Hintergrund ein Bildschirmfoto, liest den Text heraus und kopiert ihn – ohne dass Screenshots in deinen Fotos landen.</p><ol class="guide">' +
-        '<li>App <b>Kurzbefehle</b> → unten <b>Kurzbefehle</b> → oben rechts <b>+</b>. Oben auf den Namen tippen → <b>Umbenennen</b> → <b>Rezept vom Bildschirm</b>.</li>' +
-        '<li>Aktion <b>Bildschirmfoto aufnehmen</b> hinzufügen.' + kw('Bildschirmfoto') + '</li>' +
-        '<li>Aktion <b>Text aus Bild extrahieren</b> hinzufügen – sie nimmt automatisch das Bildschirmfoto.' + kw('Text aus Bild') + '</li>' +
-        '<li>Aktion <b>In Zwischenablage kopieren</b>.' + kw('Zwischenablage') + '</li>' +
-        '<li>Aktion <b>Mitteilung anzeigen</b> – Text z. B. „Rezept kopiert“.' + kw('Mitteilung') + '</li>' +
-        '<li>Fertig tippen. Dann in den iPhone-<b>Einstellungen</b> → <b>Bedienungshilfen</b> → <b>Tippen</b> → ganz unten <b>Auf Rückseite tippen</b> → <b>Doppeltippen</b> → runterscrollen und <b>Rezept vom Bildschirm</b> wählen.</li>' +
-        '<li>Hast du ein iPhone mit <b>Aktionstaste</b> (seitlich links), geht es auch dort: Einstellungen → <b>Aktionstaste</b> → <b>Kurzbefehl</b> → Rezept vom Bildschirm.</li>' +
-      '</ol></details>' +
+      '<details open><summary>Am einfachsten: „Rezept vom Bildschirm“ – Aktionstaste oder Rückseite</summary>' +
+        '<p style="margin-top:10px">Funktioniert überall, wo das Rezept auf dem Bildschirm steht: TikTok- oder Instagram-Beschreibung (mit „mehr“ aufklappen), Osta, Webseiten. Ein Druck auf die Aktionstaste – der Kurzbefehl liest den Text vom Bildschirm, räumt ihn auf Wunsch mit Apple Intelligence auf und kopiert ihn.</p><ol class="guide">' +
+        '<li>App <b>Kurzbefehle</b> → oben rechts <b>+</b>. Oben auf den Namen tippen → <b>Umbenennen</b> → <b>Rezept vom Bildschirm</b>.</li>' +
+        '<li>Aktion <b>Bildschirmfoto aufnehmen</b>.' + kw('Bildschirmfoto') + '</li>' +
+        '<li>Aktion <b>Text aus Bild extrahieren</b> – nimmt automatisch das Bildschirmfoto.' + kw('Text aus Bild') + '</li>' +
+        '<li><b>Mit Apple Intelligence (iPhone 15 Pro und neuer, empfohlen):</b> Aktion <b>Modell verwenden</b>' + kw('Modell') + ' – Modell <b>Private Cloud Compute</b> (oder „Auf dem Gerät“). Diese Anweisung kopieren ' + copyBtn(MODEL_PROMPT) + ', ins Textfeld der Aktion einfügen und ganz ans Ende die Variable <b>Text aus Bild</b> setzen. „Weiterführen“ ausgeschaltet lassen.</li>' +
+        '<li>Aktion <b>In Zwischenablage kopieren</b> – mit <b>Antwort</b> (ohne Apple Intelligence: mit <b>Text aus Bild</b>).' + kw('Zwischenablage') + '</li>' +
+        '<li>Aktion <b>Mitteilung anzeigen</b> – „Rezept kopiert“.' + kw('Mitteilung') + '</li>' +
+        '<li><b>Aktionstaste:</b> iPhone-Einstellungen → <b>Aktionstaste</b> → wischen bis <b>Kurzbefehl</b> → <b>Rezept vom Bildschirm</b> wählen. Ohne Aktionstaste: Einstellungen → Bedienungshilfen → Tippen → <b>Auf Rückseite tippen</b> → Doppeltippen.</li>' +
+      '</ol><p><b>Benutzen:</b> Rezept öffnen → Aktionstaste drücken → Karim’s Rezepte öffnen → <b>Geteiltes Rezept einfügen</b>. Erkannte Rezepte werden direkt gespeichert. Längere Rezepte: unter <b>+ Rezept → Aus Video-Beschreibung</b> teilweise einfügen, weiterscrollen, nochmal drücken, <b>Teil anhängen</b>.</p></details>' +
       '<details><summary>Zusätzlich für TikTok: „Rezept speichern“ über Teilen</summary>' +
         '<p style="margin-top:10px">Holt bei TikTok die komplette Beschreibung direkt über den Link – auch Text, der nicht auf den Bildschirm passt.</p><ol class="guide">' +
         '<li>Neuer Kurzbefehl, Name <b>Rezept speichern</b>.</li>' +
@@ -1431,6 +1455,9 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
     return bar(backBtn, '<span class="bar-title">Hilfe &amp; Backup</span>', '') +
       '<main class="wrap settings">' +
       '<section class="panel"><h2 class="sec">Teilen aus TikTok &amp; Instagram</h2>' + shareGuide() + '</section>' +
+      '<section class="panel"><h2 class="sec">Einfügen</h2>' +
+        '<p>Wenn Zutaten und Schritte erkannt werden, das Rezept <b>direkt speichern</b> statt erst den Prüf-Bildschirm zu zeigen. Anpassen kannst du es danach jederzeit mit dem Stift.</p>' +
+        '<div class="store-tg"><button class="' + (directSave() ? '' : 'off') + '" data-a="toggle-direct" aria-pressed="' + directSave() + '">' + ic(directSave() ? 'check' : 'x', 16) + 'Direkt speichern: ' + (directSave() ? 'An' : 'Aus') + '</button></div></section>' +
       pricePanel() +
       '<section class="panel"><h2 class="sec">Datensicherung</h2>' +
         '<p>Deine Rezepte (' + n + ') liegen nur auf diesem Gerät. Speichere ab und zu ein Backup, z. B. in iCloud Drive – damit kannst du sie auch auf den PC oder ein neues Handy übertragen.</p>' +
@@ -1726,6 +1753,13 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
     }
     text = u.text;
     var p = P.parse(text);
+    if (p.title && p.ingredients.length && p.steps.length && directSave()) {
+      var dup = S.recipes.filter(function (r) { return r.title.toLowerCase() === p.title.toLowerCase() && r.ingredients.length === p.ingredients.length; })[0];
+      if (dup) { go('detail', { id: dup.id, tab: 'ing', importText: '', importHint: '' }); toast('Dieses Rezept ist schon gespeichert'); return; }
+      S.form = formFromParsed(p); S.form.mode = 'auto';
+      saveForm();
+      return;
+    }
     if (p.ingredients.length || p.steps.length) { go('form', { form: formFromParsed(p), importHint: '' }); return; }
     var hint;
     if (/instagram\.com/i.test(text)) {
@@ -1786,7 +1820,7 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
     for (var k = 0; k < S.recipes.length; k++) if (S.recipes[k].id === rec.id) idx = k;
     if (idx >= 0) S.recipes[idx] = rec; else S.recipes.push(rec);
     if (!save()) return;
-    toast(f.mode === 'edit' ? 'Änderungen gespeichert' : 'Rezept gespeichert');
+    toast(f.mode === 'edit' ? 'Änderungen gespeichert' : f.mode === 'auto' ? 'Rezept gespeichert – mit ✎ kannst du es anpassen' : 'Rezept gespeichert');
     go('detail', { id: rec.id, form: null, importText: '', importHint: '', tab: 'ing' });
   }
 
@@ -1852,6 +1886,7 @@ input:focus, textarea:focus { border-color: var(--accent-text); box-shadow: 0 0 
     switch (a) {
       case 'back': go(S.view === 'detail' && S.backTo ? S.backTo : 'list', { importText: '', importHint: '', backTo: null }); break;
       case 'shop': go('shop'); break;
+      case 'toggle-direct': lsSet(DIRECT_KEY, directSave() ? '0' : '1'); rerender(); toast(directSave() ? 'Rezepte werden direkt gespeichert' : 'Rezepte werden vorher zum Prüfen angezeigt'); break;
       case 'tab': S.tab = el.getAttribute('data-t'); rerender(); break;
       case 'por-minus':
       case 'por-plus':
