@@ -1,0 +1,38 @@
+name: Kochbuch veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 4 * * *'   # täglich ca. 5–6 Uhr Wiener Zeit: Preise aktualisieren
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Preise holen
+        continue-on-error: true
+        env:
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: node --max-old-space-size=6144 preise-update.mjs
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v5
