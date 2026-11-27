@@ -111,7 +111,8 @@ function build(all, catalog, today, sources) {
   for (const it of all) {
     const store = String(it.store || '').toLowerCase();
     if (!info[store]) continue;
-    if (cutoff[store] === null ? it.unavailable === true : lastDate(it) < cutoff[store]) continue;
+    if (it.old) { if (String(it.old) < new Date(new Date(today).getTime() - 500 * DAY).toISOString().slice(0, 10)) continue; }
+    else if (cutoff[store] === null ? it.unavailable === true : lastDate(it) < cutoff[store]) continue;
     const price = Number(it.price);
     if (!(price > 0) || !it.name) continue;
     const name = String(it.name).replace(/\s+/g, ' ').trim();
