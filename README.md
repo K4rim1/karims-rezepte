@@ -51,7 +51,8 @@ Unter **Mehr → KI-Erkennung** kannst du einen eigenen API-Schlüssel von **Cla
 - Gleiche Zutaten aus mehreren Rezepten werden zusammengezählt. Salz, Öl, Gewürze & Co. stehen unter „Hast du wahrscheinlich daheim“.
 - **Günstigste Mischung** zeigt jede Zutat beim billigsten Laden; tippst du auf einen Laden, siehst du alles dort.
 - Die Preise kommen jeden Morgen automatisch von **heisse-preise.io**, einem Open-Source-Preisvergleich für österreichische Supermärkte. Es sind Richtwerte; die Zuordnung Produkt ↔ Zutat passiert über den Produktnamen. Prüfen kannst du sie unter https://k4rim1.github.io/karims-rezepte/preise-check.txt
-- Stand November 2026 liefert die Quelle nur für **Billa** tagesaktuelle Preise. **Spar** ist zuletzt vom 27.09.2026, **Hofer** vom 07.11.2025 – die App zeigt das Datum an und blendet Läden mit Daten älter als vier Monate standardmäßig aus (unter Mehr einschaltbar). **Lidl und Penny** sind in den Daten nicht enthalten. Sobald heisse-preise.io wieder aktuelle Daten liefert, übernimmt die App sie automatisch.
+- **Hofer** kommt jeden Morgen direkt von hofer.at. Hofer zeigt online aber nur einen Teil des Sortiments (vor allem Milchprodukte, Fleisch, Brot, Fisch, Aktionen); für den Rest nimmt die App den letzten bekannten Hofer-Preis von heisse-preise.io und zeigt dessen Datum an. **Billa** ist tagesaktuell, **Spar** so aktuell wie heisse-preise.io. **Lidl** veröffentlicht seine normalen Preise nicht online (nur Flugblatt-Aktionen) und fehlt deshalb; **Penny** ist in den Daten nicht enthalten.
+- Zutaten, die die App nicht kennt (z. B. Sriracha, Kapern, Reispapier), sucht sie unter allen rund 15.000 Lebensmitteln in **produkte.json** und markiert Treffer mit ≈. Mit eingerichteter KI-Erkennung übersetzt die KI solche Zutaten zuerst in übliche österreichische Produktnamen und schätzt den Preis, wenn gar nichts passt („KI-Schätzung“).
 
 ## Wartung
 

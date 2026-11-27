@@ -86,7 +86,7 @@ function rx(s) { return s ? new RegExp(s) : null; }
  * catalog: Zutaten-Katalog (Regex als Text)
  * today:   'YYYY-MM-DD'
  */
-function build(all, catalog, today) {
+function build(all, catalog, today, sources) {
   const cat = catalog.map((it) => ({ ...it, P: rx(it.p), X: rx(it.x) }));
 
   // 1. Pro Laden prüfen, ob die Daten aktuell sind
@@ -111,20 +111,21 @@ function build(all, catalog, today) {
   for (const it of all) {
     const store = String(it.store || '').toLowerCase();
     if (!info[store]) continue;
-    if (cutoff[store] === null ? it.unavailable === true : lastDate(it) < cutoff[store]) continue;
+    if (it.old) { if (String(it.old) < new Date(new Date(today).getTime() - 500 * DAY).toISOString().slice(0, 10)) continue; }
+    else if (cutoff[store] === null ? it.unavailable === true : lastDate(it) < cutoff[store]) continue;
     const price = Number(it.price);
     if (!(price > 0) || !it.name) continue;
     const name = String(it.name).replace(/\s+/g, ' ').trim();
     const lname = name.toLowerCase();
     if (NOT_FOOD.test(lname)) continue;
-    const group = groupOf(store, it.category);
+    const group = it.group != null ? String(it.group) : groupOf(store, it.category);
     const size = sizeOf(it, lname);
     if (!size || !(size.qty > 0)) continue;
-    products.push({ store, name, lname, price, unit: size.unit, qty: size.qty, group, bio: !!it.bio || BIO.test(lname) });
+    products.push({ store, name, lname, head: lname.split(',')[0], price, unit: size.unit, qty: size.qty, group, bio: !!it.bio || BIO.test(lname), old: it.old || '' });
   }
 
   const present = STORES.filter((s) => products.some((p) => p.store === s));
-  const out = { updated: today, source: 'heisse-preise.io', stores: present, asOf: {}, items: {} };
+  const out = { updated: today, source: sources || 'heisse-preise.io', stores: present, asOf: {}, items: {} };
   present.forEach((s) => { out.asOf[s] = asOf[s]; });
   const report = [];
   const none = [];
@@ -134,6 +135,8 @@ function build(all, catalog, today) {
     let cands = [];
     for (const p of products) {
       if (!it.P.test(p.lname)) continue;
+      // "Streichwurst, Zwiebel": Zutat steht nur in der Geschmacksrichtung → kein Treffer
+      if (p.head !== p.lname && !it.P.test(p.head)) continue;
       if (it.X && it.X.test(p.lname)) continue;
       if (p.group) {
         if (TRUST_GROUPS.has(p.store)) {
@@ -150,7 +153,7 @@ function build(all, catalog, today) {
         else if (!((p.unit === 'g' && it.u === 'ml') || (p.unit === 'ml' && it.u === 'g'))) continue;
       }
       if (it.r && (qty < it.r[0] || qty > it.r[1])) continue;
-      cands.push({ store: p.store, name: p.name, price: p.price, qty, up: p.price / qty, bio: p.bio });
+      cands.push({ store: p.store, name: p.name, price: p.price, qty, up: p.price / qty, bio: p.bio, old: p.old });
     }
     // Ausreißer (meist falsch erkannte Packungsgrößen) entfernen
     const med = median(cands.map((c) => c.up));
@@ -159,24 +162,81 @@ function build(all, catalog, today) {
     report.push('■ ' + it.n + ' (' + it.id + ')');
     for (const s of present) {
       let mine = cands.filter((c) => c.store === s);
+      // aktuelle Preise vor älteren (z. B. Hofer-Produkte, die hofer.at nicht online listet)
+      if (mine.some((c) => !c.old)) mine = mine.filter((c) => !c.old);
       // Bio nur, wenn es in diesem Laden nichts anderes gibt (außer die Zutat erlaubt Bio ausdrücklich)
       if (!it.bo && mine.some((c) => !c.bio)) mine = mine.filter((c) => !c.bio);
       const byUnit = [...mine].sort((a, b) => a.up - b.up).slice(0, 3);
       const cheapest = [...mine].sort((a, b) => a.price - b.price)[0];
       const pick = cheapest && !byUnit.includes(cheapest) ? byUnit.concat(cheapest) : byUnit;
-      pick.forEach((c) => offers.push([s, c.name, round2(c.price), Math.round(c.qty * 10) / 10]));
-      report.push('   ' + s.padEnd(6) + (pick.length ? pick.map((c) => c.name + ' · ' + c.price.toFixed(2) + ' € / ' + Math.round(c.qty) + ' ' + it.u).join('  |  ') : '–'));
+      pick.forEach((c) => offers.push(c.old ? [s, c.name, round2(c.price), Math.round(c.qty * 10) / 10, c.old] : [s, c.name, round2(c.price), Math.round(c.qty * 10) / 10]));
+      report.push('   ' + s.padEnd(6) + (pick.length ? pick.map((c) => c.name + ' · ' + c.price.toFixed(2) + ' € / ' + Math.round(c.qty) + ' ' + it.u + (c.old ? ' (Stand ' + c.old + ')' : '')).join('  |  ') : '–'));
     }
     if (offers.length) out.items[it.id] = offers; else none.push(it.n);
   }
   const head = [
     'Karim’s Rezepte – Preis-Zuordnung vom ' + today,
-    'Quelle: heisse-preise.io',
+    'Quelle: ' + (sources || 'heisse-preise.io'),
     'Stand je Laden: ' + present.map((s) => s + ' ' + asOf[s] + (asOf[s] === today ? ' (aktuell)' : ' (ältere Daten)')).join(', '),
     ''
   ];
   report.push('', 'Ohne Treffer: ' + (none.join(', ') || '–'));
-  return { out, report: head.concat(report).join('\n'), stats: { products: products.length, matched: Object.keys(out.items).length, none } };
+  // Kompakter Produktindex für die freie Suche in der App (Zutaten ohne Katalog-Eintrag)
+  const idx = { updated: today, stores: present, p: [] };
+  for (const p of products) {
+    if (NEVER.has(p.group) || p.old) continue;
+    idx.p.push([present.indexOf(p.store), p.name.slice(0, 90), round2(p.price), p.unit, Math.round(p.qty * 10) / 10, p.group || '']);
+  }
+  return { out, idx, report: head.concat(report).join('\n'), stats: { products: products.length, matched: Object.keys(out.items).length, none, index: idx.p.length } };
 }
 
-module.exports = { build, groupOf, STORES };
+// ---------- Hofer: Produkte von hofer.at in das gemeinsame Format bringen ----------
+const HOFER_GROUPS = [
+  [/tiefkühl/, 'tk_fertig'], [/obst/, 'obst'], [/gemüse|salat|kräuter/, 'gemuese'], [/brot|backwaren|gebäck|backbox/, 'brot'],
+  [/fisch|meeresfr/, 'fisch'], [/wurst|würstel|speck|pastete|aufschnitt/, 'wurst'], [/fleisch|geflügel|schwein|rind|faschiert|lamm/, 'fleisch'],
+  [/käse/, 'kaese'], [/eier/, 'eier'], [/milch|joghurt|topfen|butter|schlagobers|rahm|dessert/, 'milch'],
+  [/nudel|teigwaren|reis|getreide|müsli|cerealien|frühstück/, 'nudeln'], [/konserve|fertiggericht|suppe/, 'konserve'],
+  [/sauce|soße|dressing|ketchup|senf|mayonnaise/, 'sauce'], [/öl|essig|gewürz|salz/, 'oel_gewuerz'], [/mehl|zucker|backzutat|backen/, 'backen'],
+  [/honig|marmelade|aufstrich/, 'honig'], [/nüsse|nuss|trockenfrücht/, 'nuss'], [/süß|schoko|snack|knabber|weihnacht|ostern|keks|chips/, 'suess'],
+  [/kaffee|tee/, 'kaffee'], [/wein|sekt|bier|spirituose|alkohol/, 'alkohol'], [/getränk|saft|wasser|limonade|sirup/, 'getraenk'],
+  [/drogerie|kosmetik|pflege|hygiene/, 'drogerie'], [/haushalt|reinig|wasch/, 'haushalt'], [/tier/, 'tier'], [/baby/, 'baby'],
+  [/vegan|vegetarisch/, 'vegan'], [/international/, 'international'], [/feinkost|antipasti|aufstrich/, 'feinkost']
+];
+const HOFER_UNIT = { g: ['g', 1], kg: ['g', 1000], dag: ['g', 10], ml: ['ml', 1], l: ['ml', 1000], cl: ['ml', 10], dl: ['ml', 100], stück: ['stk', 1], stk: ['stk', 1], st: ['stk', 1] };
+function hoferItem(d, today) {
+  const pr = d && d.price;
+  const price = pr && (pr.amountRelevant || pr.amount) ? (pr.amountRelevant || pr.amount) / 100 : 0;
+  if (!(price > 0) || !d.name || d.discontinued) return null;
+  const brand = String(d.brandName || '').trim();
+  const name = String(d.name).replace(/\s+/g, ' ').trim() + (brand && !new RegExp(brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(d.name) ? ' (' + brand + ')' : '');
+  let unit = '', quantity = 0;
+  // "450 g per Stück", "1 l per Packung", "6 Stück per Packung", "per kg"
+  const ss = String(d.sellingSize || d.sellingUnitDisplay || '').toLowerCase();
+  let m = ss.match(/(\d+(?:[.,]\d+)?)\s*(?:x\s*(\d+(?:[.,]\d+)?)\s*)?(kg|dag|g|ml|cl|dl|l|stück|stk|st)(?![a-zäöüß])/);
+  if (m) {
+    const t = HOFER_UNIT[m[3]];
+    quantity = parseFloat(m[1].replace(',', '.')) * (m[2] ? parseFloat(m[2].replace(',', '.')) : 1) * t[1]; unit = t[0];
+  } else if (/per\s*kg/.test(ss)) { unit = 'g'; quantity = 1000; }
+  if (!quantity) {
+    // Grundpreis "€ 2,75/1 l" oder "€ 0,89/100 g" → Menge = Preis / Grundpreis
+    const c = String((pr && (pr.comparisonDisplay || pr.perUnitDisplay)) || '').toLowerCase().replace(/\s+/g, ' ');
+    const cm = c.match(/([\d.,]+)\s*\/\s*(\d+(?:[.,]\d+)?)?\s*(kg|g|ml|l|stück|stk)/);
+    if (cm) {
+      const up = parseFloat(cm[1].replace('.', '').replace(',', '.')), per = cm[2] ? parseFloat(cm[2].replace(',', '.')) : 1, t = HOFER_UNIT[cm[3]];
+      if (up > 0) { unit = t[0]; quantity = Math.round(price / up * per * t[1]); }
+    }
+  }
+  const cats = (d.categories || []).map((c) => String(c && (c.name || c.displayName) || '').toLowerCase()).filter(Boolean);
+  const catText = cats.join(' / ');
+  let group = '';
+  // die genaueste (letzte) Kategorie zuerst prüfen
+  for (let i = cats.length - 1; i >= 0 && !group; i--) for (const [re, g] of HOFER_GROUPS) if (re.test(cats[i])) { group = g; break; }
+  return {
+    store: 'hofer', name, price, unit: unit || undefined, quantity: quantity || undefined, group, category: catText,
+    bio: /(?<![a-zäöüß])bio(?![a-zäöüß])/i.test(name), priceHistory: [{ date: today, price }]
+  };
+}
+
+module.exports = { build, groupOf, STORES, hoferItem };
+
+
