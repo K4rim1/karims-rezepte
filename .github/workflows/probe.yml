@@ -9,4 +9,12 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v5
         with: { node-version: 22 }
-      - run: node probe/probe.mjs
+      - run: node preise-update.mjs
+      - run: ls -la preise.json produkte.json preise-check.txt && gzip -k produkte.json && ls -la produkte.json.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preise-test
+          path: |
+            preise.json
+            produkte.json
+            preise-check.txt
