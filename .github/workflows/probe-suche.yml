@@ -1,0 +1,48 @@
+name: probe-suche
+on:
+  push:
+    branches: [probe-suche]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Suchseiten testen
+        run: |
+          mkdir -p ergebnis
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+          probe() {
+            name="$1"; url="$2"; pat="$3"
+            code=$(curl -sL -m 25 -A "$UA" -H "Accept-Language: de-AT,de;q=0.9,en;q=0.8" -o "ergebnis/$name.html" -w "%{http_code} %{url_effective}" "$url")
+            size=$(wc -c < "ergebnis/$name.html")
+            hits=$(grep -oE "$pat" "ergebnis/$name.html" | sort -u | wc -l)
+            ex=$(grep -oE "$pat" "ergebnis/$name.html" | sort -u | head -3 | tr '\n' ' ')
+            rating=$(grep -oiE '(ratingValue|ratingCount|aggregateRating|Bewertung|stars?)' "ergebnis/$name.html" | sort | uniq -c | tr '\n' ' ' | head -c 200)
+            echo "$name | $code | $size B | $hits Treffer | $ex | $rating" >> ergebnis/uebersicht.txt
+          }
+          probe chefkoch_rs "https://www.chefkoch.de/rs/s0/h%C3%A4hnchen+curry/Rezepte.html" 'chefkoch\.de/rezepte/[0-9]+/[^"?# ]+'
+          probe chefkoch_q "https://www.chefkoch.de/suche?q=h%C3%A4hnchen+curry" 'chefkoch\.de/rezepte/[0-9]+/[^"?# ]+'
+          probe gutekueche_s "https://www.gutekueche.at/suche?s=h%C3%A4hnchen+curry" '/[a-z0-9-]+-rezept-[0-9]+'
+          probe gutekueche_q "https://www.gutekueche.at/suche?q=h%C3%A4hnchen+curry" '/[a-z0-9-]+-rezept-[0-9]+'
+          probe ichkoche_s "https://www.ichkoche.at/suche?search=h%C3%A4hnchen+curry" '/[a-z0-9-]+-rezept-[0-9]+'
+          probe ichkoche_q "https://www.ichkoche.at/suche?q=h%C3%A4hnchen+curry" '/[a-z0-9-]+-rezept-[0-9]+'
+          probe allrecipes "https://www.allrecipes.com/search?q=chicken+curry" 'allrecipes\.com/recipe/[0-9]+/[^"?# ]+'
+          probe bbcgoodfood "https://www.bbcgoodfood.com/search?q=chicken+curry" '/recipes/[a-z0-9-]+'
+          probe ddg "https://html.duckduckgo.com/html/?q=h%C3%A4hnchen+curry+rezept" 'uddg=[^"&]+'
+          probe bing "https://www.bing.com/search?q=h%C3%A4hnchen+curry+rezept&setlang=de" 'https?://[a-z0-9.-]+/[^"<> ]*rezept[^"<> ]*'
+          probe lecker "https://www.lecker.de/suche?search=h%C3%A4hnchen+curry" 'lecker\.de/[a-z0-9-]+-[0-9]+\.html'
+          probe eatsmarter "https://eatsmarter.de/suche/rezepte?ft=h%C3%A4hnchen+curry" 'eatsmarter\.de/rezepte/[a-z0-9-]+'
+          probe kitchenstories "https://www.kitchenstories.com/de/suche?search=h%C3%A4hnchen+curry" '/de/rezepte/[a-z0-9-]+'
+          probe gutekueche_home "https://www.gutekueche.at/" 'action="[^"]*"|name="[a-z]+" [^>]*(search|such)'
+          probe ichkoche_home "https://www.ichkoche.at/" 'action="[^"]*"'
+          grep -oiE '<form[^>]*>' ergebnis/gutekueche_home.html | head -5 >> ergebnis/uebersicht.txt
+          grep -oiE '<form[^>]*>|<input[^>]*search[^>]*>' ergebnis/ichkoche_home.html | head -5 >> ergebnis/uebersicht.txt
+          grep -oiE '<form[^>]*>|<input[^>]*(search|such)[^>]*>' ergebnis/lecker.html | head -3 >> ergebnis/uebersicht.txt
+          cat ergebnis/uebersicht.txt
+          rm -f ergebnis/*.html
+      - name: Ergebnis speichern
+        run: |
+          git config user.name probe; git config user.email probe@users.noreply.github.com
+          git add ergebnis; git commit -m "Ergebnis" && git push
