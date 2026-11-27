@@ -1,0 +1,12 @@
+name: Preisquellen prüfen (einmalig)
+on:
+  push:
+    branches: [probe-preise]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v5
+        with: { node-version: 22 }
+      - run: node probe/probe.mjs
