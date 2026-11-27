@@ -41,6 +41,10 @@ Liest Rezept und Foto aus einer Seite, die in Safari offen ist (Chefkoch, Rezept
 
 Holt die Beschreibung über den TikTok-Link (oEmbed). TikTok schickt sie nicht mehr bei jedem Video mit – dann hilft die Aktionstaste.
 
+## KI-Erkennung (optional)
+
+Unter **Mehr → KI-Erkennung** kannst du einen eigenen API-Schlüssel von **Claude** (platform.claude.com) oder **Google Gemini** (aistudio.google.com/apikey) eintragen. Dann ordnet eine KI jeden eingefügten Text – auch unordentliche Rezepte von Freunden –, übersetzt auf Deutsch und rechnet Einheiten um. Zusätzlich kannst du Rezepte **aus Fotos oder Screenshots** holen (+ → Aus Fotos oder Screenshots) und gespeicherte Rezepte **mit KI überarbeiten** (im Rezept ⋯). Der Schlüssel bleibt nur auf dem Gerät und kommt in kein Backup. Ohne Internet oder Schlüssel erkennt die App Rezepte wie bisher mit Regeln. Gratis-Alternative: der Schritt **Modell verwenden** (Apple Intelligence) in den Kurzbefehlen.
+
 ## Einkaufsliste und Preise
 
 - Im Rezept die **Portionen** einstellen und **Einkaufen** tippen – oder im Planer **Einkaufen** für die ganze Woche. Die Portionen pro Rezept änderst du jederzeit oben in der Einkaufsliste.

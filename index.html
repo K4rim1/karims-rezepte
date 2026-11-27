@@ -380,6 +380,14 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
 .tm.done .tm-l, .tm.done > .ic { color: #fff; }
 @keyframes pulse { 50% { transform: scale(1.025); } }
 
+#busy { position: fixed; inset: 0; z-index: 40; background: rgba(8,6,14,.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: grid; place-items: center; padding: 24px; animation: fade .15s; }
+#busy[hidden] { display: none; }
+.busy-card { width: 100%; max-width: 320px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 24px 20px 18px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+.busy-card b { font-size: 17px; }
+.busy-card small { color: var(--muted); font-size: 13.5px; margin-bottom: 8px; }
+.spin { width: 40px; height: 40px; border-radius: 50%; border: 4px solid var(--accent-soft); border-top-color: var(--accent-text); animation: rot .8s linear infinite; margin-bottom: 6px; }
+@keyframes rot { to { transform: rotate(360deg); } }
+.opt .tag-ai { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 750; color: #fff; background: var(--grad); border-radius: 999px; padding: 1px 7px; vertical-align: 1px; }
 #toast { position: fixed; left: 50%; bottom: calc(var(--tabh) + 22px + env(safe-area-inset-bottom)); transform: translate(-50%, 16px); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 550; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 30; max-width: calc(100% - 32px); display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 #toast.act { pointer-events: auto; padding-right: 8px; }
@@ -391,6 +399,8 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
 <body>
 <div id="app"></div>
 <div id="dock" hidden></div>
+<div id="busy" hidden role="alertdialog" aria-live="assertive"></div>
+<input type="file" id="aiFiles" accept="image/*" multiple hidden>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="backupFile" accept="application/json,.json" hidden>
 <input type="file" id="photoFile" accept="image/*" hidden>
@@ -1429,16 +1439,16 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if (id) return '<img alt="" data-img="' + esc(id) + '"' + (u ? ' src="' + u + '"' : '') + '>';
     return '<img alt="" loading="lazy" referrerpolicy="no-referrer" src="' + esc(ref) + '" onerror="this.remove()">';
   }
-  function resizeImage(file) {
+  function resizeImage(file, max, q) {
     return new Promise(function (res, rej) {
       var url = URL.createObjectURL(file), im = new Image();
       im.onload = function () {
-        var w = im.naturalWidth, h = im.naturalHeight, s = Math.min(1, 1400 / Math.max(w, h));
+        var w = im.naturalWidth, h = im.naturalHeight, s = Math.min(1, (max || 1400) / Math.max(w, h));
         var c = document.createElement('canvas');
         c.width = Math.max(1, Math.round(w * s)); c.height = Math.max(1, Math.round(h * s));
         c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
         URL.revokeObjectURL(url);
-        c.toBlob(function (b) { if (b) res(b); else rej(new Error('blob')); }, 'image/jpeg', 0.82);
+        c.toBlob(function (b) { if (b) res(b); else rej(new Error('blob')); }, 'image/jpeg', q || 0.82);
       };
       im.onerror = function () { URL.revokeObjectURL(url); rej(new Error('img')); };
       im.src = url;
@@ -2020,7 +2030,8 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
   var WEB_SCRIPT = "var out = '';\n// Vorschaubild: Rezeptdaten → og:image → größtes Bild auf der Seite\nvar pic = function (v) {\n  if (!v) return '';\n  if (Array.isArray(v)) return pic(v[0]);\n  if (typeof v === 'object') return pic(v.url || v.contentUrl || v['@id']);\n  return /^https?:\\/\\//.test(v) ? v : '';\n};\nvar bigImg = function () {\n  var best = '', area = 0, im = document.querySelectorAll('img');\n  for (var i = 0; i < im.length; i++) {\n    var b = im[i].getBoundingClientRect(), a = b.width * b.height, u = im[i].currentSrc || im[i].src || '';\n    if (b.width >= 150 && b.height >= 120 && a > area && /^https?:/.test(u) && !/logo|avatar|icon|sprite/i.test(u)) { area = a; best = u; }\n  }\n  var og = document.querySelector('meta[property=\"og:image\"]'), ou = document.querySelector('meta[property=\"og:url\"]');\n  var ogOk = og && og.content && !(ou && /^https?:\\/\\/[^\\/]+\\/?$/.test(ou.content) && location.pathname.length > 1);\n  return ogOk && !best ? og.content : (best || (ogOk ? og.content : ''));\n};\ntry {\n  var find = function (o) {\n    if (!o || typeof o !== 'object') return null;\n    if (Array.isArray(o)) { for (var i = 0; i < o.length; i++) { var r = find(o[i]); if (r) return r; } return null; }\n    var t = o['@type'];\n    if (t === 'Recipe' || (Array.isArray(t) && t.indexOf('Recipe') > -1)) return o;\n    return find(o['@graph']);\n  };\n  var steps = function (s, a) {\n    if (!s) return a;\n    if (typeof s === 'string') { a.push(s); return a; }\n    if (Array.isArray(s)) { s.forEach(function (x) { steps(x, a); }); return a; }\n    if (s.itemListElement) { if (s.name) a.push(s.name + ':'); return steps(s.itemListElement, a); }\n    if (s.text) a.push(s.text);\n    return a;\n  };\n  var min = function (d) {\n    var m = /PT(?:(\\d+)H)?(?:(\\d+)M)?/.exec(d || '');\n    return m ? (+(m[1] || 0)) * 60 + (+(m[2] || 0)) : 0;\n  };\n  var ld = document.querySelectorAll('script[type=\"application/ld+json\"]');\n  for (var i = 0; i < ld.length && !out; i++) {\n    var r = null;\n    try { r = find(JSON.parse(ld[i].textContent)); } catch (e) {}\n    if (r) {\n      var y = (String([].concat(r.recipeYield || '')[0]).match(/\\d+/) || [''])[0];\n      var z = min(r.totalTime) || min(r.cookTime) + min(r.prepTime);\n      var im1 = pic(r.image) || bigImg();\n      out = [r.name || document.title,\n        im1 ? 'Bild: ' + im1 : '',\n        y ? 'Portionen: ' + y : '',\n        z ? 'Zeit: ' + z + ' Minuten' : '',\n        'Zutaten:'].concat(r.recipeIngredient || [], ['Zubereitung:'], steps(r.recipeInstructions, []))\n        .filter(Boolean).join('\\n');\n    }\n  }\n} catch (e) {}\nif (!out) {\n  // Ohne Rezeptdaten: angezeigten Text lesen\n  var bt = document.body.innerText || '';\n  var norm = function (s) { return String(s).replace(/\\s+/g, ' ').trim(); };\n  var key = function (s) { return String(s).toLowerCase().replace(/[^a-z0-9äöüß]/g, ''); };\n  // Portionen und Zeit (stehen oft in Knöpfen, die unten weggelassen werden)\n  var sv = bt.match(/(\\d+)\\s*(?:servings?|portionen|portions?|personen|people)\\b/i) || bt.match(/(?:serves|servings?|portionen|yield|ergibt)\\s*:?\\s*(\\d+)/i);\n  var D = '((?:\\\\d+(?:[.,]\\\\d+)?\\\\s*(?:hours?|hrs?|h|std\\\\.?|stunden?|minutes?|minuten|mins?|m)\\\\b\\\\s*[:,]?\\\\s*(?:and|und)?\\\\s*)+)';\n  var dur = function (s) {\n    var t = 0, m, re = /(\\d+(?:[.,]\\d+)?)\\s*(hours?|hrs?|h|std\\.?|stunden?|minutes?|minuten|mins?|m)\\b/gi;\n    while ((m = re.exec(s))) t += parseFloat(m[1].replace(',', '.')) * (/^(h|std|stu)/i.test(m[2]) ? 60 : 1);\n    return Math.round(t);\n  };\n  var tm = function (label) {\n    var m = bt.match(new RegExp('(?:^|\\\\n)\\\\s*' + label + '[a-z]*(?:\\\\s*(?:time|zeit))?\\\\s*:?\\\\s*' + D, 'i'));\n    return m ? dur(m[1]) : 0;\n  };\n  var zeit = tm('(?:total|gesamt)') || (tm('(?:prep|vorbereitung)') + tm('(?:cook|koch|back|bake)'));\n\n  var main = document.querySelector('main, article, [role=main]');\n  var root = main && (main.innerText || '').length > 300 ? main : document.body;\n  var all = root.querySelectorAll('*'), marked = [], info = [];\n  var mark = function (e, k) { e.setAttribute('data-kb', k); marked.push(e); };\n  var own = function (e) { for (var c = e.firstChild; c; c = c.nextSibling) if (c.nodeType === 3 && c.textContent.trim()) return true; return false; };\n  var BAD = 'nav, footer, aside, button, form, dialog, select, [role=button], [role=dialog], [role=navigation], [aria-modal=true], [data-kb=\"x\"]';\n  // Feste Leisten (Menüs, Cookie-Hinweise, App-Banner) markieren\n  for (var a = 0; a < all.length; a++) {\n    var e = all[a], cs = getComputedStyle(e);\n    if (cs.position === 'fixed' || cs.position === 'sticky') { mark(e, 'x'); continue; }\n    if (!e.getClientRects().length || e.closest(BAD)) continue;\n    var tx = norm(e.textContent);\n    if (!tx) continue;\n    info.push({ e: e, tx: tx, fs: parseFloat(cs.fontSize) || 16, fw: parseInt(cs.fontWeight, 10) || 400, own: own(e), cls: String(e.className || '') });\n  }\n  // Titel: h1, sonst die größte Schrift\n  var title = null;\n  for (var b = 0; b < info.length && !title; b++) {\n    var f = info[b];\n    if ((f.e.tagName === 'H1' || /(?:^|[\\s_-])h1(?:$|[\\s_-])/i.test(f.cls) || (f.e.getAttribute('role') === 'heading' && f.e.getAttribute('aria-level') === '1')) && f.tx.length >= 3 && f.tx.length <= 150) title = f;\n  }\n  if (!title) info.forEach(function (f) { if (f.own && f.tx.length >= 3 && f.tx.length <= 150 && /[a-zäöüß]{3}/i.test(f.tx) && (!title || f.fs > title.fs)) title = f; });\n  // Zwischenüberschriften (Zutatengruppen, \"Directions\", \"Notes\")\n  var sizes = info.filter(function (f) { return f.own; }).map(function (f) { return f.fs; }).sort(function (x, y) { return x - y; });\n  var base = sizes.length ? sizes[Math.floor(sizes.length / 2)] : 16;\n  info.forEach(function (f) {\n    if (f === title || f.tx.length < 2 || f.tx.length > 60 || /^\\d/.test(f.tx) || f.e.closest('[data-kb=\"h\"]')) return;\n    var tag = /^H[2-6]$/.test(f.e.tagName) || f.e.getAttribute('role') === 'heading' || /(?:^|[\\s_-])h[2-4](?:$|[\\s_-])/i.test(f.cls);\n    var look = f.own && f.fs >= base * 1.2 && f.fw >= 600 && f.tx.length <= 50;\n    if (tag || look) mark(f.e, 'h');\n  });\n  var c = root.cloneNode(true);\n  for (var q = 0; q < marked.length; q++) marked[q].removeAttribute('data-kb');\n  var bad = c.querySelectorAll(BAD + ', svg, img, video, iframe, script, style, noscript, [aria-hidden=true], [hidden]');\n  for (var j = 0; j < bad.length; j++) if (bad[j].parentNode) bad[j].parentNode.removeChild(bad[j]);\n  var ln = c.querySelectorAll('a');\n  for (var k = 0; k < ln.length; k++) {\n    if (/sign ?up|log ?in|register|join|download|app ?store|play\\.google|apps\\.apple|install|open app/i.test((ln[k].getAttribute('href') || '') + ' ' + ln[k].textContent) && ln[k].parentNode) ln[k].parentNode.removeChild(ln[k]);\n  }\n  var hs = c.querySelectorAll('[data-kb=\"h\"]');\n  for (var h = 0; h < hs.length; h++) if (!/:\\s*$/.test(hs[h].textContent)) hs[h].appendChild(document.createTextNode(':'));\n  // Leerzeichen zwischen allen Elementen, damit \"5\" + \"russet potatoes\" nicht zusammenkleben\n  var el = c.querySelectorAll('*');\n  for (var n = 0; n < el.length; n++) if (!/^(BR|HR|INPUT|WBR)$/.test(el[n].tagName)) el[n].appendChild(document.createTextNode(' '));\n  c.style.cssText = 'position:absolute;left:-99999px;top:0;width:' + Math.max(320, Math.min(innerWidth, 800)) + 'px';\n  document.body.appendChild(c);\n  var lines = (c.innerText || c.textContent || '').split('\\n').map(function (s) {\n    return s.replace(/[ \\t ]+/g, ' ').replace(/ ([,.;:!?)])/g, '$1').trim();\n  }).filter(Boolean);\n  c.parentNode.removeChild(c);\n  var head = [];\n  if (title) {\n    var tk = key(title.tx), at = -1;\n    for (var w = 0; w < lines.length && at < 0; w++) if (key(lines[w]) === tk) at = w;\n    if (at >= 0) lines = lines.slice(at + 1);\n    head.push(title.tx);\n  }\n  var im2 = bigImg();\n  if (im2) head.push('Bild: ' + im2);\n  if (sv) head.push('Portionen: ' + sv[1]);\n  if (zeit) head.push('Zeit: ' + zeit + ' Minuten');\n  out = head.concat(lines).join('\\n');\n  if (lines.join('').length < 40) out = bt;\n}\ncompletion(out + '\\n' + location.href);";
   var MODEL_PROMPT = 'Hier ist Text, der von einem Handy-Bildschirm abgelesen wurde (z. B. Instagram, TikTok, Osta oder eine Webseite). Finde darin das Rezept und gib es auf Deutsch genau in diesem Format zurück, ohne Einleitung, ohne Sternchen und ohne Aufzählungszeichen:\n' +
     'Titel des Rezepts\nPortionen: Zahl\nZeit: Zahl Minuten\nZutaten:\n(eine Zutat pro Zeile, Menge zuerst, z. B. 200 g Spaghetti)\nZubereitung:\n(ein Schritt pro Zeile)\n' +
-    'Lass Benutzernamen, Likes, Kommentare, Hashtags, Uhrzeit und Knöpfe weg. Erfinde nichts; fehlt eine Angabe, lass die Zeile weg. Hier der Text:\n';
+    'Rechne US-Einheiten (cups, oz, lb, °F) in g, ml und °C um. Lass Benutzernamen, Likes, Kommentare, Hashtags, Uhrzeit und Knöpfe weg. Erfinde nichts; fehlt eine Angabe, lass die Zeile weg. ' +
+    'Steht im Text eine Zeile, die mit „Bild:“ beginnt, oder ein Link (https://…), übernimm sie unverändert als letzte Zeilen. Hier der Text:\n';
   function shareGuide() {
     var kw = function (w) { return ' <span class="kw">Suchwort: ' + w + '</span>'; };
     return '<p>Tipp: In der Kurzbefehle-App findest du jede Aktion über das Suchfeld unten („Aktionen suchen“). Gib einfach das <b>Suchwort</b> ein – die genauen Namen können je nach iOS-Version leicht abweichen.</p>' +
@@ -2029,7 +2040,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         '<li>App <b>Kurzbefehle</b> → oben rechts <b>+</b>. Oben auf den Namen tippen → <b>Umbenennen</b> → <b>Rezept vom Bildschirm</b>.</li>' +
         '<li>Aktion <b>Bildschirmfoto aufnehmen</b>.' + kw('Bildschirmfoto') + '</li>' +
         '<li>Aktion <b>Text aus Bild extrahieren</b> – nimmt automatisch das Bildschirmfoto.' + kw('Text aus Bild') + '</li>' +
-        '<li><b>Mit Apple Intelligence (iPhone 15 Pro und neuer, empfohlen):</b> Aktion <b>Modell verwenden</b>' + kw('Modell') + ' – Modell <b>Private Cloud Compute</b> (oder „Auf dem Gerät“). Diese Anweisung kopieren ' + copyBtn(MODEL_PROMPT) + ', ins Textfeld der Aktion einfügen und ganz ans Ende die Variable <b>Text aus Bild</b> setzen. „Weiterführen“ ausgeschaltet lassen.</li>' +
+        '<li><b>Mit Apple Intelligence (iPhone 15 Pro und neuer, empfohlen):</b> Aktion <b>Modell verwenden</b>' + kw('Modell') + ' – Modell <b>Private Cloud Compute</b> (oder „Auf dem Gerät“). Diese Anweisung kopieren ' + copyBtn(MODEL_PROMPT) + ', ins Textfeld der Aktion einfügen und ganz ans Ende die Variable <b>Text aus Bild</b> setzen. „Weiterführen“ ausgeschaltet lassen. Gratis und privat. Hast du unten die <b>KI-Erkennung</b> der App eingerichtet, ist dieser Schritt nicht nötig.</li>' +
         '<li>Aktion <b>In Zwischenablage kopieren</b> – mit <b>Antwort</b> (ohne Apple Intelligence: mit <b>Text aus Bild</b>).' + kw('Zwischenablage') + '</li>' +
         '<li>Aktion <b>Mitteilung anzeigen</b> – „Rezept kopiert“.' + kw('Mitteilung') + '</li>' +
         '<li><b>Aktionstaste:</b> iPhone-Einstellungen → <b>Aktionstaste</b> → wischen bis <b>Kurzbefehl</b> → <b>Rezept vom Bildschirm</b> wählen. Ohne Aktionstaste: Einstellungen → Bedienungshilfen → Tippen → <b>Auf Rückseite tippen</b> → Doppeltippen.</li>' +
@@ -2039,7 +2050,8 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         '<li>Neuer Kurzbefehl, Name <b>Rezept aus Webseite</b>. Unten auf <b>ⓘ</b> → <b>Im Share-Sheet anzeigen</b> → Fertig.</li>' +
         '<li>Aktion <b>JavaScript auf Webseite ausführen</b>' + kw('JavaScript') + '. Sie nimmt automatisch die <b>Kurzbefehleingabe</b>.</li>' +
         '<li>Hier das Skript kopieren: ' + copyBtn(WEB_SCRIPT) + ' – dann im grauen Code-Feld der Aktion alles markieren, löschen und das Skript einfügen.</li>' +
-        '<li>Aktion <b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Ergebnis von JavaScript</b>.</li>' +
+        '<li><b>Optional mit Apple Intelligence:</b> Aktion <b>Modell verwenden</b>' + kw('Modell') + ' – Modell <b>Private Cloud Compute</b>. Anweisung kopieren ' + copyBtn(MODEL_PROMPT) + ', einfügen und ans Ende die Variable <b>Ergebnis von JavaScript</b> setzen. Nicht nötig, wenn die KI-Erkennung der App eingerichtet ist.</li>' +
+        '<li>Aktion <b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Ergebnis von JavaScript</b> (mit Apple Intelligence: mit <b>Antwort</b>).</li>' +
         '<li>Aktion <b>Mitteilung anzeigen</b>' + kw('Mitteilung') + ' – „Rezept kopiert“.</li>' +
         '<li>Kommt beim ersten Mal die Meldung, dass Skripts nicht erlaubt sind: iPhone-Einstellungen → <b>Apps</b> → <b>Kurzbefehle</b> → <b>Erweitert</b> → Skripts ausführen erlauben. Fragt der Kurzbefehl, ob er auf die Webseite zugreifen darf: <b>Immer erlauben</b>.</li>' +
       '</ol><p><b>Benutzen:</b> Seite in <b>Safari</b> öffnen (bei Osta: Rezept teilen → Link kopieren → in Safari einfügen) → warten, bis das Rezept zu sehen ist → <b>Teilen</b> → <b>Rezept aus Webseite</b> → in der App <b>Geteiltes Rezept einfügen</b>.</p></details>' +
@@ -2052,7 +2064,8 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         '<li><b>URL codieren</b>' + kw('codieren') + ' – mit <b>Erweiterte URL</b>.</li>' +
         '<li><b>Text</b>' + kw('Text') + ': <code>https://www.tiktok.com/oembed?url=</code>' + copyBtn('https://www.tiktok.com/oembed?url=') + ' und direkt dahinter (ohne Leerzeichen) die Variable <b>Text der codierten URL</b>.</li>' +
         '<li><b>Inhalte von URL abrufen</b>' + kw('Inhalte') + ' – mit der gelben Variable <b>Text</b>.</li>' +
-        '<li><b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Inhalt der URL</b>.</li>' +
+        '<li><b>Optional:</b> <b>Modell verwenden</b>' + kw('Modell') + ' mit der Anweisung ' + copyBtn(MODEL_PROMPT) + ' und am Ende <b>Inhalt der URL</b>.</li>' +
+        '<li><b>In Zwischenablage kopieren</b>' + kw('Zwischenablage') + ' – mit <b>Inhalt der URL</b> (mit Apple Intelligence: mit <b>Antwort</b>).</li>' +
         '<li><b>Mitteilung anzeigen</b>' + kw('Mitteilung') + ' – Text „Rezept kopiert“.</li>' +
       '</ol></details>';
   }
@@ -2084,7 +2097,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       '<section class="panel"><h2 class="sec">Einfügen</h2>' +
         '<p>Wenn Zutaten und Schritte erkannt werden, das Rezept <b>direkt speichern</b> statt erst den Prüf-Bildschirm zu zeigen. Anpassen kannst du es danach jederzeit mit dem Stift.</p>' +
         '<div class="store-tg"><button class="' + (directSave() ? '' : 'off') + '" data-a="toggle-direct" aria-pressed="' + directSave() + '">' + ic(directSave() ? 'check' : 'x', 16) + 'Direkt speichern: ' + (directSave() ? 'An' : 'Aus') + '</button></div></section>' +
-      pricePanel() +
+      aiPanel() + pricePanel() +
       '<section class="panel"><h2 class="sec">Datensicherung</h2>' +
         '<p>Rezepte (' + S.recipes.length + '), Fotos, Ordner und Wochenplan liegen nur auf diesem Gerät. Speichere ab und zu ein Backup, z. B. in iCloud Drive – damit kannst du alles auch auf den PC oder ein neues Handy übertragen.</p>' +
         '<div class="btn-row"><button class="btn ghost" data-a="export">' + ic('download', 18) + 'Backup speichern</button>' +
@@ -2210,15 +2223,203 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
   document.addEventListener('pointerup', endDrag);
   document.addEventListener('pointercancel', endDrag);
 
+  // ---------- KI-Erkennung (Claude oder Gemini, eigener Schlüssel) ----------
+  var AI_KEY = 'kochbuch.ai.v1';
+  var AI_DEF = { claude: 'claude-haiku-5-5', gemini: 'gemini-flash-latest' };
+  var AI_NAME = { claude: 'Claude', gemini: 'Google Gemini' };
+  function aiCfg() {
+    var c = lsJson(AI_KEY, {}) || {};
+    return { provider: c.provider || '', key: c.key || '', model: c.model || '', translate: c.translate !== false, auto: c.auto !== false };
+  }
+  function aiSet(c) { lsSet(AI_KEY, JSON.stringify(c)); }
+  function aiOn() { var c = aiCfg(); return !!(c.provider && c.key); }
+  var AI_SCHEMA = {
+    type: 'object',
+    properties: { title: { type: 'string' }, servings: { type: 'string' }, minutes: { type: 'string' }, ingredients: { type: 'array', items: { type: 'string' } }, steps: { type: 'array', items: { type: 'string' } }, notes: { type: 'string' } },
+    required: ['title', 'servings', 'minutes', 'ingredients', 'steps', 'notes'], additionalProperties: false
+  };
+  function aiSystem(tr) {
+    return [
+      'Du bist der Rezept-Assistent der Koch-App „Karim’s Rezepte“. Du bekommst Text und/oder Bilder: kopierte Beschreibungen von TikTok- oder Instagram-Videos, vom Bildschirm abgelesenen Text, Webseiten, Chatnachrichten oder abgetippte bzw. handgeschriebene Rezepte von Freunden.',
+      'Finde darin genau ein Rezept und gib es als JSON-Objekt zurück.',
+      '- Lass alles weg, was nicht zum Rezept gehört: Benutzernamen, Likes, Kommentare, Hashtags, Werbung, Knöpfe, Menüs, Cookie-Hinweise, Uhrzeit, Akkustand.',
+      tr ? '- Schreib alles auf Deutsch. Markennamen bleiben unverändert.' : '- Behalte die Sprache des Originals bei.',
+      '- Rechne US-Einheiten in metrische um: cups, oz, lb und fl oz in g oder ml, tbsp in EL, tsp in TL, °F in °C, inch in cm. Runde sinnvoll.',
+      '- ingredients: eine Zutat pro Eintrag, Menge und Einheit zuerst, z. B. „200 g Spaghetti“, „2 Knoblauchzehen“, „1 Prise Salz“. Zusätze in Klammern hinter den Namen, z. B. „500 g Hähnchenbrust (Rohgewicht)“. Gibt es Zutatengruppen, kommt vor jede Gruppe ein eigener Eintrag, der mit Doppelpunkt endet, z. B. „Für die Soße:“.',
+      '- steps: ein Arbeitsschritt pro Eintrag, ohne Nummerierung, in ganzen Sätzen. Teil lange Absätze in sinnvolle Schritte. Zeiten und Temperaturen bleiben drin.',
+      '- title: kurzer, klarer Name des Gerichts ohne Emojis.',
+      '- servings: nur die Zahl der Portionen, z. B. „4“, sonst leer. minutes: Gesamtzeit in Minuten als Zahl, z. B. „45“, sonst leer.',
+      '- notes: kurze Tipps, Varianten oder Nährwerte aus dem Original, sonst leer.',
+      '- Erfinde nichts. Fehlt eine Menge, schreib die Zutat ohne Menge. Findest du kein Rezept, gib einen leeren Titel und leere Listen zurück.',
+      '- Antworte ausschließlich mit dem JSON-Objekt {"title": "", "servings": "", "minutes": "", "ingredients": [], "steps": [], "notes": ""}.'
+    ].join('\n');
+  }
+  var aiAbort = null;
+  function readJson(res) {
+    return res.text().then(function (t) {
+      var j = null;
+      try { j = JSON.parse(t); } catch (e) {}
+      if (!res.ok) {
+        var e2 = new Error((j && j.error && (j.error.message || j.error.status)) || ('HTTP ' + res.status));
+        e2.status = res.status;
+        throw e2;
+      }
+      return j || {};
+    });
+  }
+  function parseAiJson(t) {
+    t = String(t || '');
+    var a = t.indexOf('{'), b = t.lastIndexOf('}');
+    if (a < 0 || b <= a) throw new Error('Die KI hat kein Rezept zurückgegeben');
+    var j = JSON.parse(t.slice(a, b + 1));
+    var arr = function (x) {
+      return Array.isArray(x) ? x.map(function (v) { return trim(typeof v === 'string' ? v : v && (v.text || v.name) || ''); }).filter(Boolean) : [];
+    };
+    var num = function (x) { var m = String(x == null ? '' : x).match(/\d+/); return m ? m[0] : ''; };
+    return {
+      title: trim(j.title).replace(/\s+/g, ' '), servings: num(j.servings), minutes: num(j.minutes),
+      ingredients: arr(j.ingredients).map(function (l) { return P.convertUnits(l.replace(/^[•\-*–·]\s*/, '')); }),
+      steps: arr(j.steps).map(function (l) { return l.replace(/^(?:schritt|step)?\s*\d{1,2}\s*[.):]\s*/i, ''); }),
+      notes: trim(j.notes)
+    };
+  }
+  // opts: { text, images: [{type, data(base64)}], hint }
+  function aiRecipe(opts, cfg) {
+    var c = cfg || aiCfg(), model = c.model || AI_DEF[c.provider];
+    var text = String(opts.text || '').slice(0, 30000), images = opts.images || [];
+    var userText = (text ? 'Hier ist der Text:\n\n' + text : (images.length > 1 ? 'Hier sind ' + images.length + ' Bilder vom selben Rezept.' : 'Hier ist das Bild.')) + (opts.hint ? '\n\n' + opts.hint : '');
+    aiAbort = window.AbortController ? new AbortController() : null;
+    var sig = aiAbort ? aiAbort.signal : undefined;
+    if (c.provider === 'gemini') {
+      return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
+        method: 'POST', signal: sig, headers: { 'content-type': 'application/json', 'x-goog-api-key': c.key },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: aiSystem(c.translate) }] },
+          contents: [{ role: 'user', parts: images.map(function (im) { return { inline_data: { mime_type: im.type, data: im.data } }; }).concat([{ text: userText }]) }],
+          generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
+        })
+      }).then(readJson).then(function (d) {
+        var parts = (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts) || [];
+        return parseAiJson(parts.map(function (x) { return x.text || ''; }).join(''));
+      });
+    }
+    var body = {
+      model: model, max_tokens: 8000, system: aiSystem(c.translate),
+      messages: [{ role: 'user', content: images.map(function (im) { return { type: 'image', source: { type: 'base64', media_type: im.type, data: im.data } }; }).concat([{ type: 'text', text: userText }]) }],
+      output_config: { format: { type: 'json_schema', schema: AI_SCHEMA }, effort: 'low' }
+    };
+    var send = function () {
+      return fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST', signal: sig,
+        headers: { 'content-type': 'application/json', 'x-api-key': c.key, 'anthropic-version': '2026-10-21', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify(body)
+      }).then(readJson);
+    };
+    return send().catch(function (err) {
+      // Ein Modell ohne strukturierte Ausgabe: einmal ohne output_config versuchen
+      if (err && err.status === 400 && body.output_config && /output_config|effort|format|schema/i.test(err.message)) { delete body.output_config; return send(); }
+      throw err;
+    }).then(function (d) {
+      return parseAiJson((d.content || []).filter(function (x) { return x.type === 'text'; }).map(function (x) { return x.text; }).join(''));
+    });
+  }
+  function aiErrText(err) {
+    if (err && err.name === 'AbortError') return 'abgebrochen';
+    if (navigator.onLine === false) return 'du bist offline';
+    if (err && (err.status === 401 || err.status === 403)) return 'der Schlüssel wird nicht akzeptiert';
+    if (err && err.status === 429) return 'zu viele Anfragen oder kein Guthaben mehr';
+    if (err && err.status === 404) return 'Modell nicht gefunden';
+    if (err && err.status === 400 && /credit|balance|billing/i.test(err.message)) return 'kein Guthaben auf dem API-Konto';
+    if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message)) return 'keine Verbindung';
+    return (err && err.message) || 'unbekannter Fehler';
+  }
+  function busy(msg) {
+    var el = document.getElementById('busy');
+    if (!msg) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.innerHTML = '<div class="busy-card"><span class="spin" aria-hidden="true"></span><b>' + esc(msg) + '</b><small>Das dauert meist ein paar Sekunden.</small>' +
+      '<button class="btn ghost small" data-a="busy-cancel">Abbrechen</button></div>';
+  }
+  function curFolders() { return S.folder !== 'all' && S.folder !== 'fav' && folderById(S.folder) ? [S.folder] : []; }
+  function aiPhotos(files) {
+    files = Array.prototype.slice.call(files || [], 0, 6);
+    if (!files.length) return;
+    busy(files.length > 1 ? 'KI liest deine ' + files.length + ' Bilder …' : 'KI liest dein Bild …');
+    Promise.all(files.map(function (f) {
+      return resizeImage(f, 1568, 0.85).then(blobToDataUrl).then(function (u) { return { type: 'image/jpeg', data: String(u).split(',')[1] }; });
+    })).then(function (images) {
+      return aiRecipe({ images: images });
+    }).then(function (a) {
+      busy(null);
+      if (!a.ingredients.length && !a.steps.length) { toast('Auf den Bildern wurde kein Rezept gefunden.'); return; }
+      finishImport({ title: a.title, minutes: a.minutes, servings: a.servings, source: '', notes: a.notes, image: '', ingredients: a.ingredients, steps: a.steps }, '');
+    }).catch(function (err) {
+      busy(null);
+      if (err && err.name === 'AbortError') return;
+      toast('KI: ' + aiErrText(err));
+    });
+  }
+  function aiRedo(r) {
+    var txt = [r.title, r.servings ? 'Portionen: ' + r.servings : '', r.minutes ? 'Zeit: ' + r.minutes + ' Minuten' : '', 'Zutaten:']
+      .concat(r.ingredients, ['Zubereitung:'], r.steps, r.notes ? ['Notizen:', r.notes] : []).filter(Boolean).join('\n');
+    busy('KI überarbeitet das Rezept …');
+    aiRecipe({ text: txt, hint: 'Dieses Rezept ist schon gespeichert, wurde aber unordentlich erkannt. Räum es auf und ordne es, ohne Inhalte wegzulassen.' }).then(function (a) {
+      busy(null);
+      if (!a.ingredients.length && !a.steps.length) { toast('Die KI konnte hier nichts verbessern.'); return; }
+      var before = JSON.stringify(r);
+      r.title = a.title || r.title; r.servings = a.servings || r.servings; r.minutes = a.minutes || r.minutes;
+      if (a.ingredients.length) r.ingredients = a.ingredients;
+      if (a.steps.length) r.steps = a.steps;
+      if (a.notes) r.notes = a.notes;
+      r.updatedAt = Date.now();
+      save(); rerender();
+      toast('Mit KI überarbeitet', 'Rückgängig', function () {
+        var o = normalize(JSON.parse(before)), i = S.recipes.indexOf(byId(o.id));
+        if (i > -1) { S.recipes[i] = o; save(); rerender(); }
+      });
+    }).catch(function (err) {
+      busy(null);
+      if (err && err.name !== 'AbortError') toast('KI: ' + aiErrText(err));
+    });
+  }
+  function aiTest(c) {
+    busy('Verbindung wird getestet …');
+    aiRecipe({ text: 'Spiegelei\nZutaten:\n1 Ei\n1 TL Butter\nZubereitung:\nButter erhitzen, Ei hineinschlagen und 3 Minuten braten.' }, c).then(function (a) {
+      busy(null);
+      toast(a.ingredients.length ? 'Verbindung klappt – die KI ist bereit ✓' : 'Verbunden, aber die Antwort war leer.');
+    }).catch(function (err) { busy(null); if (err && err.name !== 'AbortError') toast('Test fehlgeschlagen: ' + aiErrText(err)); });
+  }
+  function aiPanel() {
+    var c = aiCfg(), on = aiOn(), prov = S.aiProv || c.provider || 'claude';
+    var tg = function (a, val, label) { return '<button class="' + (val ? '' : 'off') + '" data-a="' + a + '" aria-pressed="' + val + '">' + ic(val ? 'check' : 'x', 16) + label + '</button>'; };
+    var head = '<section class="panel" id="ki"><h2 class="sec">KI-Erkennung</h2>' +
+      '<p>Mit KI versteht die App auch unordentliche Texte, Rezepte von Freunden, Fotos und Screenshots – und übersetzt auf Deutsch. Dafür brauchst du einen eigenen API-Schlüssel. Er bleibt nur auf diesem Gerät und kommt in kein Backup.</p>';
+    if (on) {
+      return head + '<p class="note-box">' + ic('check', 18) + '<span><b>Aktiv:</b> ' + AI_NAME[c.provider] + ' · ' + esc(c.model || AI_DEF[c.provider]) + ' · Schlüssel …' + esc(c.key.slice(-4)) + '</span></p>' +
+        '<div class="store-tg">' + tg('ai-auto', c.auto, 'Beim Einfügen automatisch') + tg('ai-translate', c.translate, 'Auf Deutsch übersetzen') + '</div>' +
+        '<p style="font-size:14px;color:var(--muted)">Ohne Internet oder wenn die KI nicht antwortet, erkennt die App das Rezept wie bisher mit Regeln.</p>' +
+        '<div class="btn-row"><button class="btn ghost" data-a="ai-test">' + ic('wand', 18) + 'Verbindung testen</button><button class="btn danger" data-a="ai-off">' + ic('trash', 18) + 'Schlüssel entfernen</button></div></section>';
+    }
+    var pb = function (p) { return '<button class="fchip' + (prov === p ? ' on' : '') + '" data-a="ai-prov" data-p="' + p + '" aria-pressed="' + (prov === p) + '">' + AI_NAME[p] + '</button>'; };
+    return head + '<div class="sel-chips" style="margin:4px 0 12px">' + pb('claude') + pb('gemini') + '</div>' +
+      (prov === 'claude'
+        ? '<p>Schlüssel holen: <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a> öffnen, anmelden → <b>API Keys</b> → <b>Create Key</b> → kopieren. Die API wird getrennt vom Claude-Abo abgerechnet, bei Max, Ultra und Team ist ein monatliches API-Guthaben dabei. Ein Rezept kostet mit Claude Haiku meist weniger als 0,1 Cent. Tipp: Dort ein Ausgabenlimit setzen.</p>'
+        : '<p>Schlüssel holen: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> öffnen, mit Google anmelden → <b>Create API key</b> → kopieren. Die Gratis-Stufe kostet nichts, Google darf die Inhalte dort aber zur Verbesserung seiner Produkte verwenden.</p>') +
+      field('API-Schlüssel', '<input type="password" data-bind="aikey" value="' + esc(S.aiKey || '') + '" placeholder="' + (prov === 'claude' ? 'sk-ant-…' : 'AIza…') + '" autocomplete="off" autocapitalize="off" spellcheck="false">') +
+      '<details><summary>Modell ändern (optional)</summary>' + field('Modell', '<input data-bind="aimodel" value="' + esc(S.aiModel || '') + '" placeholder="' + AI_DEF[prov] + '" autocomplete="off" autocapitalize="off" spellcheck="false">') + '</details>' +
+      '<div class="btn-row"><button class="btn accent" data-a="ai-save">' + ic('check', 18) + 'Speichern &amp; testen</button></div></section>';
+  }
+
   // ---------- Import ----------
   function viewImport() {
     return bar(backBtn, '<span class="bar-title">Text einfügen</span>', '') +
       '<main class="wrap form notab">' +
-      '<p class="lead">Füge eine Rezept-Beschreibung ein – Deutsch oder Englisch. Zutaten, Schritte, Zeit und Portionen werden erkannt, US-Einheiten automatisch umgerechnet.</p>' +
+      '<p class="lead">' + (aiOn() ? 'Füge irgendeinen Rezepttext ein – Videobeschreibung, Webseite oder ein Rezept, das dir jemand geschrieben hat. Die KI ordnet Zutaten und Schritte, übersetzt und rechnet Einheiten um.' : 'Füge eine Rezept-Beschreibung ein – Deutsch oder Englisch. Zutaten, Schritte, Zeit und Portionen werden erkannt, US-Einheiten automatisch umgerechnet.') + '</p>' +
       (S.importHint ? '<div class="note-box">' + ic('info', 18) + '<span>' + S.importHint + '</span></div>' : '') +
       '<textarea class="big" data-bind="importText" placeholder="z. B. „Easy garlic pasta 🍝 Ingredients: 200g spaghetti, 4 cloves garlic, 1/4 cup olive oil …“" aria-label="Rezepttext">' + esc(S.importText) + '</textarea>' +
       '<div class="btn-row"><button class="btn ghost" data-a="paste-into">' + ic('clipboard', 18) + (S.importText.trim() ? 'Teil anhängen' : 'Einfügen') + '</button>' +
-        '<button class="btn accent" data-a="parse">' + ic('wand', 18) + 'Rezept erkennen</button></div>' +
+        '<button class="btn accent" data-a="parse">' + ic('wand', 18) + (aiOn() ? 'Mit KI erkennen' : 'Rezept erkennen') + '</button></div>' +
+      (aiOn() && S.importText.trim() ? '<div class="btn-row"><button class="btn ghost" data-a="parse-rules">Ohne KI erkennen</button></div>' : '') +
       (S.importHint && S.importText.trim() ? '<div class="btn-row"><button class="btn ghost" data-a="raw">Trotzdem als Rezept anlegen</button></div>' : '') +
       '</main>';
   }
@@ -2239,24 +2440,42 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if (!title) return { text: '', empty: true, src: src };
     return { text: title + (src ? '\n' + src : '') };
   }
-  function startReview(text) {
+  function startReview(text, opts) {
+    opts = opts || {};
     var u = unwrapShared(text);
     if (u.empty) {
-      nav('import', { importText: u.src || '', importHint: 'TikTok hat für dieses Video keine Beschreibung mitgeschickt. Klapp die Beschreibung auf und drück die <b>Aktionstaste</b> („Rezept vom Bildschirm“) – oder füge den Text hier ein.' }, true);
+      nav('import', { importText: u.src || '', importHint: 'TikTok hat für dieses Video keine Beschreibung mitgeschickt. Klapp die Beschreibung auf und drück die <b>Aktionstaste</b> („Rezept vom Bildschirm“) – oder füge den Text hier ein.' }, S.view !== 'import');
       return;
     }
     text = u.text;
     var p = P.parse(text);
-    var base = { title: p.title, minutes: p.minutes, servings: p.servings, source: p.source, notes: p.notes, image: p.image || '', ingredients: p.ingredients, steps: p.steps,
-      folders: S.folder !== 'all' && S.folder !== 'fav' && folderById(S.folder) ? [S.folder] : [] };
-    if (p.title && p.ingredients.length && p.steps.length && directSave()) {
-      var dup = S.recipes.filter(function (r) { return r.title.toLowerCase() === p.title.toLowerCase() && r.ingredients.length === p.ingredients.length; })[0];
+    var rules = { title: p.title, minutes: p.minutes, servings: p.servings, source: p.source, notes: p.notes, image: p.image || '', ingredients: p.ingredients, steps: p.steps };
+    var content = text.replace(/https?:\/\/\S+/g, '').replace(/^\s*(?:bild|image|foto|photo)\s*:.*$/gim, '').trim();
+    var useAi = aiOn() && !opts.rules && (opts.ai || aiCfg().auto) && navigator.onLine !== false && content.length >= 25;
+    if (!useAi) { finishImport(rules, text); return; }
+    busy('KI liest das Rezept …');
+    aiRecipe({ text: text.replace(/^\s*(?:bild|image|foto|photo)\s*:\s*https?:\/\/\S+\s*$/gim, '') }).then(function (a) {
+      busy(null);
+      if (!a.ingredients.length && !a.steps.length) { finishImport(rules, text); return; }
+      finishImport({ title: a.title || p.title, minutes: a.minutes || p.minutes, servings: a.servings || p.servings, source: p.source, notes: a.notes, image: p.image || '', ingredients: a.ingredients, steps: a.steps }, text);
+    }).catch(function (err) {
+      busy(null);
+      if (err && err.name === 'AbortError') { if (S.view !== 'import') nav('import', { importText: text, importHint: '' }, true); return; }
+      S.importNote = 'Ohne KI erkannt (KI: ' + aiErrText(err) + ')';
+      finishImport(rules, text);
+      if (S.importNote) { toast(S.importNote); S.importNote = ''; }
+    });
+  }
+  function finishImport(base, text) {
+    base.folders = curFolders();
+    if (base.title && base.ingredients.length && base.steps.length && directSave()) {
+      var dup = S.recipes.filter(function (r) { return r.title.toLowerCase() === base.title.toLowerCase() && r.ingredients.length === base.ingredients.length; })[0];
       if (dup) { nav('detail', { id: dup.id, dtab: 'ing', importText: '', importHint: '' }, true); toast('Dieses Rezept ist schon gespeichert'); return; }
       S.form = makeForm('auto', base);
       saveForm();
       return;
     }
-    if (p.ingredients.length || p.steps.length) { nav('form', { form: makeForm('review', base), importHint: '' }, true); return; }
+    if (base.ingredients.length || base.steps.length) { nav('form', { form: makeForm('review', base), importHint: '' }, true); return; }
     var hint;
     if (/instagram\.com/i.test(text)) hint = 'Von Instagram ist nur der Link angekommen – Instagram gibt die Beschreibung beim Teilen nicht weiter. Klapp die Beschreibung im Video auf und drück die <b>Aktionstaste</b> („Rezept vom Bildschirm“, Anleitung unter <b>Mehr</b>).';
     else if (/tiktok\.com/i.test(text)) hint = 'Von TikTok ist nur der Link angekommen. Klapp die Beschreibung auf und drück die <b>Aktionstaste</b> – oder füge den Text hier ein.';
@@ -2307,7 +2526,8 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if (idx >= 0) S.recipes[idx] = rec; else S.recipes.push(rec);
     if (!save()) return;
     clearDraft();
-    toast(f.mode === 'edit' ? 'Änderungen gespeichert' : f.mode === 'auto' ? 'Rezept gespeichert – mit ✎ kannst du es anpassen' : 'Rezept gespeichert');
+    toast(f.mode === 'edit' ? 'Änderungen gespeichert' : f.mode === 'auto' ? (S.importNote ? S.importNote + ' – gespeichert' : 'Rezept gespeichert – mit ✎ kannst du es anpassen') : 'Rezept gespeichert');
+    S.importNote = '';
     if (f.mode === 'edit' && depth > 0) { S.form = null; S.id = rec.id; back(); return; }
     nav('detail', { id: rec.id, form: null, importText: '', importHint: '', dtab: 'ing' }, f.mode === 'auto' && S.view !== 'import');
   }
@@ -2343,7 +2563,11 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         return sheetWrap('Rezept hinzufügen', '<h2 class="sheet-t">Rezept hinzufügen</h2>' +
           '<button class="opt" data-a="paste"><span class="opt-ic accent">' + ic('clipboard') + '</span><span class="grow"><strong>Aus der Zwischenablage</strong><small>Nach Aktionstaste oder Kurzbefehl – wird automatisch erkannt</small></span></button>' +
           '<button class="opt" data-a="import"><span class="opt-ic">' + ic('wand') + '</span><span class="grow"><strong>Text einfügen</strong><small>Beschreibung von TikTok, Instagram, Webseite …</small></span></button>' +
+          '<button class="opt" data-a="ai-photos"><span class="opt-ic">' + ic('camera') + '</span><span class="grow"><strong>Aus Fotos oder Screenshots <span class="tag-ai">KI</span></strong><small>Handgeschriebenes, Kochbuchseiten, Screenshots – bis zu 6 Bilder</small></span></button>' +
           '<button class="opt" data-a="new"><span class="opt-ic">' + ic('pencil') + '</span><span class="grow"><strong>Selbst schreiben</strong><small>Mit Foto, Zutaten und Schritten</small></span></button>');
+      case 'ai-need':
+        return sheetWrap('KI einrichten', '<h2 class="sheet-t">Dafür brauchst du die KI</h2><p class="sheet-sub">Bilder kann nur die KI lesen. Richte sie einmal unter <b>Mehr → KI-Erkennung</b> mit einem API-Schlüssel ein – das dauert zwei Minuten.</p>' +
+          '<button class="btn accent wide" data-a="ai-setup">' + ic('wand', 18) + 'Jetzt einrichten</button>');
       case 'sort':
         return sheetWrap('Sortieren', '<h2 class="sheet-t">Sortieren</h2>' + Object.keys(SORTS).map(function (k) {
           return '<button class="opt" data-a="sort-set" data-s="' + k + '"><span class="grow"><strong>' + SORTS[k] + '</strong></span>' + (S.prefs.sort === k ? '<span class="chk-ic">' + ic('check', 20) + '</span>' : '') + '</button>';
@@ -2351,6 +2575,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       case 'rmore':
         return sheetWrap('Rezept', '<h2 class="sheet-t">' + esc(r.title) + '</h2>' +
           '<button class="opt" data-a="edit"><span class="opt-ic">' + ic('pencil') + '</span><span class="grow"><strong>Bearbeiten</strong><small>Foto, Zutaten, Schritte, Ordner</small></span></button>' +
+          (aiOn() ? '<button class="opt" data-a="ai-redo"><span class="opt-ic">' + ic('wand') + '</span><span class="grow"><strong>Mit KI überarbeiten</strong><small>Zutaten und Schritte neu ordnen und übersetzen</small></span></button>' : '') +
           '<button class="opt" data-a="share-recipe"><span class="opt-ic">' + ic('share') + '</span><span class="grow"><strong>Teilen</strong><small>Als Text – auch für WhatsApp oder Notizen</small></span></button>' +
           '<button class="opt" data-a="dup"><span class="opt-ic">' + ic('copy') + '</span><span class="grow"><strong>Duplizieren</strong><small>Als Vorlage für eine Variante</small></span></button>' +
           '<button class="opt danger" data-a="delete"><span class="opt-ic">' + ic('trash') + '</span><span class="grow"><strong>Löschen</strong></span></button>');
@@ -2558,6 +2783,11 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       input.value = '';
     };
     reader.readAsText(file);
+  });
+  document.getElementById('aiFiles').addEventListener('change', function (e) {
+    var files = e.target.files ? Array.prototype.slice.call(e.target.files) : [];
+    e.target.value = '';
+    aiPhotos(files);
   });
   document.getElementById('photoFile').addEventListener('change', function (e) {
     var input = e.target, file = input.files && input.files[0];
@@ -2864,8 +3094,9 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         }).catch(function () { toast('Tippe lange ins Textfeld und wähle „Einfügen“.'); });
         break;
       case 'parse':
+      case 'parse-rules':
         if (!S.importText.trim()) { toast('Füge zuerst einen Text ein.'); break; }
-        startReview(S.importText);
+        startReview(S.importText, a === 'parse' ? { ai: true } : { rules: true });
         break;
       case 'raw': {
         var p = P.parse(S.importText);
@@ -2874,6 +3105,34 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       }
 
       // Mehr
+      case 'ai-photos':
+        if (!aiOn()) { S.sheet = { type: 'ai-need' }; render(); break; }
+        S.sheet = null; render(); document.getElementById('aiFiles').click();
+        break;
+      case 'ai-setup': nav('more', {}, false); setTimeout(function () { var k = document.getElementById('ki'); if (k) k.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60); break;
+      case 'ai-redo': S.sheet = null; render(); if (r) aiRedo(r); break;
+      case 'busy-cancel': if (aiAbort) aiAbort.abort(); busy(null); break;
+      case 'ai-prov': S.aiProv = el.getAttribute('data-p'); rerender(); break;
+      case 'ai-save': {
+        var key = trim(S.aiKey), prov = S.aiProv || 'claude';
+        if (!key) { toast('Füge zuerst den API-Schlüssel ein.'); focusLater('[data-bind="aikey"]'); break; }
+        if (prov === 'claude' && !/^sk-ant-/.test(key)) toast('Hinweis: Claude-Schlüssel beginnen meist mit „sk-ant-“.');
+        var cfg = { provider: prov, key: key, model: trim(S.aiModel), translate: true, auto: true };
+        aiSet(cfg); S.aiKey = ''; S.aiModel = ''; rerender();
+        aiTest(cfg);
+        break;
+      }
+      case 'ai-test': aiTest(); break;
+      case 'ai-off':
+        if (!window.confirm('KI-Schlüssel von diesem Gerät entfernen?')) break;
+        lsDel(AI_KEY); rerender(); toast('Schlüssel entfernt – die App erkennt Rezepte wieder ohne KI');
+        break;
+      case 'ai-auto':
+      case 'ai-translate': {
+        var cf = aiCfg(), k2 = a === 'ai-auto' ? 'auto' : 'translate';
+        cf[k2] = !cf[k2]; aiSet(cf); rerender();
+        break;
+      }
       case 'toggle-direct': lsSet(DIRECT_KEY, directSave() ? '0' : '1'); rerender(); toast(directSave() ? 'Rezepte werden direkt gespeichert' : 'Rezepte werden vorher zum Prüfen angezeigt'); break;
       case 'export': exportBackup(); break;
       case 'import-backup': document.getElementById('backupFile').click(); break;
@@ -2901,6 +3160,8 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     }
     if (b === 'importText') S.importText = t.value;
     if (b === 'extraText') S.extraText = t.value;
+    if (b === 'aikey') S.aiKey = t.value;
+    if (b === 'aimodel') S.aiModel = t.value;
     if (S.sheet) {
       if (b === 'fname') S.sheet.name = t.value;
       if (b === 'note') S.sheet.note = t.value;
