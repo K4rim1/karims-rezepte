@@ -2437,7 +2437,27 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
 
   // ---------- KI-Erkennung (Claude oder Gemini, eigener Schlüssel) ----------
   var AI_KEY = 'kochbuch.ai.v1';
-  var AI_DEF = { claude: 'claude-haiku-5-5', gemini: 'gemini-flash-latest' };
+  var AI_DEF = { claude: 'claude-haiku-5-5', gemini: 'gemini-2.5-flash' };
+  var GEMINI_FALLBACK = 'gemini-flash-latest';
+  function geminiGen(model, g) {
+    if (/^gemini-2\.5-flash/.test(model)) g.thinkingConfig = { thinkingBudget: 0 };
+    return g;
+  }
+  // Gemini-Aufruf; ist das Standardmodell irgendwann abgeschaltet (404), einmal mit dem „latest“-Modell versuchen
+  function geminiFetch(model, body, sig, key, custom) {
+    var go = function (m) {
+      return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent', {
+        method: 'POST', signal: sig, headers: { 'content-type': 'application/json', 'x-goog-api-key': key }, body: JSON.stringify(body)
+      }).then(readJson);
+    };
+    return go(model).catch(function (err) {
+      if (!custom && err && err.status === 404 && model !== GEMINI_FALLBACK) {
+        if (body.generationConfig) delete body.generationConfig.thinkingConfig;
+        return go(GEMINI_FALLBACK);
+      }
+      throw err;
+    });
+  }
   var AI_NAME = { claude: 'Claude', gemini: 'Google Gemini' };
   function aiCfg() {
     var c = lsJson(AI_KEY, {}) || {};
@@ -2509,14 +2529,11 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       return JSON.parse(t.slice(a, b + 1));
     };
     if (c.provider === 'gemini') {
-      return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
-        method: 'POST', signal: sig, headers: { 'content-type': 'application/json', 'x-goog-api-key': c.key },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: system }] },
-          contents: [{ role: 'user', parts: images.map(function (im) { return { inline_data: { mime_type: im.type, data: im.data } }; }).concat([{ text: userText }]) }],
-          generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
-        })
-      }).then(readJson).then(function (d) {
+      return geminiFetch(model, {
+        systemInstruction: { parts: [{ text: system }] },
+        contents: [{ role: 'user', parts: images.map(function (im) { return { inline_data: { mime_type: im.type, data: im.data } }; }).concat([{ text: userText }]) }],
+        generationConfig: geminiGen(model, { responseMimeType: 'application/json', temperature: 0.2 })
+      }, sig, c.key, !!c.model).then(function (d) {
         var parts = (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts) || [];
         return parse(parts.map(function (x) { return x.text || ''; }).join(''));
       });
@@ -2552,7 +2569,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if (err && err.name === 'AbortError') return 'abgebrochen';
     if (navigator.onLine === false) return 'du bist offline';
     if (err && (err.status === 401 || err.status === 403)) return 'der Schlüssel wird nicht akzeptiert';
-    if (err && err.status === 429) return 'zu viele Anfragen oder kein Guthaben mehr';
+    if (err && err.status === 429) return aiCfg().provider === 'gemini' ? 'Gratis-Limit erreicht – in einer Minute bzw. morgen geht es wieder' : 'zu viele Anfragen oder kein Guthaben mehr';
     if (err && err.status === 404) return 'Modell nicht gefunden';
     if (err && err.status === 400 && /credit|balance|billing/i.test(err.message)) return 'kein Guthaben auf dem API-Konto';
     if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message)) return 'keine Verbindung';
@@ -2615,7 +2632,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     }).catch(function (err) { busy(null); if (err && err.name !== 'AbortError') toast('Test fehlgeschlagen: ' + aiErrText(err)); });
   }
   function aiPanel() {
-    var c = aiCfg(), on = aiOn(), prov = S.aiProv || c.provider || 'claude';
+    var c = aiCfg(), on = aiOn(), prov = S.aiProv || c.provider || 'gemini';
     var tg = function (a, val, label) { return '<button class="' + (val ? '' : 'off') + '" data-a="' + a + '" aria-pressed="' + val + '">' + ic(val ? 'check' : 'x', 16) + label + '</button>'; };
     var head = '<section class="panel" id="ki"><h2 class="sec">KI-Erkennung</h2>' +
       '<p>Mit KI versteht die App auch unordentliche Texte, Rezepte von Freunden, Fotos und Screenshots, übersetzt auf Deutsch, sucht gut bewertete Rezepte im Internet (🌐 oben bei Rezepte) und liest Rezept-Links. Dafür brauchst du einen eigenen API-Schlüssel. Er bleibt nur auf diesem Gerät und kommt in kein Backup.</p>';
@@ -2625,11 +2642,11 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         '<p style="font-size:14px;color:var(--muted)">Ohne Internet oder wenn die KI nicht antwortet, erkennt die App das Rezept wie bisher mit Regeln.</p>' +
         '<div class="btn-row"><button class="btn ghost" data-a="ai-test">' + ic('wand', 18) + 'Verbindung testen</button><button class="btn danger" data-a="ai-off">' + ic('trash', 18) + 'Schlüssel entfernen</button></div></section>';
     }
-    var pb = function (p) { return '<button class="fchip' + (prov === p ? ' on' : '') + '" data-a="ai-prov" data-p="' + p + '" aria-pressed="' + (prov === p) + '">' + AI_NAME[p] + '</button>'; };
-    return head + '<div class="sel-chips" style="margin:4px 0 12px">' + pb('claude') + pb('gemini') + '</div>' +
+    var pb = function (p, tag) { return '<button class="fchip' + (prov === p ? ' on' : '') + '" data-a="ai-prov" data-p="' + p + '" aria-pressed="' + (prov === p) + '">' + AI_NAME[p] + ' <small>' + tag + '</small></button>'; };
+    return head + '<div class="sel-chips" style="margin:4px 0 12px">' + pb('gemini', 'gratis') + pb('claude', 'kostenpflichtig') + '</div>' +
       (prov === 'claude'
-        ? '<p>Schlüssel holen: <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a> öffnen, anmelden → <b>API Keys</b> → <b>Create Key</b> → kopieren. Die API wird getrennt vom Claude-Abo abgerechnet, bei Max, Ultra und Team ist ein monatliches API-Guthaben dabei. Ein Rezept kostet mit Claude Haiku meist weniger als 0,1 Cent. Tipp: Dort ein Ausgabenlimit setzen.</p>'
-        : '<p>Schlüssel holen: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> öffnen, mit Google anmelden → <b>Create API key</b> → kopieren. Die Gratis-Stufe kostet nichts, Google darf die Inhalte dort aber zur Verbesserung seiner Produkte verwenden.</p>') +
+        ? '<p><b>Kostet Geld</b> (wird pro Anfrage abgerechnet) – wenn du nur gratis willst, nimm Google Gemini. Schlüssel holen: <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a> öffnen, anmelden → <b>API Keys</b> → <b>Create Key</b> → kopieren. Die API wird getrennt vom Claude-Abo abgerechnet, bei Max, Ultra und Team ist ein monatliches API-Guthaben dabei. Ein Rezept kostet mit Claude Haiku meist weniger als 0,1 Cent. Tipp: Dort ein Ausgabenlimit setzen.</p>'
+        : '<p><b>Gratis:</b> <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> öffnen, mit deinem Google-Konto anmelden → <b>API-Schlüssel erstellen</b> → kopieren und unten einfügen. <b>Keine Zahlungsmethode hinterlegen</b> – dann bleibt es bei der Gratis-Stufe und es kann nichts abgebucht werden; ist das Tageslimit erreicht, kommt nur ein Hinweis. Google darf Inhalte der Gratis-Stufe zur Verbesserung seiner Produkte verwenden – für Rezepte meist egal.</p>') +
       field('API-Schlüssel', '<input type="password" data-bind="aikey" value="' + esc(S.aiKey || '') + '" placeholder="' + (prov === 'claude' ? 'sk-ant-…' : 'AIza…') + '" autocomplete="off" autocapitalize="off" spellcheck="false">') +
       '<details><summary>Modell ändern (optional)</summary>' + field('Modell', '<input data-bind="aimodel" value="' + esc(S.aiModel || '') + '" placeholder="' + AI_DEF[prov] + '" autocomplete="off" autocapitalize="off" spellcheck="false">') + '</details>' +
       '<div class="btn-row"><button class="btn accent" data-a="ai-save">' + ic('check', 18) + 'Speichern &amp; testen</button></div></section>';
@@ -2668,14 +2685,14 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     var c = cfg || aiCfg(), model = c.model || AI_DEF.gemini;
     var ctl = window.AbortController ? new AbortController() : null;
     aiAbort = ctl;
-    return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
-      method: 'POST', signal: ctl ? ctl.signal : undefined, headers: { 'content-type': 'application/json', 'x-goog-api-key': c.key },
-      body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: userText }] }], tools: tools, generationConfig: { temperature: 0.3 } })
-    }).then(readJson).then(function (d) {
+    return geminiFetch(model, { systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: userText }] }], tools: tools, generationConfig: { temperature: 0.3 } },
+      ctl ? ctl.signal : undefined, c.key, !!c.model).then(function (d) {
       var cand = d.candidates && d.candidates[0] || {};
       var parts = (cand.content && cand.content.parts) || [];
       var g = cand.groundingMetadata || {};
-      return { text: parts.map(function (x) { return x.text || ''; }).join(''), urls: (g.groundingChunks || []).map(function (ch) { return ch.web && ch.web.uri; }).filter(Boolean) };
+      var web = (g.groundingChunks || []).map(function (ch) { return ch.web || {}; });
+      // Gemini liefert Weiterleitungs-Links; im Titel steht die echte Domain der Quelle
+      return { text: parts.map(function (x) { return x.thought ? '' : (x.text || ''); }).join(''), urls: web.map(function (w) { return w.uri; }).filter(Boolean), domains: web.map(function (w) { return String(w.title || '').toLowerCase().replace(/^www\./, ''); }).filter(Boolean) };
     });
   }
   function jsonFrom(t) {
@@ -2688,7 +2705,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
   function discoverSearch(q) {
     var c = aiCfg(), userText = 'Suche Rezepte für: ' + q;
     var p = c.provider === 'gemini'
-      ? geminiTools(DISC_SYSTEM, userText, [{ google_search: {} }]).then(function (r) { return { text: r.text, seen: null }; })
+      ? geminiTools(DISC_SYSTEM, userText, [{ google_search: {} }]).then(function (r) { return { text: r.text, seen: null, domains: r.domains }; })
       : anthropicTools(DISC_SYSTEM, userText, [{ type: 'web_search_20250305', name: 'web_search', max_uses: 4, user_location: { type: 'approximate', city: 'Wien', country: 'AT', timezone: 'Europe/Vienna' } }]).then(function (blocks) {
           var seen = {};
           blocks.forEach(function (b) { if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) b.content.forEach(function (r) { if (r && r.url) seen[normUrl(r.url)] = 1; }); });
@@ -2704,6 +2721,12 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       if (r.seen && Object.keys(r.seen).length) {
         var ok = list.filter(function (x) { return r.seen[normUrl(x.url)]; });
         if (ok.length) list = ok;
+      }
+      // Gemini: nur Seiten von Domains, die die Google-Suche wirklich gefunden hat
+      if (r.domains && r.domains.length) {
+        var dom = function (u) { return (String(u).match(/^https?:\/\/(?:www\.)?([^\/?#]+)/i) || [0, ''])[1].toLowerCase(); };
+        var okd = list.filter(function (x) { var d = dom(x.url); return r.domains.some(function (k) { return d === k || d.slice(-k.length - 1) === '.' + k || k.slice(-d.length - 1) === '.' + d; }); });
+        if (okd.length) list = okd;
       }
       return list.slice(0, 10);
     });
@@ -2766,7 +2789,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     } else if (list) res = '<div class="empty"><p>Keine passenden Rezepte gefunden. Versuch es mit anderen Worten.</p></div>';
     return bar(backBtn, '<span class="bar-title">Rezepte entdecken</span>', '') +
       '<main class="wrap notab">' +
-      (aiOn() ? '' : '<div class="note-box">' + ic('info', 18) + '<span>Für die Suche im Internet brauchst du die <b>KI-Erkennung</b> (Mehr → KI-Erkennung). Am besten mit Claude – eine Suche kostet dort meist nur wenige Cent.</span></div>') +
+      (aiOn() ? '' : '<div class="note-box">' + ic('info', 18) + '<span>Für die Suche im Internet brauchst du die <b>KI-Erkennung</b> (Mehr → KI-Erkennung) – mit Google Gemini gratis.</span></div>') +
       '<p class="lead">Sag, worauf du Lust hast – die KI sucht im Internet nach echten, gut bewerteten Rezepten. Mit <b>Übernehmen</b> landet das Rezept in deiner Sammlung.</p>' +
       '<label class="search">' + ic('search', 18) + '<input type="search" data-bind="discq" value="' + esc(d.q || '') + '" placeholder="z. B. cremiges Hähnchen-Curry, schnell" enterkeyhint="search" aria-label="Wonach suchen?"></label>' +
       '<div class="fchips">' + DISC_SUGGEST.map(function (q) { return '<button class="fchip" data-a="disc-chip" data-q="' + esc(q) + '">' + esc(q) + '</button>'; }).join('') + '</div>' +
@@ -3487,9 +3510,10 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       case 'busy-cancel': if (aiAbort) aiAbort.abort(); busy(null); break;
       case 'ai-prov': S.aiProv = el.getAttribute('data-p'); rerender(); break;
       case 'ai-save': {
-        var key = trim(S.aiKey), prov = S.aiProv || 'claude';
+        var key = trim(S.aiKey), prov = S.aiProv || 'gemini';
         if (!key) { toast('Füge zuerst den API-Schlüssel ein.'); focusLater('[data-bind="aikey"]'); break; }
         if (prov === 'claude' && !/^sk-ant-/.test(key)) toast('Hinweis: Claude-Schlüssel beginnen meist mit „sk-ant-“.');
+        if (prov === 'gemini' && !/^AI/.test(key)) toast('Hinweis: Gemini-Schlüssel beginnen meist mit „AI…“.');
         var cfg = { provider: prov, key: key, model: trim(S.aiModel), translate: true, auto: true };
         aiSet(cfg); S.aiKey = ''; S.aiModel = ''; rerender();
         aiTest(cfg);
