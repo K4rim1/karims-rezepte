@@ -120,7 +120,7 @@ function build(all, catalog, today, sources) {
     const group = it.group != null ? String(it.group) : groupOf(store, it.category);
     const size = sizeOf(it, lname);
     if (!size || !(size.qty > 0)) continue;
-    products.push({ store, name, lname, price, unit: size.unit, qty: size.qty, group, bio: !!it.bio || BIO.test(lname) });
+    products.push({ store, name, lname, head: lname.split(',')[0], price, unit: size.unit, qty: size.qty, group, bio: !!it.bio || BIO.test(lname), old: it.old || '' });
   }
 
   const present = STORES.filter((s) => products.some((p) => p.store === s));
@@ -134,6 +134,8 @@ function build(all, catalog, today, sources) {
     let cands = [];
     for (const p of products) {
       if (!it.P.test(p.lname)) continue;
+      // "Streichwurst, Zwiebel": Zutat steht nur in der Geschmacksrichtung → kein Treffer
+      if (p.head !== p.lname && !it.P.test(p.head)) continue;
       if (it.X && it.X.test(p.lname)) continue;
       if (p.group) {
         if (TRUST_GROUPS.has(p.store)) {
@@ -150,7 +152,7 @@ function build(all, catalog, today, sources) {
         else if (!((p.unit === 'g' && it.u === 'ml') || (p.unit === 'ml' && it.u === 'g'))) continue;
       }
       if (it.r && (qty < it.r[0] || qty > it.r[1])) continue;
-      cands.push({ store: p.store, name: p.name, price: p.price, qty, up: p.price / qty, bio: p.bio });
+      cands.push({ store: p.store, name: p.name, price: p.price, qty, up: p.price / qty, bio: p.bio, old: p.old });
     }
     // Ausreißer (meist falsch erkannte Packungsgrößen) entfernen
     const med = median(cands.map((c) => c.up));
@@ -159,13 +161,15 @@ function build(all, catalog, today, sources) {
     report.push('■ ' + it.n + ' (' + it.id + ')');
     for (const s of present) {
       let mine = cands.filter((c) => c.store === s);
+      // aktuelle Preise vor älteren (z. B. Hofer-Produkte, die hofer.at nicht online listet)
+      if (mine.some((c) => !c.old)) mine = mine.filter((c) => !c.old);
       // Bio nur, wenn es in diesem Laden nichts anderes gibt (außer die Zutat erlaubt Bio ausdrücklich)
       if (!it.bo && mine.some((c) => !c.bio)) mine = mine.filter((c) => !c.bio);
       const byUnit = [...mine].sort((a, b) => a.up - b.up).slice(0, 3);
       const cheapest = [...mine].sort((a, b) => a.price - b.price)[0];
       const pick = cheapest && !byUnit.includes(cheapest) ? byUnit.concat(cheapest) : byUnit;
-      pick.forEach((c) => offers.push([s, c.name, round2(c.price), Math.round(c.qty * 10) / 10]));
-      report.push('   ' + s.padEnd(6) + (pick.length ? pick.map((c) => c.name + ' · ' + c.price.toFixed(2) + ' € / ' + Math.round(c.qty) + ' ' + it.u).join('  |  ') : '–'));
+      pick.forEach((c) => offers.push(c.old ? [s, c.name, round2(c.price), Math.round(c.qty * 10) / 10, c.old] : [s, c.name, round2(c.price), Math.round(c.qty * 10) / 10]));
+      report.push('   ' + s.padEnd(6) + (pick.length ? pick.map((c) => c.name + ' · ' + c.price.toFixed(2) + ' € / ' + Math.round(c.qty) + ' ' + it.u + (c.old ? ' (Stand ' + c.old + ')' : '')).join('  |  ') : '–'));
     }
     if (offers.length) out.items[it.id] = offers; else none.push(it.n);
   }
@@ -179,7 +183,7 @@ function build(all, catalog, today, sources) {
   // Kompakter Produktindex für die freie Suche in der App (Zutaten ohne Katalog-Eintrag)
   const idx = { updated: today, stores: present, p: [] };
   for (const p of products) {
-    if (NEVER.has(p.group)) continue;
+    if (NEVER.has(p.group) || p.old) continue;
     idx.p.push([present.indexOf(p.store), p.name.slice(0, 90), round2(p.price), p.unit, Math.round(p.qty * 10) / 10, p.group || '']);
   }
   return { out, idx, report: head.concat(report).join('\n'), stats: { products: products.length, matched: Object.keys(out.items).length, none, index: idx.p.length } };

@@ -71,7 +71,12 @@ async function main() {
     const hofer = await fetchHofer(today);
     console.log('Hofer (hofer.at): ' + hofer.length + ' Produkte mit Preis.');
     if (hofer.length >= 300) {
-      all = all.filter((it) => String(it.store || '').toLowerCase() !== 'hofer').concat(hofer);
+      // hofer.at listet nur einen Teil des Sortiments online – ältere Hofer-Preise bleiben als Ersatz, gekennzeichnet
+      all = all.map((it) => {
+        if (String(it.store || '').toLowerCase() !== 'hofer') return it;
+        const h = Array.isArray(it.priceHistory) && it.priceHistory[0];
+        return { ...it, old: (h && h.date) || 'älter' };
+      }).concat(hofer);
       sources = 'heisse-preise.io, hofer.at';
     }
   } catch (e) {
