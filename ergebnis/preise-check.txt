@@ -7,7 +7,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Zwiebel gelb · 1.23 € / 1000 g  |  SPAR Zwiebel gelb · 1.51 € / 280 g  |  SPAR Zwiebel Mix · 1.70 € / 280 g
    billa Da komm ich her! Zwiebel Gelb · 1.19 € / 1000 g
 ■ Rote Zwiebeln (rote_zwiebel)
-   hofer –
+   hofer HOFER MARKTPLATZ Zwiebel rot 1kg · 1.49 € / 1000 g (Stand 2025-10-01)
    spar  SPAR Zwiebel rot · 1.61 € / 1000 g  |  Tropea Zwiebel rot Tropea Zwiebel Zopf rot KG KG 1 · 3.80 € / 1000 g  |  SPAR Zwiebel rot · 1.32 € / 280 g  |  S-BUDGET Zwiebeln Rot/Weiß tiefgekühlt, geschnitten · 0.94 € / 150 g
    billa Da komm ich her! Zwiebel Rot · 1.69 € / 1000 g  |  Da komm ich her! Zwiebel Rot · 1.79 € / 380 g
 ■ Frühlingszwiebeln (jungzwiebel)
@@ -15,7 +15,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Jungzwiebel rot per Bund · 1.70 € / 100 g
    billa –
 ■ Knoblauch (knoblauch)
-   hofer –
+   hofer HOFER MARKTPLATZ Knoblauch 250g · 2.49 € / 250 g (Stand 2025-08-25)  |  AMA Knoblauch 250g · 2.79 € / 250 g (Stand 2025-07-29)  |  ZURÜCK ZUM URSPRUNG Knoblauch 150g · 2.24 € / 150 g (Stand 2025-10-13)
    spar  Knoblauch frisch 1 STK · 1.23 € / 50 g  |  Knoblauch frisch 1 STK · 1.23 € / 50 g  |  SPAR Veggie vegane Almjäger Knoblauch · 2.29 € / 80 g
    billa Da komm ich her! Knoblauch · 2.46 € / 200 g
 ■ Tomaten (tomate)
@@ -23,23 +23,23 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Tomaten rund per kg · 1.42 € / 1000 g  |  S-BUDGET Tomaten · 2.85 € / 1000 g  |  SPAR Rispentomaten per Tasse · 1.89 € / 500 g
    billa Clever Tomaten · 2.49 € / 1000 g  |  Fleischtomaten 'Monte Rosa' · 4.99 € / 1000 g
 ■ Cherrytomaten (cherrytomate)
-   hofer –
+   hofer HOFER MARKTPLATZ Cherrytomaten an der Rispe 500g · 2.29 € / 500 g (Stand 2025-10-20)  |  Premium Cherrytomaten 300g · 2.99 € / 300 g (Stand 2025-08-12)  |  Premium Cherrytomaten 200g · 2.99 € / 200 g (Stand 2025-10-20)
    spar  S-BUDGET Cherrytomate an der Rispe · 2.37 € / 500 g  |  Cherrytomaten aus der Steiermark 400 G · 2.85 € / 400 g  |  SPAR Cherrytomaten Mix · 2.85 € / 300 g
    billa Clever Cherrytomaten · 2.29 € / 500 g  |  Datteltomaten · 1.49 € / 250 g  |  Da komm ich her! Wiener Cherry Paradeiser Mix · 3.32 € / 270 g
 ■ Paprika (paprika)
-   hofer –
+   hofer BIO Paprika 400g · 1.99 € / 400 g (Stand 2025-10-20)
    spar  S-BUDGET Paprika Mix · 2.99 € / 500 g  |  SPAR Paprika Mix · 3.80 € / 450 g  |  SPAR Paprika gelb · 1.32 € / 150 g
    billa Clever Paprika Rot · 2.69 € / 500 g  |  Da komm ich her! Paprika Tricolore · 2.99 € / 450 g  |  SanLucar Regenbogen Paprika · 3.99 € / 600 g  |  Da komm ich her! Paprika Grün · 1.19 € / 150 g
 ■ Zucchini (zucchini)
-   hofer –
+   hofer HOFER MARKTPLATZ Zucchini 1 kg · 1.99 € / 1000 g (Stand 2025-09-16)  |  HOFER MARKTPLATZ Zucchini 1kg · 1.99 € / 1000 g (Stand 2025-08-22)
    spar  SPAR Zucchini · 1.89 € / 1000 g  |  SPAR Zucchini · 1.23 € / 500 g  |  Bergzucchini 2 STK · 1.70 € / 500 g
    billa Clever Zucchini · 1.99 € / 1000 g
 ■ Karotten (karotte)
-   hofer –
+   hofer HOFER MARKTPLATZ Karotten 1kg · 1.29 € / 1000 g (Stand 2025-10-17)  |  ZURÜCK ZUM URSPRUNG Karotten 1kg · 1.89 € / 1000 g (Stand 2025-10-14)
    spar  SPAR Karotten · 1.13 € / 1000 g  |  S-BUDGET Karotten · 1.61 € / 1000 g  |  Karotten lose Karotten lose per kg KG 1 · 1.70 € / 1000 g
    billa Wunderlinge Karotten · 2.49 € / 2000 g  |  Clever Karotten · 1.49 € / 1000 g  |  Da komm ich her! Karotten · 1.49 € / 1000 g  |  Da komm ich her! Karotten · 0.94 € / 500 g
 ■ Kartoffeln (kartoffel)
-   hofer –
+   hofer HOFER MARKTPLATZ Kartoffeln, festkochend 5kg · 3.99 € / 5000 g (Stand 2025-09-08)  |  HOFER MARKTPLATZ Kartoffeln, vorwiegend festkochend 5kg · 3.99 € / 5000 g (Stand 2025-08-13)  |  HOFER MARKTPLATZ Kartoffeln 2kg, festkochend · 1.99 € / 2000 g (Stand 2025-11-04)
    spar  SPAR Kartoffel Heurige 1,5kg Netz · 0.95 € / 1500 g  |  Frühkartoffeln vorwiegend festkochend lose Heurige aus Oesterreich KG +MW GVE 7 · 0.95 € / 1000 g  |  SPAR Kartoffel Heurige · 1.51 € / 1000 g
    billa Wunderlinge Erdäpfel · 2.07 € / 2500 g  |  Clever Erdäpfel festkochend · 4.99 € / 5000 g  |  Clever Erdäpfel vorwiegend festkochend · 4.99 € / 5000 g  |  Da komm ich her! Erdäpfel speckig · 1.70 € / 1000 g
 ■ Süßkartoffeln (suesskartoffel)
@@ -47,7 +47,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Süßkartoffel weiß lose Suesskartoffel weiss us Kl1 kg KG 1 · 3.80 € / 1000 g  |  Süßkartoffel lila lose Suesskartoffel lila hn Kl1 kg KG 1 · 4.75 € / 1000 g
    billa –
 ■ Brokkoli (brokkoli)
-   hofer –
+   hofer HOFER MARKTPLATZ Brokkoli 500g · 1.79 € / 500 g (Stand 2025-10-28)  |  HOFER MARKTPLATZ Brokkoli 500g · 1.99 € / 500 g (Stand 2025-09-08)
    spar  SPAR Broccoli per Stück · 2.66 € / 400 g  |  Broccoli-Bimi 150g Bimi 150G+KT EVE 1 · 2.85 € / 400 g
    billa Clever Brokkoli · 1.39 € / 750 g  |  BILLA Brokkoli · 1.89 € / 500 g  |  Iglo Broccoli · 3.16 € / 600 g
 ■ Karfiol (karfiol)
@@ -55,11 +55,11 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Karfiol STK 1 STK · 2.66 € / 800 g
    billa Karfiol · 2.29 € / 800 g
 ■ Champignons (champignons)
-   hofer –
+   hofer HOFER MARKTPLATZ Champignons braun 500g · 1.99 € / 500 g (Stand 2025-11-04)  |  HOFER MARKTPLATZ Champignons weiß 500g · 1.99 € / 500 g (Stand 2025-11-04)
    spar  S-BUDGET Champignons weiß · 1.99 € / 500 g  |  SPAR Champignons weiß · 2.85 € / 400 g  |  SPAR Champignons weiß · 1.99 € / 250 g
    billa Clever Champignons · 1.99 € / 500 g
 ■ Spinat (spinat)
-   hofer –
+   hofer ZURÜCK ZUM URSPRUNG Bio Blattspinat 750g · 3.79 € / 750 g (Stand 2025-07-16)
    spar  SPAR Junger Blattspinat · 1.70 € / 125 g
    billa BILLA Blattspinat · 2.71 € / 700 g  |  Iglo Blattspinat Zwutschgerl · 3.16 € / 650 g  |  Iglo Spinat doppelt passiert · 3.61 € / 450 g  |  Iglo Spinat doppelt passiert · 2.37 € / 225 g
 ■ Gurke (gurke)
@@ -71,7 +71,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Salatherzen · 1.99 € / 600 g  |  S-BUDGET Kopfsalatherzen 2 Stück · 2.85 € / 600 g  |  Kopfsalat Kl.1 Stk 1 STK · 1.51 € / 300 g  |  S-BUDGET Salatmix Herzhaft · 0.94 € / 90 g
    billa Häuptelsalat · 1.29 € / 300 g  |  Simply Good Eisbergsalat geschnitten · 1.70 € / 200 g  |  Simply Good Kopfsalat mit Kräutern · 1.89 € / 175 g
 ■ Lauch (lauch)
-   hofer –
+   hofer ZURÜCK ZUM URSPRUNG Porree 400g · 2.49 € / 400 g (Stand 2025-10-06)
    spar  Porree per kg Porree Kl1 KG KG 1 · 4.47 € / 1000 g
    billa Da komm ich her! Lauch · 1.42 € / 250 g
 ■ Melanzani (melanzani)
@@ -79,19 +79,19 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Melanzani Mix per Tasse · 2.85 € / 500 g  |  SPAR Melanzani · 1.89 € / 300 g  |  Melanzani Lang Mini 250 G · 2.37 € / 250 g
    billa BILLA Genusswelt Melanzani Perlina · 3.32 € / 300 g
 ■ Kürbis (kuerbis)
-   hofer –
+   hofer ZURÜCK ZUM URSPRUNG Kürbis Hokkaido 1kg · 1.79 € / 1000 g (Stand 2025-09-08)
    spar  SPAR Kürbis Butternuss per kg · 1.79 € / 1000 g  |  SPAR Kürbis Moschata geschnitten · 3.19 € / 500 g
    billa Ja! Natürlich Bio-Hokkaido-Kürbis · 2.18 € / 1000 g  |  Ja! Natürlich Kürbis-Mix · 2.37 € / 1000 g
 ■ Avocado (avocado)
-   hofer –
+   hofer Avocados 500g · 2.49 € / 500 g (Stand 2025-08-12)  |  ISS-REIF! Avocado 320g · 2.39 € / 320 g (Stand 2025-11-04)
    spar  S-BUDGET Avocado genussreif · 0.99 € / 200 g  |  Avocados Mini 550g MK 550 G · 3.79 € / 550 g  |  SPAR PREMIUM Avocado · 2.29 € / 200 g
    billa Clever Avocado · 1.19 € / 200 g  |  BILLA immer gut Avocado essreif 2 Stk. · 2.99 € / 400 g  |  SanLucar Premium Avocado Essreif · 2.79 € / 200 g
 ■ Zitronen (zitrone)
-   hofer –
+   hofer HOFER MARKTPLATZ Zitronen 750g · 1.99 € / 750 g (Stand 2025-11-04)
    spar  S-BUDGET Zitronen 7 Stk. · 1.39 € / 700 g  |  S-BUDGET Zitronen · 1.69 € / 500 g  |  SPAR Zitronen unbehandelt · 1.49 € / 300 g
    billa SanLucar Zitronen unbehandelt · 1.99 € / 400 g  |  SanLucar Zitronen · 0.99 € / 100 g
 ■ Limetten (limette)
-   hofer –
+   hofer BIO Limetten 300g · 2.29 € / 300 g (Stand 2025-09-30)
    spar  –
    billa BILLA Bio Limetten · 2.49 € / 300 g
 ■ Ingwer (ingwer)
@@ -119,7 +119,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Schnittlauch · 1.32 € / 25 g  |  SPAR Schnittlauch · 1.32 € / 20 g
    billa Ja! Natürlich Bio Schnittlauch im Topf · 2.37 € / 30 g
 ■ Äpfel (apfel)
-   hofer –
+   hofer ZURÜCK ZUM URSPRUNG Äpfel 1,5kg · 3.49 € / 1500 g (Stand 2025-09-23)  |  TESSA Äpfel 1kg · 2.49 € / 1000 g (Stand 2025-10-17)  |  ZURÜCK ZUM URSPRUNG Mini Äpfel 600g · 1.99 € / 600 g (Stand 2025-09-23)
    spar  S-BUDGET Apfel rot Sorte: siehe Etikett 2kg Sack · 3.32 € / 2000 g  |  Äpfel Braeburn 1 kg Tasse 1 KG · 1.99 € / 1000 g  |  SPAR Äpfel Mairac per kg · 2.18 € / 1000 g  |  Äpfel Pärchen 4er Tasse 600 G · 1.70 € / 600 g
    billa Wunderlinge Äpfel · 2.66 € / 2000 g  |  Clever Apfel rot · 3.32 € / 2000 g  |  Clever Apfel Rot · 2.18 € / 1000 g
 ■ Bananen (banane)
@@ -127,11 +127,11 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Bananen per kg · 1.59 € / 1000 g  |  SPAR Bananen gelb per kg · 2.19 € / 1000 g  |  Jumbo Bananen Schalotten Jumbo Bananen Schalotten KG GVE 3 · 7.53 € / 1000 g
    billa Clever Bananen · 1.69 € / 1000 g  |  SanLucar Bananen · 2.39 € / 1000 g
 ■ Orangen (orange)
-   hofer –
+   hofer HOFER MARKTPLATZ Orangen 2kg · 3.98 € / 2000 g (Stand 2025-09-19)
    spar  SPAR Orangen Navelina · 2.99 € / 2000 g  |  SPAR Orangen 1kg Netz Sorte: siehe Etikett · 2.49 € / 1000 g  |  SPAR Orangen Navellate gelegt · 2.79 € / 1000 g
    billa SanLucar Orangen · 2.49 € / 1000 g  |  SanLucar Orangen gelegt · 3.49 € / 1000 g
 ■ Beeren (beeren)
-   hofer –
+   hofer ALL SEASONS TK Heidelbeeren 500g · 3.49 € / 500 g (Stand 2025-09-26)  |  ALL SEASONS Tiefgefroren Himbeeren 500g · 3.99 € / 500 g (Stand 2025-10-28)  |  HOFER MARKTPLATZ Erdbeeren 500g · 3.99 € / 500 g (Stand 2025-08-01)  |  ZURÜCK ZUM URSPRUNG Kiwibeeren 125g · 1.49 € / 125 g (Stand 2025-09-24)
    spar  S-BUDGET Heidelbeeren · 3.99 € / 500 g  |  S-BUDGET Himbeeren Bruch · 4.79 € / 500 g  |  S-BUDGET Himbeeren tiefgekühlt · 4.99 € / 500 g  |  SPAR Vital Heidelbeeren · 1.99 € / 125 g
    billa Clever Himbeeren · 4.39 € / 500 g  |  BILLA Himbeeren · 3.89 € / 300 g  |  Da komm ich her! Erdbeeren · 3.79 € / 250 g  |  Himbeeren · 2.49 € / 125 g
 ■ Mais (Dose) (mais)
@@ -139,7 +139,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Natur*pur Bio-Gemüsemais 3 x 150g · 2.79 € / 450 g  |  SPAR Natur*pur Bio-Zuckermais vorgegart · 2.99 € / 400 g  |  Bonduelle Bio-Goldmais 0% pesticide · 1.99 € / 150 g
    billa Clever Gemüsemais · 0.89 € / 330 g  |  Beach Flower Maiskörner · 1.29 € / 340 g  |  BILLA Mais dampfgegart · 1.49 € / 340 g
 ■ Erbsen (TK) (erbsen)
-   hofer –
+   hofer ALL SEASONS Junge Erbsen extra zart tiefgekühlt 1kg · 1.99 € / 1000 g (Stand 2025-10-03)
    spar  SPAR Erbsen frisch · 4.28 € / 500 g
    billa Clever Junge Erbsen · 1.89 € / 1000 g  |  Clever Erbsen 3er Pack · 1.69 € / 600 g  |  Clever Erbsen zart & fein · 1.39 € / 400 g
 ■ Faschiertes (faschiertes)
@@ -183,7 +183,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET MSC Thunfisch Natur · 1.69 € / 195 g  |  S-BUDGET MSC Thunfisch in Sonnenblumenöl · 1.78 € / 195 g  |  SPAR Gelbflossen-Thunfisch Filets geschnitten, in Sonnenblumenöl · 1.79 € / 195 g  |  Argeta Thunfisch · 1.69 € / 95 g
    billa Clever Thunfisch im eigenen Saft · 1.69 € / 195 g  |  Orlando Msc Thunfisch in Salzlake · 1.99 € / 185 g  |  Orlando Msc Thunfisch in Sonnenblumenöl · 1.99 € / 185 g
 ■ Eier (eier)
-   hofer –
+   hofer GOLDLAND Eier aus Bodenhaltung 15 Stk. · 3.99 € / 15 stk (Stand 2025-10-09)  |  GOLDLAND Frische Eier aus Bodenhaltung 10Stk. · 2.79 € / 10 stk (Stand 2025-10-09)  |  GOLDLAND Eier aus Freilandhaltung 15 Stk. · 4.49 € / 15 stk (Stand 2025-10-09)
    spar  S-BUDGET Frische Eier aus Bodenhaltung · 3.80 € / 15 stk  |  S-BUDGET Frische Eier aus Bodenhaltung · 2.66 € / 10 stk  |  S-BUDGET Frische Eier aus Freilandhaltung · 3.32 € / 10 stk  |  S-BUDGET Jauseneier · 2.39 € / 6 stk
    billa Clever Eier aus Bodenhaltung M · 3.80 € / 15 stk  |  Clever Eier aus Bodenhaltung M · 2.66 € / 10 stk  |  BILLA Freilandeier M · 3.32 € / 10 stk
 ■ Milch (milch)
@@ -207,11 +207,11 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Butter · 1.51 € / 250 g  |  SPAR Österreichische Teebutter · 1.70 € / 250 g  |  SPAR free from Teebutter laktosefrei · 1.80 € / 250 g
    billa Clever Österreichische Teebutter · 1.59 € / 250 g  |  BILLA Irische Butter · 1.99 € / 250 g  |  Free Teebutter · 1.99 € / 250 g
 ■ Parmesan (parmesan)
-   hofer –
+   hofer CUCINA NOBILE Grana Padano 300g · 6.29 € / 300 g (Stand 2025-07-31)  |  CUCINA NOBILE Parmigiano Reggiano Flakes 125g · 3.29 € / 125 g (Stand 2025-11-07)  |  PRIMIS Parmigiano Reggiano DOP 24M 250g · 6.99 € / 250 g (Stand 2025-11-07)
    spar  S-BUDGET Grana Padano DOP · 6.39 € / 300 g  |  DESPAR Grana Padano D.O.P. gerieben · 3.29 € / 150 g  |  Latteria Sociiale Mantova Grana Padano · 7.99 € / 250 g
    billa Clever Grana Padano · 6.29 € / 300 g  |  Grana Padano Gerieben · 3.49 € / 150 g  |  Pecorino Romano DOP · 4.99 € / 200 g  |  Grana Padano Flocken · 3.29 € / 125 g
 ■ Mozzarella (mozzarella)
-   hofer –
+   hofer GOURMET FINEST CUISINE Mini Burrata 200g · 3.49 € / 200 g (Stand 2025-07-18)  |  CUCINA Burrata 125g · 2.29 € / 125 g (Stand 2025-10-03)
    spar  S-BUDGET Mozzarella · 0.79 € / 125 g  |  S-BUDGET Mozzarella light · 0.79 € / 125 g  |  S-BUDGET Mozzarella Stange · 2.99 € / 400 g
    billa Clever Mozzarella · 0.75 € / 125 g  |  Clever Mozzarella Light · 0.75 € / 125 g  |  Clever Mozzarella Mini Light · 1.39 € / 125 g
 ■ Reibkäse (reibkaese)
@@ -235,7 +235,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Mager-Topfen · 0.99 € / 250 g  |  SPAR Österreichischer Magertopfen · 1.09 € / 250 g  |  SPAR Österreichischer Speisetopfen · 1.19 € / 250 g
    billa Clever Magertopfen · 0.99 € / 250 g  |  Free Magertopfen · 1.09 € / 250 g  |  Clever Topfen 20% · 1.19 € / 250 g
 ■ Spaghetti (spaghetti)
-   hofer –
+   hofer CUCINA NOBILE Spaghetti 1kg · 1.38 € / 1000 g (Stand 2025-10-07)
    spar  S-BUDGET Spaghetti · 1.28 € / 1000 g  |  S-BUDGET Eierteigwaren Spaghetti · 1.88 € / 1000 g  |  DESPAR Spaghetti N°5 · 2.18 € / 1000 g  |  DESPAR Spaghetti n. 5 · 1.13 € / 500 g
    billa Clever Spaghetti · 1.28 € / 1000 g  |  Barilla Spaghetti N.5 · 1.13 € / 500 g  |  Barilla Spaghettini N.3 · 1.13 € / 500 g
 ■ Nudeln (Penne, Fusilli …) (nudeln)
@@ -243,15 +243,15 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Fusilli · 1.28 € / 1000 g  |  S-BUDGET Penne Rigate · 1.28 € / 1000 g  |  S-BUDGET Tortiglioni · 1.28 € / 1000 g  |  DESPAR Fusilli · 1.13 € / 500 g
    billa Clever Fusilli · 1.28 € / 1000 g  |  Clever Penne · 1.28 € / 1000 g  |  Clever Fleckerl · 1.88 € / 1000 g  |  Barilla Fusilli · 1.13 € / 500 g
 ■ Reis (reis)
-   hofer –
+   hofer BON-RI Langkornreis 1kg · 1.19 € / 1000 g (Stand 2025-10-20)  |  BON-RI Parboiled Reis 1kg · 1.69 € / 1000 g (Stand 2025-10-09)  |  BON-RI Risottoreis 1kg · 2.79 € / 1000 g (Stand 2025-07-24)
    spar  S-BUDGET Langkornreis · 1.23 € / 1000 g  |  S-BUDGET Langkornreis Parboiled · 1.61 € / 1000 g  |  S-BUDGET Jasmin Reis · 1.89 € / 1000 g
    billa Clever Parboild Langkornrreis · 1.61 € / 1000 g  |  BILLA Langkornreis Parboiled · 3.70 € / 2000 g  |  BILLA Rundkornreis · 1.89 € / 1000 g  |  BILLA Risotto Reis Arborio · 1.42 € / 500 g
 ■ Couscous / Bulgur (couscous)
-   hofer –
+   hofer NATUR AKTIV Bio Bulgur 750g · 2.18 € / 750 g (Stand 2025-10-29)  |  NATUR AKTIV Bio Couscous 750g · 2.18 € / 750 g (Stand 2025-10-29)
    spar  SPAR Bio-Goldhirse · 2.99 € / 1000 g  |  SPAR Natur*pur Bio-Quinoa · 3.59 € / 500 g
    billa BILLA Couscous · 1.49 € / 500 g  |  Tipiak Couscous · 2.49 € / 500 g
 ■ Haferflocken (haferflocken)
-   hofer –
+   hofer ZURÜCK ZUM URSPRUNG Haferflocken Großblättrig 500g · 1.39 € / 500 g (Stand 2025-08-22)  |  ZURÜCK ZUM URSPRUNG Haferflocken Kleinblättrig 500g · 1.39 € / 500 g (Stand 2025-08-22)
    spar  Bioquelle Bio Haferflocken · 3.69 € / 750 g  |  SPAR free from Bio Haferflocken glutenfrei besonders zart · 2.99 € / 500 g
    billa Clever Haferflocken Kernig · 0.79 € / 500 g  |  Clever Haferflocken Zart · 0.79 € / 500 g  |  Rupp Haferflocken · 1.49 € / 500 g
 ■ Lasagneblätter (lasagne)
@@ -259,7 +259,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  DESPAR Lasagne Teigblätter · 0.80 € / 250 g  |  DESPAR Lasagne - gewellte Teigblätter · 0.94 € / 250 g  |  De Cecco Lasagneblätter Lasagna Riccia · 2.56 € / 500 g
    billa Clever Lasagne · 1.60 € / 500 g  |  BILLA Lasagne · 1.09 € / 250 g  |  Barilla Lasagne · 1.42 € / 250 g
 ■ Gnocchi (gnocchi)
-   hofer –
+   hofer CUCINA Kartoffel-Gnocchi 1kg · 1.99 € / 1000 g (Stand 2025-10-03)
    spar  DESPAR Gnocchi · 1.13 € / 500 g  |  SPAR Pasta Italiana Gnocchi · 1.13 € / 500 g  |  Barilla Gnocchi n.85 · 1.89 € / 500 g
    billa Clever Gnocchi · 0.99 € / 500 g  |  Garofalo Gnocchi Sardi · 1.89 € / 500 g  |  BILLA Gnocchi vegan · 4.49 € / 1000 g
 ■ Tortilla-Wraps (tortilla)
@@ -287,11 +287,11 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Weizenmehl Glatt, Type W 700 · 0.71 € / 1000 g  |  S-BUDGET Weizenmehl Universal, Type W 700 · 0.71 € / 1000 g  |  S-BUDGET Weizenmehl griffig, Type W 700 · 0.71 € / 1000 g
    billa Clever Mehl Griffig · 0.71 € / 1000 g  |  Clever Weizenmehl Glatt · 0.71 € / 1000 g  |  Clever Weizenmehl Glatt · 0.71 € / 1000 g
 ■ Zucker (zucker)
-   hofer –
+   hofer WIENER ZUCKER Feinkristallzucker 1kg · 1.59 € / 1000 g (Stand 2025-10-03)
    spar  Wiener Zucker Feinkristallzucker · 1.59 € / 1000 g  |  Wiener Zucker Normalkristallzucker · 1.59 € / 1000 g
    billa Clever Feinkristallzucker · 0.99 € / 1000 g  |  Wiener Zucker Feinkristall-Zucker · 1.59 € / 1000 g  |  Wiener Zucker Normalkristall-Zucker · 1.79 € / 1000 g
 ■ Staubzucker (staubzucker)
-   hofer –
+   hofer WIENER ZUCKER Staubzucker 500g · 1.29 € / 500 g (Stand 2025-10-03)
    spar  Wiener Zucker Staubzucker Mühle · 2.49 € / 250 g
    billa Clever Staubzucker · 0.99 € / 500 g  |  Wiener Zucker Staubzucker · 1.29 € / 500 g  |  Wiener Zucker Puderzucker · 1.29 € / 400 g
 ■ Brauner Zucker (braunerzucker)
@@ -335,15 +335,15 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Natur*pur Bio-Agavendicksaft · 6.99 € / 1000 ml
    billa BILLA Bio Agavendicksaft · 2.99 € / 250 ml  |  Ja! Natürlich Ahornsirup Grad C · 7.99 € / 375 ml  |  Ja! Natürlich Ahornsirup Grad A · 5.79 € / 250 ml
 ■ Nüsse (nuesse)
-   hofer –
+   hofer BELLA Mandeln gemahlen 200g · 1.99 € / 200 g (Stand 2025-10-03)  |  GOURMET Premium Erdnüsse 250g · 2.49 € / 250 g (Stand 2025-10-08)  |  HAPPY HARVEST Cashewbruch 250g · 2.49 € / 250 g (Stand 2025-10-09)  |  MANNER Knuspino Haselnuss 110g · 1.19 € / 110 g (Stand 2025-08-01)
    spar  SPAR Walnüsse gerieben · 1.99 € / 200 g  |  SPAR Mandeln gerieben · 2.39 € / 200 g  |  SPAR Haselnüsse gemahlen · 4.99 € / 400 g  |  SPAR Mandeln blanchiert · 1.59 € / 100 g
    billa BILLA Walnüsse Gerieben · 1.79 € / 200 g  |  BILLA Haselnüsse Gerieben · 1.99 € / 200 g  |  BILLA Mandeln Gerieben · 1.99 € / 200 g  |  BILLA Mandeln blanchiert · 1.49 € / 100 g
 ■ Tomaten gehackt (Dose) (dosentomaten)
-   hofer –
+   hofer BIO Gehackte Tomaten, Basilikum 400g · 0.75 € / 400 g (Stand 2025-07-31)  |  BIO Gehackte Tomaten, Natur 400g · 0.75 € / 400 g (Stand 2025-07-31)
    spar  SPAR Vital Polpa Fine - Fein gehackte Tomaten · 1.49 € / 400 g  |  Pomito Tomatenfruchtfleisch in Stücken · 2.39 € / 500 g  |  Mutti Polpa fein gehackte Tomaten · 1.99 € / 400 g
    billa Clever Gehackte Tomaten · 0.69 € / 400 g  |  Conte DeCesare Ganze Geschälte Tomaten · 1.59 € / 400 g  |  Conte DeCesare Tomaten in Stücken · 1.59 € / 400 g
 ■ Passata (passata)
-   hofer –
+   hofer CUCINA Passierte Tomaten 500g · 0.69 € / 500 g (Stand 2025-07-18)
    spar  Cirio Passata Verace · 2.19 € / 700 g  |  Cirio Passierte Tomaten Rustica · 2.19 € / 680 g
    billa Clever Passierte Tomaten · 0.69 € / 500 g  |  Cirio Passata Rustica - Grob Passierte Tomaten · 2.19 € / 680 g  |  Cirio Passata Rustica Basilico - Grob Passierte Tomaten mit Basilikum · 2.19 € / 680 g
 ■ Tomatenmark (tomatenmark)
@@ -359,7 +359,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Kichererbsen · 0.99 € / 380 g  |  S-BUDGET Kichererbsen dampfgegart 3 x 150g · 1.99 € / 450 g  |  Suntat Kichererbsen · 2.89 € / 500 g
    billa Clever Kichererbsen 400g · 0.69 € / 400 g  |  Ece Kichererbsen gekocht · 1.79 € / 800 g  |  BILLA Dampfgegarte Kichererbsen · 1.49 € / 300 g
 ■ Bohnen (Dose) (bohnen)
-   hofer –
+   hofer HOFER MARKTPLATZ Bohnen breit 500g · 2.49 € / 500 g (Stand 2025-11-04)  |  BONDUELLE Kidney Bohnen 2x200g · 2.49 € / 400 g (Stand 2025-07-23)
    spar  S-BUDGET Rote Kidney Bohnen · 0.59 € / 400 g  |  S-BUDGET Weiße Bohnen · 1.39 € / 800 g  |  SPAR Cannellini Bohnen · 0.99 € / 380 g
    billa Clever Rote Kidney Bohnen · 0.65 € / 400 g  |  Clever Weiße Bohnen · 1.39 € / 800 g  |  Le Baron Rote Kidneybohnen · 1.99 € / 800 g
 ■ Linsen (linsen)
@@ -375,15 +375,15 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Kikkoman Sojasauce · 6.99 € / 500 ml  |  Shan'shi Sojasauce · 2.49 € / 150 ml  |  Shan'shi Sojasauce süß · 2.49 € / 150 ml
    billa BILLA Sojasauce · 1.65 € / 250 ml  |  Healthy Boy Sojasauce Hell · 5.49 € / 700 ml  |  Kikkoman Soja Sauce süß · 3.19 € / 250 ml
 ■ Senf (senf)
-   hofer –
+   hofer LE GUSTO Kremser Senf mild süß 330g · 1.29 € / 330 g (Stand 2025-07-31)
    spar  Ramsa Wolf Wiener Spezial Senf · 1.59 € / 100 g  |  Ramsa Wolf Whisky Senf · 3.99 € / 180 g
    billa Clever Estragon Senf · 1.29 € / 330 g  |  Mautner Markhof Estragonsenf · 1.49 € / 330 g  |  Mautner Markhof Kremsersenf · 1.49 € / 330 g  |  BILLA Kremser Senf Zwiebel · 1.19 € / 200 g
 ■ Ketchup (ketchup)
-   hofer –
+   hofer LE GUSTO Tomato Ketchup 900g · 1.38 € / 900 g (Stand 2025-10-10)  |  FELIX Ketchup Mild 1000g · 3.99 € / 1000 g (Stand 2025-07-31)  |  FELIX Ketchup ohne Zuckerzusatz 1000g · 3.99 € / 1000 g (Stand 2025-07-31)
    spar  Felix Ketchup hot · 3.99 € / 1000 g  |  Felix Ketchup mild · 3.99 € / 1000 g  |  Heinz Tomato Ketchup · 3.99 € / 1000 g  |  Millas Ketchup · 2.49 € / 300 g
    billa BILLA Ketchup Mild · 1.47 € / 585 g  |  Clever Ketchup · 1.16 € / 460 g  |  BILLA Ketchup ohne Zuckerzusatz · 1.47 € / 560 g
 ■ Mayonnaise (mayo)
-   hofer –
+   hofer LE GUSTO Mayonnaise 25% Fett 275g · 1.78 € / 275 g (Stand 2025-08-07)
    spar  Heinz Mayonnaise Das Original · 2.99 € / 400 g  |  Mautner Markhof Mayonnaise · 3.49 € / 440 g  |  Millas Mayonnaise · 2.49 € / 300 g
    billa Clever Mayonnaise 25 % · 1.78 € / 275 g  |  Clever Mayonnaise 80% · 1.99 € / 275 g  |  Spak Mayonnaise 80% · 3.89 € / 500 g
 ■ Pesto (pesto)
@@ -391,7 +391,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Bertagni Pesto Calabrese · 1.49 € / 130 g  |  Bertagni Pesto Rosso · 1.49 € / 130 g  |  Barilla Pesto Pomodori Secchi · 3.69 € / 200 g
    billa Clever Pesto Alla Calabrese · 1.59 € / 190 g  |  Clever Pesto Alla Genovese · 1.59 € / 190 g  |  Clever Pesto Rosso · 1.59 € / 190 g
 ■ Oliven (oliven)
-   hofer –
+   hofer KINGS CROWN Oliven grün entsteint 320g · 1.24 € / 320 g (Stand 2025-09-26)  |  KINGS CROWN Oliven schwarz entsteint 320g · 1.24 € / 320 g (Stand 2025-09-26)  |  LYTTOS Griechische Grüne Oliven mit Knoblauch 350g · 1.68 € / 350 g (Stand 2025-07-31)
    spar  S-BUDGET Spanische grüne Oliven ohne Kern · 2.49 € / 670 g  |  S-BUDGET Griechische Oliven mit Kern · 1.59 € / 350 g  |  S-BUDGET Kalamata Oliven mit Kern · 1.59 € / 350 g
    billa BILLA Kalamata Oliven mit Kern · 1.39 € / 350 g  |  Clever Griechische Grüne Oliven · 1.49 € / 355 g  |  Clever Kalamata Oliven · 1.49 € / 350 g
 ■ Tofu (tofu)
@@ -399,15 +399,15 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Omami KIchererbsentofu Korean Spice · 3.49 € / 200 g
    billa Vegavita Bio Tofu Natur · 1.71 € / 300 g  |  Vegavita Bio Tofu Natur · 3.49 € / 500 g  |  Vegavita Bio Tofu stark geräuchert · 1.99 € / 250 g
 ■ Wein (zum Kochen) (wein)
-   hofer –
+   hofer FLAT LAKE Rotweincuvee trocken 0,75l · 4.99 € / 750 ml (Stand 2025-11-04)  |  RIEDEN SELECTION Grüner Veltliner trocken 0,75l · 4.99 € / 750 ml (Stand 2025-10-01)
    spar  Sonnleiten Rotwein Cuvée · 2.59 € / 750 ml  |  Feine Rebe Blauer Zweigelt 2022 · 3.99 € / 750 ml  |  Krispel Klasse Steira Welschriesling 2024 · 3.99 € / 750 ml
    billa Wegenstein Grüner Veltliner · 2.99 € / 1000 ml  |  Wegenstein Welschriesling · 2.99 € / 1000 ml  |  Wegenstein Grüner Veltliner Edition Österreich · 3.49 € / 750 ml
 ■ Olivenöl (olivenoel)
-   hofer –
+   hofer LYTTOS Olivenöl Extra Nativ 750ml · 9.59 € / 750 ml (Stand 2025-09-18)
    spar  DESPAR Olio Extra Vergine di Oliva · 3.99 € / 250 ml  |  SPAR Natives Olivenöl extra 100% aus Griechenland · 11.99 € / 750 ml  |  Notos Natives Olivenöl Extra · 12.99 € / 750 ml
    billa Clever Raffiniertes Olivenöl · 5.99 € / 1000 ml  |  Clever Natives Olivenöl Extra · 6.99 € / 750 ml  |  BILLA Griechisches Olivenöl · 10.99 € / 1000 ml  |  BILLA Griechisches Olivenöl · 4.49 € / 250 ml
 ■ Speiseöl (oel)
-   hofer –
+   hofer BELLASAN Feinstes Rapsöl 1l · 1.99 € / 1000 ml (Stand 2025-10-04)  |  BELLASAN Reines Sonnenblumenöl 1l · 1.99 € / 1000 ml (Stand 2025-10-28)
    spar  S-BUDGET Maiskeimöl · 1.89 € / 1000 ml  |  S-BUDGET Reines Rapsöl · 1.89 € / 1000 ml  |  S-BUDGET 100% Reines Sonnenblumenöl · 3.79 € / 2000 ml
    billa Clever Rapsöl · 1.89 € / 1000 ml  |  Clever Rapsöl · 1.89 € / 1000 ml  |  Clever Sonnenblumenöl · 3.79 € / 2000 ml
 ■ Essig (essig)
@@ -419,7 +419,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Schenkel Meersalz fein · 1.23 € / 500 g  |  Schenkel Meersalz grob · 1.23 € / 500 g  |  Baron de Sel Himalaya Salz Algen · 2.66 € / 500 g
    billa Odina Meersalz fein unjodiert · 1.89 € / 1000 g  |  Odina Feines Meersalz Unjodiert · 1.51 € / 500 g  |  Odina Meersalz · 1.51 € / 400 g
 ■ Pfeffer (pfeffer)
-   hofer –
+   hofer ZURÜCK ZUM URSPRUNG Würziger Bergbauern Brie Pfeffer 150g · 3.49 € / 150 g (Stand 2025-09-04)  |  ZURÜCK ZUM URSPRUNG Ziegencamembert Pfeffer 100g · 2.69 € / 100 g (Stand 2025-10-03)
    spar  Kotányi Pfeffer schwarz ganz 36g · 3.99 € / 36 g  |  Kotányi Pfeffer bunt 35g · 3.99 € / 35 g  |  Stay Spiced! Weißer Pfeffer ganz 70g · 9.99 € / 70 g
    billa Clever Pfeffer Schwarz Gemahlen · 1.69 € / 100 g  |  BILLA Pfeffer schwarz gemahlen · 0.85 € / 41 g  |  Clever Pfeffer Bunt Ganz · 1.69 € / 70 g
 ■ Paprikapulver (paprikapulver)
@@ -435,7 +435,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Italienische Kräuter streufertig · 1.32 € / 50 g  |  Iglo Italienische Kräuter · 1.89 € / 50 g
    billa BILLA Rosmarin geschnitten · 0.85 € / 24 g  |  BILLA Kräuter der Provence · 0.85 € / 16 g  |  BILLA Thymian gerebelt · 0.85 € / 16 g  |  BILLA Basilikum gerebelt · 0.85 € / 14 g
 ■ Gewürze (gewuerz)
-   hofer –
+   hofer LE GUSTO Zimt 40g · 0.85 € / 40 g (Stand 2025-07-31)
    spar  Easy Spices Gewürzmischung Curry Basis 65g · 4.99 € / 65 g  |  Easy Spices Gewürzmischung Ras el Hanout 60g · 4.99 € / 60 g  |  Kotányi Curry Mischung 45g · 3.99 € / 45 g  |  Kotányi Nelken ganz · 2.99 € / 14 g
    billa BILLA Curry mild · 0.85 € / 32 g  |  Kotányi Kümmel Ganz · 2.99 € / 100 g  |  BILLA Zimt gemahlen · 0.85 € / 28 g
 ■ Zitronensaft (zitronensaft)
