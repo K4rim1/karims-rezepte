@@ -3,9 +3,9 @@ Quelle: heisse-preise.io, hofer.at
 Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), billa 2026-11-27 (aktuell)
 
 ■ Zwiebeln (zwiebel)
-   hofer Streichwurst, Zwiebel (GENUSS 100% AUS ÖSTERREICH) · 1.99 € / 400 g
-   spar  SPAR Zwiebel gelb · 1.51 € / 280 g  |  SPAR Zwiebel Mix · 1.70 € / 280 g  |  SPAR Zwiebel weiß · 1.80 € / 280 g
-   billa Ja! Natürlich Zwiebel gelb · 1.49 € / 750 g  |  Ja! Natürlich Zwiebel weiss · 2.08 € / 500 g
+   hofer –
+   spar  SPAR Zwiebel gelb · 1.23 € / 1000 g  |  SPAR Zwiebel gelb · 1.51 € / 280 g  |  SPAR Zwiebel Mix · 1.70 € / 280 g
+   billa Da komm ich her! Zwiebel Gelb · 1.19 € / 1000 g
 ■ Rote Zwiebeln (rote_zwiebel)
    hofer –
    spar  SPAR Zwiebel rot · 1.61 € / 1000 g  |  Tropea Zwiebel rot Tropea Zwiebel Zopf rot KG KG 1 · 3.80 € / 1000 g  |  SPAR Zwiebel rot · 1.32 € / 280 g  |  S-BUDGET Zwiebeln Rot/Weiß tiefgekühlt, geschnitten · 0.94 € / 150 g
@@ -15,7 +15,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Jungzwiebel rot per Bund · 1.70 € / 100 g
    billa –
 ■ Knoblauch (knoblauch)
-   hofer Raclette Scheiben, Knoblauch (EMMI) · 2.39 € / 150 g
+   hofer –
    spar  Knoblauch frisch 1 STK · 1.23 € / 50 g  |  Knoblauch frisch 1 STK · 1.23 € / 50 g  |  SPAR Veggie vegane Almjäger Knoblauch · 2.29 € / 80 g
    billa Da komm ich her! Knoblauch · 2.46 € / 200 g
 ■ Tomaten (tomate)
@@ -23,11 +23,11 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Tomaten rund per kg · 1.42 € / 1000 g  |  S-BUDGET Tomaten · 2.85 € / 1000 g  |  SPAR Rispentomaten per Tasse · 1.89 € / 500 g
    billa Clever Tomaten · 2.49 € / 1000 g  |  Fleischtomaten 'Monte Rosa' · 4.99 € / 1000 g
 ■ Cherrytomaten (cherrytomate)
-   hofer Fraicho, Kirschtomaten · 0.99 € / 150 g
+   hofer –
    spar  S-BUDGET Cherrytomate an der Rispe · 2.37 € / 500 g  |  Cherrytomaten aus der Steiermark 400 G · 2.85 € / 400 g  |  SPAR Cherrytomaten Mix · 2.85 € / 300 g
    billa Clever Cherrytomaten · 2.29 € / 500 g  |  Datteltomaten · 1.49 € / 250 g  |  Da komm ich her! Wiener Cherry Paradeiser Mix · 3.32 € / 270 g
 ■ Paprika (paprika)
-   hofer Raclette Scheiben, Paprika (EMMI) · 2.39 € / 150 g
+   hofer –
    spar  S-BUDGET Paprika Mix · 2.99 € / 500 g  |  SPAR Paprika Mix · 3.80 € / 450 g  |  SPAR Paprika gelb · 1.32 € / 150 g
    billa Clever Paprika Rot · 2.69 € / 500 g  |  Da komm ich her! Paprika Tricolore · 2.99 € / 450 g  |  SanLucar Regenbogen Paprika · 3.99 € / 600 g  |  Da komm ich her! Paprika Grün · 1.19 € / 150 g
 ■ Zucchini (zucchini)
@@ -35,7 +35,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Zucchini · 1.89 € / 1000 g  |  SPAR Zucchini · 1.23 € / 500 g  |  Bergzucchini 2 STK · 1.70 € / 500 g
    billa Clever Zucchini · 1.99 € / 1000 g
 ■ Karotten (karotte)
-   hofer Proteinbrot, Karotte (HAPPY HARVEST) · 1.19 € / 250 g
+   hofer –
    spar  SPAR Karotten · 1.13 € / 1000 g  |  S-BUDGET Karotten · 1.61 € / 1000 g  |  Karotten lose Karotten lose per kg KG 1 · 1.70 € / 1000 g
    billa Wunderlinge Karotten · 2.49 € / 2000 g  |  Clever Karotten · 1.49 € / 1000 g  |  Da komm ich her! Karotten · 1.49 € / 1000 g  |  Da komm ich her! Karotten · 0.94 € / 500 g
 ■ Kartoffeln (kartoffel)
@@ -87,8 +87,8 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Avocado genussreif · 0.99 € / 200 g  |  Avocados Mini 550g MK 550 G · 3.79 € / 550 g  |  SPAR PREMIUM Avocado · 2.29 € / 200 g
    billa Clever Avocado · 1.19 € / 200 g  |  BILLA immer gut Avocado essreif 2 Stk. · 2.99 € / 400 g  |  SanLucar Premium Avocado Essreif · 2.79 € / 200 g
 ■ Zitronen (zitrone)
-   hofer Grisbi, Zitrone (MATILDE VICENZI) · 3.49 € / 270 g
-   spar  S-BUDGET Zitronen · 1.69 € / 500 g  |  SPAR Zitronen unbehandelt · 1.49 € / 300 g  |  Delamaris Makrelenfilets Zitrone · 3.69 € / 125 g
+   hofer –
+   spar  S-BUDGET Zitronen 7 Stk. · 1.39 € / 700 g  |  S-BUDGET Zitronen · 1.69 € / 500 g  |  SPAR Zitronen unbehandelt · 1.49 € / 300 g
    billa SanLucar Zitronen unbehandelt · 1.99 € / 400 g  |  SanLucar Zitronen · 0.99 € / 100 g
 ■ Limetten (limette)
    hofer –
@@ -135,7 +135,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Heidelbeeren · 3.99 € / 500 g  |  S-BUDGET Himbeeren Bruch · 4.79 € / 500 g  |  S-BUDGET Himbeeren tiefgekühlt · 4.99 € / 500 g  |  SPAR Vital Heidelbeeren · 1.99 € / 125 g
    billa Clever Himbeeren · 4.39 € / 500 g  |  BILLA Himbeeren · 3.89 € / 300 g  |  Da komm ich her! Erdbeeren · 3.79 € / 250 g  |  Himbeeren · 2.49 € / 125 g
 ■ Mais (Dose) (mais)
-   hofer Rio Mare, Mais · 6.99 € / 480 g
+   hofer –
    spar  SPAR Natur*pur Bio-Gemüsemais 3 x 150g · 2.79 € / 450 g  |  SPAR Natur*pur Bio-Zuckermais vorgegart · 2.99 € / 400 g  |  Bonduelle Bio-Goldmais 0% pesticide · 1.99 € / 150 g
    billa Clever Gemüsemais · 0.89 € / 330 g  |  Beach Flower Maiskörner · 1.29 € / 340 g  |  BILLA Mais dampfgegart · 1.49 € / 340 g
 ■ Erbsen (TK) (erbsen)
@@ -155,7 +155,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  –
    billa Clever Hendlkeulenviertel 4 Stk · 7.99 € / 1000 g
 ■ Rindfleisch (rind)
-   hofer Rindsschnitzel (SONNHOF) · 19.98 € / 1000 g  |  Salat-/Wok-Streifen per kg, Rind (SONNHOF) · 19.99 € / 1000 g  |  Rinder-Hüftsteaks (SONNHOF) · 25.99 € / 1000 g
+   hofer Rindsschnitzel (SONNHOF) · 19.98 € / 1000 g  |  Rinder-Hüftsteaks (SONNHOF) · 25.99 € / 1000 g  |  Rindfleisch, Rindsschnitzel (ZURÜCK ZUM URSPRUNG) · 29.99 € / 1000 g
    spar  S-BUDGET Rindsschnitzel ca. 400g per Pkg. · 19.98 € / 1000 g
    billa Clever Rindsschnitzel · 11.99 € / 600 g  |  Clever Hüftsteak vom Rind · 25.99 € / 1000 g  |  Clever Rib Eye Steak vom Rind · 27.99 € / 1000 g
 ■ Schweinefleisch (schwein)
@@ -235,7 +235,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Mager-Topfen · 0.99 € / 250 g  |  SPAR Österreichischer Magertopfen · 1.09 € / 250 g  |  SPAR Österreichischer Speisetopfen · 1.19 € / 250 g
    billa Clever Magertopfen · 0.99 € / 250 g  |  Free Magertopfen · 1.09 € / 250 g  |  Clever Topfen 20% · 1.19 € / 250 g
 ■ Spaghetti (spaghetti)
-   hofer Long Bronze Pasta, Spaghetti (GOURMET FINEST CUISINE) · 0.99 € / 500 g  |  Long Bronze Pasta, Linguine (GOURMET FINEST CUISINE) · 0.99 € / 500 g
+   hofer –
    spar  S-BUDGET Spaghetti · 1.28 € / 1000 g  |  S-BUDGET Eierteigwaren Spaghetti · 1.88 € / 1000 g  |  DESPAR Spaghetti N°5 · 2.18 € / 1000 g  |  DESPAR Spaghetti n. 5 · 1.13 € / 500 g
    billa Clever Spaghetti · 1.28 € / 1000 g  |  Barilla Spaghetti N.5 · 1.13 € / 500 g  |  Barilla Spaghettini N.3 · 1.13 € / 500 g
 ■ Nudeln (Penne, Fusilli …) (nudeln)
@@ -247,7 +247,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Langkornreis · 1.23 € / 1000 g  |  S-BUDGET Langkornreis Parboiled · 1.61 € / 1000 g  |  S-BUDGET Jasmin Reis · 1.89 € / 1000 g
    billa Clever Parboild Langkornrreis · 1.61 € / 1000 g  |  BILLA Langkornreis Parboiled · 3.70 € / 2000 g  |  BILLA Rundkornreis · 1.89 € / 1000 g  |  BILLA Risotto Reis Arborio · 1.42 € / 500 g
 ■ Couscous / Bulgur (couscous)
-   hofer Rio Mare, Couscous · 6.99 € / 480 g
+   hofer –
    spar  SPAR Bio-Goldhirse · 2.99 € / 1000 g  |  SPAR Natur*pur Bio-Quinoa · 3.59 € / 500 g
    billa BILLA Couscous · 1.49 € / 500 g  |  Tipiak Couscous · 2.49 € / 500 g
 ■ Haferflocken (haferflocken)
@@ -319,15 +319,15 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  –
    billa BILLA Kartoffelstärke · 1.99 € / 500 g  |  Maizena Maisstärke · 2.29 € / 250 g
 ■ Kochschokolade (schokolade)
-   hofer Dominosteine, Zartbitter (MONARC) · 2.99 € / 250 g  |  Bake Drops, Zartbitter (BACK FAMILY) · 3.99 € / 250 g  |  Schokolierte Datteln, Zartbitter (GOURMET FINEST CUISINE) · 2.99 € / 150 g
+   hofer Kochschokolade (MANNER) · 3.99 € / 200 g
    spar  Maitre Truffout Zartbitterschokolade · 4.79 € / 300 g  |  Lindt Maitre Chocolatier Tafel Zartbitter · 2.49 € / 100 g  |  Lindt Goldhase Edelbitter · 4.99 € / 100 g
    billa Clever Back- & Kochschokolade · 2.62 € / 400 g  |  BILLA Kuvertüre Zartbitter · 1.72 € / 200 g  |  Manner Haushaltsschokolade · 2.99 € / 200 g  |  BILLA Schokoraspeln Zartbitter · 1.59 € / 100 g
 ■ Kakaopulver (kakao)
-   hofer Linzer Kipferl, Kakao (MONARC) · 5.49 € / 400 g
+   hofer –
    spar  Benco Kakao · 6.79 € / 500 g  |  Suchard Express Backkakao · 12.99 € / 500 g  |  Suchard Express Backkakao · 4.69 € / 125 g
    billa Benco Power Plus Kakao · 6.99 € / 500 g  |  Suchard Express Kakao · 6.99 € / 500 g  |  Clever Kakao · 4.99 € / 250 g  |  Suchard Express Backkakao · 4.69 € / 125 g
 ■ Honig (honig)
-   hofer Genießerfässchen, Honig (KING'S CROWN) · 1.99 € / 300 g
+   hofer –
    spar  S-BUDGET Blütenhonig · 6.18 € / 1000 g  |  S-BUDGET Blütenhonig · 3.59 € / 500 g  |  S-BUDGET Waldhonig · 3.59 € / 500 g
    billa BILLA Blütenhonig · 7.98 € / 500 g  |  Darbo Blütenhonig aus Österreich · 16.99 € / 1000 g  |  Darbo Wald- und Blütenhonig aus Österreich · 16.99 € / 1000 g  |  Darbo Blütenhonig aus Österreich · 5.99 € / 300 g
 ■ Ahornsirup (sirup)
@@ -335,7 +335,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  SPAR Natur*pur Bio-Agavendicksaft · 6.99 € / 1000 ml
    billa BILLA Bio Agavendicksaft · 2.99 € / 250 ml  |  Ja! Natürlich Ahornsirup Grad C · 7.99 € / 375 ml  |  Ja! Natürlich Ahornsirup Grad A · 5.79 € / 250 ml
 ■ Nüsse (nuesse)
-   hofer Grisbi, Haselnuss (MATILDE VICENZI) · 3.49 € / 270 g  |  Gefüllte Datteln, Walnusskern (GOURMET FINEST CUISINE) · 3.99 € / 200 g
+   hofer –
    spar  SPAR Walnüsse gerieben · 1.99 € / 200 g  |  SPAR Mandeln gerieben · 2.39 € / 200 g  |  SPAR Haselnüsse gemahlen · 4.99 € / 400 g  |  SPAR Mandeln blanchiert · 1.59 € / 100 g
    billa BILLA Walnüsse Gerieben · 1.79 € / 200 g  |  BILLA Haselnüsse Gerieben · 1.99 € / 200 g  |  BILLA Mandeln Gerieben · 1.99 € / 200 g  |  BILLA Mandeln blanchiert · 1.49 € / 100 g
 ■ Tomaten gehackt (Dose) (dosentomaten)
@@ -363,7 +363,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Rote Kidney Bohnen · 0.59 € / 400 g  |  S-BUDGET Weiße Bohnen · 1.39 € / 800 g  |  SPAR Cannellini Bohnen · 0.99 € / 380 g
    billa Clever Rote Kidney Bohnen · 0.65 € / 400 g  |  Clever Weiße Bohnen · 1.39 € / 800 g  |  Le Baron Rote Kidneybohnen · 1.99 € / 800 g
 ■ Linsen (linsen)
-   hofer Proteingerichte im Glas, Mediterrane Linsen Bowl (PRIMANA) · 0.55 € / 400 g
+   hofer –
    spar  S-BUDGET Linsen · 1.19 € / 800 g  |  S-BUDGET Rote Linsen · 1.19 € / 500 g  |  SPAR Tellerlinsen · 0.99 € / 380 g
    billa Clever Linsen · 1.39 € / 800 g  |  Sera Rote Linsen · 3.99 € / 900 g  |  BILLA Dampfgegarte Linsen · 1.49 € / 310 g
 ■ Suppenwürfel / Brühe (bruehe)
@@ -403,7 +403,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Sonnleiten Rotwein Cuvée · 2.59 € / 750 ml  |  Feine Rebe Blauer Zweigelt 2022 · 3.99 € / 750 ml  |  Krispel Klasse Steira Welschriesling 2024 · 3.99 € / 750 ml
    billa Wegenstein Grüner Veltliner · 2.99 € / 1000 ml  |  Wegenstein Welschriesling · 2.99 € / 1000 ml  |  Wegenstein Grüner Veltliner Edition Österreich · 3.49 € / 750 ml
 ■ Olivenöl (olivenoel)
-   hofer Rio Mare, Olivenöl · 6.99 € / 480 ml
+   hofer –
    spar  DESPAR Olio Extra Vergine di Oliva · 3.99 € / 250 ml  |  SPAR Natives Olivenöl extra 100% aus Griechenland · 11.99 € / 750 ml  |  Notos Natives Olivenöl Extra · 12.99 € / 750 ml
    billa Clever Raffiniertes Olivenöl · 5.99 € / 1000 ml  |  Clever Natives Olivenöl Extra · 6.99 € / 750 ml  |  BILLA Griechisches Olivenöl · 10.99 € / 1000 ml  |  BILLA Griechisches Olivenöl · 4.49 € / 250 ml
 ■ Speiseöl (oel)
@@ -411,7 +411,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  S-BUDGET Maiskeimöl · 1.89 € / 1000 ml  |  S-BUDGET Reines Rapsöl · 1.89 € / 1000 ml  |  S-BUDGET 100% Reines Sonnenblumenöl · 3.79 € / 2000 ml
    billa Clever Rapsöl · 1.89 € / 1000 ml  |  Clever Rapsöl · 1.89 € / 1000 ml  |  Clever Sonnenblumenöl · 3.79 € / 2000 ml
 ■ Essig (essig)
-   hofer Genießerfässchen, Balsamico (KING'S CROWN) · 1.99 € / 300 ml  |  Fruchtbalsamessig, Mango (GOURMET FINEST CUISINE) · 1.99 € / 250 ml  |  Fruchtbalsamessig, Granatapfel (GOURMET FINEST CUISINE) · 1.99 € / 250 ml
+   hofer Fruchtbalsamessig, Mango (GOURMET FINEST CUISINE) · 1.99 € / 250 ml  |  Fruchtbalsamessig, Granatapfel (GOURMET FINEST CUISINE) · 1.99 € / 250 ml  |  Fruchtbalsamessig, Feige (GOURMET FINEST CUISINE) · 1.99 € / 250 ml
    spar  Stift Klosterneuburg Rotwein Essig vom St. Laurent · 5.90 € / 250 ml
    billa Clever Aceto Balsamico di Modena · 1.59 € / 500 ml  |  Clever Condimento Balsamico Bianco · 1.59 € / 500 ml  |  BILLA Rotweinessig · 1.99 € / 500 ml
 ■ Salz (salz)
@@ -419,7 +419,7 @@ Stand je Laden: hofer 2026-11-27 (aktuell), spar 2026-09-27 (ältere Daten), bil
    spar  Schenkel Meersalz fein · 1.23 € / 500 g  |  Schenkel Meersalz grob · 1.23 € / 500 g  |  Baron de Sel Himalaya Salz Algen · 2.66 € / 500 g
    billa Odina Meersalz fein unjodiert · 1.89 € / 1000 g  |  Odina Feines Meersalz Unjodiert · 1.51 € / 500 g  |  Odina Meersalz · 1.51 € / 400 g
 ■ Pfeffer (pfeffer)
-   hofer Aufschnitt hauchfein, Pfeffer (GENUSS 100% AUS ÖSTERREICH) · 2.99 € / 150 g
+   hofer –
    spar  Kotányi Pfeffer schwarz ganz 36g · 3.99 € / 36 g  |  Kotányi Pfeffer bunt 35g · 3.99 € / 35 g  |  Stay Spiced! Weißer Pfeffer ganz 70g · 9.99 € / 70 g
    billa Clever Pfeffer Schwarz Gemahlen · 1.69 € / 100 g  |  BILLA Pfeffer schwarz gemahlen · 0.85 € / 41 g  |  Clever Pfeffer Bunt Ganz · 1.69 € / 70 g
 ■ Paprikapulver (paprikapulver)
