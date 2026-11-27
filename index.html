@@ -387,6 +387,15 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
 .busy-card small { color: var(--muted); font-size: 13.5px; margin-bottom: 8px; }
 .spin { width: 40px; height: 40px; border-radius: 50%; border: 4px solid var(--accent-soft); border-top-color: var(--accent-text); animation: rot .8s linear infinite; margin-bottom: 6px; }
 @keyframes rot { to { transform: rotate(360deg); } }
+.dres { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; margin-bottom: 10px; }
+.dres-t { font-weight: 750; font-size: 16.5px; line-height: 1.3; }
+.dres-m { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 13px; color: var(--muted); margin-top: 4px; }
+.dres-m .stars { color: var(--gold); font-weight: 750; }
+.dres-m span { display: inline-flex; align-items: center; gap: 4px; }
+.dres p { margin: 8px 0 10px; font-size: 14.5px; color: var(--muted); }
+.dres-b { display: flex; gap: 8px; flex-wrap: wrap; }
+.dres-b a.pill { text-decoration: none; }
+.pill.acc { background: var(--grad); color: #fff; border-color: transparent; }
 .opt .tag-ai { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 750; color: #fff; background: var(--grad); border-radius: 999px; padding: 1px 7px; vertical-align: 1px; }
 #toast { position: fixed; left: 50%; bottom: calc(var(--tabh) + 22px + env(safe-area-inset-bottom)); transform: translate(-50%, 16px); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 550; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 30; max-width: calc(100% - 32px); display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
@@ -1644,6 +1653,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
     note: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
     undo: '<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
     sliders: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>'
   };
   function ic(n, s) {
@@ -1774,7 +1784,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     var showHint = isIOS() && !isStandalone() && !lsGet(HINT_KEY);
     var dr = loadDraft(), n = S.recipes.length;
     if (S.folder !== 'all' && S.folder !== 'fav' && !folderById(S.folder)) S.folder = 'all';
-    return top('Karim’s Rezepte', 'Rezepte', n ? '<button class="round" data-a="sort-open" aria-label="Sortieren">' + ic('sort', 20) + '</button>' : '') +
+    return top('Karim’s Rezepte', 'Rezepte', '<button class="round" data-a="discover" aria-label="Rezepte im Internet suchen">' + ic('globe', 20) + '</button>' + (n ? '<button class="round" data-a="sort-open" aria-label="Sortieren">' + ic('sort', 20) + '</button>' : '')) +
       '<main class="wrap">' +
       (showHint ? '<div class="hint">' + ic('share', 20) + '<span>Tippe in Safari auf <b>Teilen</b> → <b>Zum Home-Bildschirm</b>. Öffne die App danach immer über das Symbol – Safari und App speichern Rezepte getrennt.</span><button class="x" data-a="dismiss-hint" aria-label="Hinweis schließen">' + ic('x', 18) + '</button></div>' : '') +
       (dr ? '<div class="draft">' + ic('pencil', 20) + '<span><b>Unfertiges Rezept</b><small>' + esc(trim(dr.title) || 'Ohne Titel') + '</small></span><button class="go" data-a="draft-go">Weiter</button><button class="x" data-a="draft-del" aria-label="Entwurf verwerfen">' + ic('x', 18) + '</button></div>' : '') +
@@ -1800,7 +1810,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     var head = '<div class="list-head"><h2 class="sec">' + label + ' · ' + list.length + '</h2>' +
       (f ? '<button class="linkbtn" data-a="folder-edit" data-f="' + esc(f.id) + '">' + ic('pencil', 15) + 'Ordner bearbeiten</button>' : '') + '</div>';
     if (!list.length) {
-      var msg = S.query ? 'Nichts gefunden – versuch einen anderen Suchbegriff.'
+      var msg = S.query ? 'Nichts gefunden.<br><br><button class="btn accent small" data-a="discover-q">' + ic('globe', 18) + '„' + esc(S.query) + '“ im Internet suchen</button>'
         : f ? 'Dieser Ordner ist noch leer. Öffne ein Rezept und tippe auf <b>Ordner</b>.'
         : 'Noch keine Favoriten. Tippe in einem Rezept auf den <b>Stern</b>.';
       return head + '<div class="empty"><p>' + msg + '</p></div>';
@@ -2608,7 +2618,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     var c = aiCfg(), on = aiOn(), prov = S.aiProv || c.provider || 'claude';
     var tg = function (a, val, label) { return '<button class="' + (val ? '' : 'off') + '" data-a="' + a + '" aria-pressed="' + val + '">' + ic(val ? 'check' : 'x', 16) + label + '</button>'; };
     var head = '<section class="panel" id="ki"><h2 class="sec">KI-Erkennung</h2>' +
-      '<p>Mit KI versteht die App auch unordentliche Texte, Rezepte von Freunden, Fotos und Screenshots – und übersetzt auf Deutsch. Dafür brauchst du einen eigenen API-Schlüssel. Er bleibt nur auf diesem Gerät und kommt in kein Backup.</p>';
+      '<p>Mit KI versteht die App auch unordentliche Texte, Rezepte von Freunden, Fotos und Screenshots, übersetzt auf Deutsch, sucht gut bewertete Rezepte im Internet (🌐 oben bei Rezepte) und liest Rezept-Links. Dafür brauchst du einen eigenen API-Schlüssel. Er bleibt nur auf diesem Gerät und kommt in kein Backup.</p>';
     if (on) {
       return head + '<p class="note-box">' + ic('check', 18) + '<span><b>Aktiv:</b> ' + AI_NAME[c.provider] + ' · ' + esc(c.model || AI_DEF[c.provider]) + ' · Schlüssel …' + esc(c.key.slice(-4)) + '</span></p>' +
         '<div class="store-tg">' + tg('ai-auto', c.auto, 'Beim Einfügen automatisch') + tg('ai-translate', c.translate, 'Auf Deutsch übersetzen') + '</div>' +
@@ -2623,6 +2633,145 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       field('API-Schlüssel', '<input type="password" data-bind="aikey" value="' + esc(S.aiKey || '') + '" placeholder="' + (prov === 'claude' ? 'sk-ant-…' : 'AIza…') + '" autocomplete="off" autocapitalize="off" spellcheck="false">') +
       '<details><summary>Modell ändern (optional)</summary>' + field('Modell', '<input data-bind="aimodel" value="' + esc(S.aiModel || '') + '" placeholder="' + AI_DEF[prov] + '" autocomplete="off" autocapitalize="off" spellcheck="false">') + '</details>' +
       '<div class="btn-row"><button class="btn accent" data-a="ai-save">' + ic('check', 18) + 'Speichern &amp; testen</button></div></section>';
+  }
+
+  // ---------- Rezepte im Internet finden (KI mit Websuche) ----------
+  var DISC_KEY = 'kochbuch.discover.v1';
+  var DISC_SUGGEST = ['Schnelles Abendessen', 'High Protein Meal Prep', 'Vegetarisch & einfach', 'Wiener Klassiker', 'One-Pot Pasta', 'Saftiger Schokokuchen', 'Airfryer Rezepte', 'Gesundes Frühstück'];
+  var DISC_SYSTEM = [
+    'Du findest für die Koch-App „Karim’s Rezepte“ (Nutzer in Wien) echte, gut bewertete Rezepte im Internet.',
+    'Nutze die Websuche (gerne auf Deutsch und auf Englisch) und such gezielt nach Rezeptseiten mit vielen guten Bewertungen, z. B. Chefkoch, Gutekueche.at, Ichkoche.at, Kitchen Stories, Lecker, EAT SMARTER, BBC Good Food, Allrecipes, Serious Eats oder bekannten Food-Blogs.',
+    'Gib nur Rezepte zurück, deren Seite du in den Suchergebnissen gesehen hast, und nur den direkten Link zur Rezeptseite. Erfinde keine Links und keine Bewertungen.',
+    'Liefere 6 bis 10 verschiedene Rezepte, die beste Mischung aus Bewertung und Passung zuerst.',
+    'Antworte zum Schluss ausschließlich mit JSON: {"recipes": [{"title": "", "url": "", "site": "", "rating": 0, "ratingCount": 0, "minutes": 0, "description": ""}]}.',
+    'title und description (ein kurzer Satz) auf Deutsch. rating von 0 bis 5 und ratingCount nur, wenn du sie gesehen hast, sonst 0. minutes nur, wenn bekannt, sonst 0.'
+  ].join('\n');
+  function anthropicTools(system, userText, tools, cfg) {
+    var c = cfg || aiCfg(), model = c.model || AI_DEF.claude;
+    var ctl = window.AbortController ? new AbortController() : null;
+    aiAbort = ctl;
+    var messages = [{ role: 'user', content: userText }], all = [];
+    var step = function (n) {
+      return fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST', signal: ctl ? ctl.signal : undefined,
+        headers: { 'content-type': 'application/json', 'x-api-key': c.key, 'anthropic-version': '2026-10-21', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify({ model: model, max_tokens: 8000, system: system, messages: messages, tools: tools })
+      }).then(readJson).then(function (d) {
+        all = all.concat(d.content || []);
+        if (d.stop_reason === 'pause_turn' && n < 3) { messages = messages.concat([{ role: 'assistant', content: d.content }]); return step(n + 1); }
+        return all;
+      });
+    };
+    return step(0);
+  }
+  function geminiTools(system, userText, tools, cfg) {
+    var c = cfg || aiCfg(), model = c.model || AI_DEF.gemini;
+    var ctl = window.AbortController ? new AbortController() : null;
+    aiAbort = ctl;
+    return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
+      method: 'POST', signal: ctl ? ctl.signal : undefined, headers: { 'content-type': 'application/json', 'x-goog-api-key': c.key },
+      body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: userText }] }], tools: tools, generationConfig: { temperature: 0.3 } })
+    }).then(readJson).then(function (d) {
+      var cand = d.candidates && d.candidates[0] || {};
+      var parts = (cand.content && cand.content.parts) || [];
+      var g = cand.groundingMetadata || {};
+      return { text: parts.map(function (x) { return x.text || ''; }).join(''), urls: (g.groundingChunks || []).map(function (ch) { return ch.web && ch.web.uri; }).filter(Boolean) };
+    });
+  }
+  function jsonFrom(t) {
+    t = String(t || '').replace(/```(?:json)?/g, '');
+    var a = t.indexOf('{'), b = t.lastIndexOf('}');
+    if (a < 0 || b <= a) throw new Error('Die KI hat keine Liste geschickt');
+    return JSON.parse(t.slice(a, b + 1));
+  }
+  function normUrl(u) { return String(u || '').replace(/^https?:\/\/(www\.)?/i, '').replace(/[#?].*$/, '').replace(/\/$/, '').toLowerCase(); }
+  function discoverSearch(q) {
+    var c = aiCfg(), userText = 'Suche Rezepte für: ' + q;
+    var p = c.provider === 'gemini'
+      ? geminiTools(DISC_SYSTEM, userText, [{ google_search: {} }]).then(function (r) { return { text: r.text, seen: null }; })
+      : anthropicTools(DISC_SYSTEM, userText, [{ type: 'web_search_20250305', name: 'web_search', max_uses: 4, user_location: { type: 'approximate', city: 'Wien', country: 'AT', timezone: 'Europe/Vienna' } }]).then(function (blocks) {
+          var seen = {};
+          blocks.forEach(function (b) { if (b.type === 'web_search_tool_result' && Array.isArray(b.content)) b.content.forEach(function (r) { if (r && r.url) seen[normUrl(r.url)] = 1; }); });
+          return { text: blocks.filter(function (b) { return b.type === 'text'; }).map(function (b) { return b.text; }).join(''), seen: seen };
+        });
+    return p.then(function (r) {
+      var j = jsonFrom(r.text), list = Array.isArray(j.recipes) ? j.recipes : [];
+      list = list.filter(function (x) { return x && x.title && /^https?:\/\//i.test(x.url); }).map(function (x) {
+        return { title: trim(x.title), url: trim(x.url), site: trim(x.site) || (x.url.match(/^https?:\/\/(?:www\.)?([^\/]+)/i) || [0, ''])[1],
+          rating: +x.rating > 0 && +x.rating <= 5 ? +x.rating : 0, count: +x.ratingCount > 0 ? Math.round(+x.ratingCount) : 0, minutes: +x.minutes > 0 ? Math.round(+x.minutes) : 0, desc: trim(x.description) };
+      });
+      // Nur Links, die wirklich in den Suchergebnissen vorkamen (keine erfundenen Seiten)
+      if (r.seen && Object.keys(r.seen).length) {
+        var ok = list.filter(function (x) { return r.seen[normUrl(x.url)]; });
+        if (ok.length) list = ok;
+      }
+      return list.slice(0, 10);
+    });
+  }
+  function importFromUrl(url) {
+    var c = aiCfg(), sys = aiSystem(c.translate) + '\nLies die Rezeptseite mit dem Werkzeug zum Abrufen von Webseiten (web_fetch bzw. URL-Kontext). Antworte zum Schluss nur mit dem JSON-Objekt.';
+    var userText = 'Lies das Rezept auf dieser Seite und gib es als JSON zurück: ' + url;
+    var p = c.provider === 'gemini'
+      ? geminiTools(sys, userText, [{ url_context: {} }]).then(function (r) { return r.text; })
+      : anthropicTools(sys, userText, [{ type: 'web_fetch_20250910', name: 'web_fetch', max_uses: 2, max_content_tokens: 40000 }]).then(function (blocks) {
+          return blocks.filter(function (b) { return b.type === 'text'; }).map(function (b) { return b.text; }).join('');
+        });
+    return p.then(parseAiJson);
+  }
+  function runDiscover(q) {
+    q = trim(q);
+    if (!q) { toast('Gib zuerst ein, worauf du Lust hast.'); return; }
+    if (!aiOn()) { S.sheet = { type: 'ai-need', why: 'search' }; render(); return; }
+    S.disc = { q: q, results: null };
+    busy('KI sucht Rezepte im Internet …');
+    discoverSearch(q).then(function (list) {
+      busy(null);
+      S.disc = { q: q, results: list, t: Date.now() };
+      lsSet(DISC_KEY, JSON.stringify(S.disc));
+      if (S.view === 'discover') rerender();
+      if (!list.length) toast('Keine passenden Rezepte gefunden – versuch es anders zu formulieren.');
+    }).catch(function (err) {
+      busy(null);
+      if (err && err.name === 'AbortError') return;
+      toast('Suche fehlgeschlagen: ' + aiErrText(err) + (/web search|not enabled/i.test(err && err.message) ? ' (Websuche in der Claude-Konsole aktivieren)' : ''));
+    });
+  }
+  function runImportUrl(url, idx) {
+    busy('KI liest das Rezept von der Webseite …');
+    importFromUrl(url).then(function (a) {
+      busy(null);
+      if (!a.ingredients.length && !a.steps.length) { toast('Die Seite konnte nicht gelesen werden. Öffne sie in Safari und nutze „Rezept aus Webseite“.'); return; }
+      if (idx != null && S.disc && S.disc.results && S.disc.results[idx]) { S.disc.results[idx].done = true; lsSet(DISC_KEY, JSON.stringify(S.disc)); }
+      finishImport({ title: a.title, minutes: a.minutes, servings: a.servings, source: url, notes: a.notes, image: '', ingredients: a.ingredients, steps: a.steps }, url);
+    }).catch(function (err) {
+      busy(null);
+      if (err && err.name !== 'AbortError') toast('Import fehlgeschlagen: ' + aiErrText(err));
+    });
+  }
+  function viewDiscover() {
+    var d = S.disc || lsJson(DISC_KEY, null) || { q: '', results: null };
+    S.disc = d;
+    var list = d.results;
+    var res = '';
+    if (list && list.length) {
+      res = '<div class="list-head"><h2 class="sec">' + list.length + ' Rezepte für „' + esc(d.q) + '“</h2></div>' + list.map(function (x, i) {
+        var m = [];
+        if (x.rating) m.push('<span class="stars">★ ' + String(x.rating.toFixed(1)).replace('.', ',') + '</span>' + (x.count ? '<span>(' + x.count.toLocaleString('de-AT') + ')</span>' : ''));
+        if (x.minutes) m.push('<span>' + ic('clock', 13) + x.minutes + ' Min.</span>');
+        m.push('<span>' + esc(x.site) + '</span>');
+        return '<div class="dres"><div class="dres-t">' + esc(x.title) + '</div><div class="dres-m">' + m.join('') + '</div>' + (x.desc ? '<p>' + esc(x.desc) + '</p>' : '<div style="height:10px"></div>') +
+          '<div class="dres-b"><a class="pill" href="' + esc(x.url) + '" target="_blank" rel="noopener">' + ic('link', 15) + 'Ansehen</a>' +
+          (x.done ? '<span class="pill">' + ic('check', 15) + 'Übernommen</span>' : '<button class="pill acc" data-a="disc-import" data-i="' + i + '">' + ic('download', 15) + 'Übernehmen</button>') + '</div></div>';
+      }).join('');
+    } else if (list) res = '<div class="empty"><p>Keine passenden Rezepte gefunden. Versuch es mit anderen Worten.</p></div>';
+    return bar(backBtn, '<span class="bar-title">Rezepte entdecken</span>', '') +
+      '<main class="wrap notab">' +
+      (aiOn() ? '' : '<div class="note-box">' + ic('info', 18) + '<span>Für die Suche im Internet brauchst du die <b>KI-Erkennung</b> (Mehr → KI-Erkennung). Am besten mit Claude – eine Suche kostet dort meist nur wenige Cent.</span></div>') +
+      '<p class="lead">Sag, worauf du Lust hast – die KI sucht im Internet nach echten, gut bewerteten Rezepten. Mit <b>Übernehmen</b> landet das Rezept in deiner Sammlung.</p>' +
+      '<label class="search">' + ic('search', 18) + '<input type="search" data-bind="discq" value="' + esc(d.q || '') + '" placeholder="z. B. cremiges Hähnchen-Curry, schnell" enterkeyhint="search" aria-label="Wonach suchen?"></label>' +
+      '<div class="fchips">' + DISC_SUGGEST.map(function (q) { return '<button class="fchip" data-a="disc-chip" data-q="' + esc(q) + '">' + esc(q) + '</button>'; }).join('') + '</div>' +
+      '<div class="btn-row"><button class="btn accent" data-a="disc-go">' + ic('globe', 18) + 'Im Internet suchen</button></div>' +
+      res + '</main>';
   }
 
   // ---------- Import ----------
@@ -2667,6 +2816,9 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     var rules = { title: p.title, minutes: p.minutes, servings: p.servings, source: p.source, notes: p.notes, image: p.image || '', ingredients: p.ingredients, steps: p.steps };
     var content = text.replace(/https?:\/\/\S+/g, '').replace(/^\s*(?:bild|image|foto|photo)\s*:.*$/gim, '').trim();
     var useAi = aiOn() && !opts.rules && (opts.ai || aiCfg().auto) && navigator.onLine !== false && content.length >= 25;
+    // Nur ein Link zu einer Rezeptseite (nicht Video-Apps/Osta, die erst im Browser entstehen): KI liest die Seite
+    var onlyUrl = content.length < 25 && (text.match(/https?:\/\/\S+/) || [])[0];
+    if (onlyUrl && aiOn() && !opts.rules && navigator.onLine !== false && !/tiktok|instagram|youtu|facebook|ostarecipes|osta\.app|pinterest/i.test(onlyUrl)) { runImportUrl(onlyUrl); return; }
     if (!useAi) { finishImport(rules, text); return; }
     busy('KI liest das Rezept …');
     aiRecipe({ text: text.replace(/^\s*(?:bild|image|foto|photo)\s*:\s*https?:\/\/\S+\s*$/gim, '') }).then(function (a) {
@@ -2778,10 +2930,11 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
         return sheetWrap('Rezept hinzufügen', '<h2 class="sheet-t">Rezept hinzufügen</h2>' +
           '<button class="opt" data-a="paste"><span class="opt-ic accent">' + ic('clipboard') + '</span><span class="grow"><strong>Aus der Zwischenablage</strong><small>Nach Aktionstaste oder Kurzbefehl – wird automatisch erkannt</small></span></button>' +
           '<button class="opt" data-a="import"><span class="opt-ic">' + ic('wand') + '</span><span class="grow"><strong>Text einfügen</strong><small>Beschreibung von TikTok, Instagram, Webseite …</small></span></button>' +
+          '<button class="opt" data-a="discover"><span class="opt-ic">' + ic('globe') + '</span><span class="grow"><strong>Im Internet suchen <span class="tag-ai">KI</span></strong><small>Gut bewertete Rezepte finden und mit einem Tipp übernehmen</small></span></button>' +
           '<button class="opt" data-a="ai-photos"><span class="opt-ic">' + ic('camera') + '</span><span class="grow"><strong>Aus Fotos oder Screenshots <span class="tag-ai">KI</span></strong><small>Handgeschriebenes, Kochbuchseiten, Screenshots – bis zu 6 Bilder</small></span></button>' +
           '<button class="opt" data-a="new"><span class="opt-ic">' + ic('pencil') + '</span><span class="grow"><strong>Selbst schreiben</strong><small>Mit Foto, Zutaten und Schritten</small></span></button>');
       case 'ai-need':
-        return sheetWrap('KI einrichten', '<h2 class="sheet-t">Dafür brauchst du die KI</h2><p class="sheet-sub">Bilder kann nur die KI lesen. Richte sie einmal unter <b>Mehr → KI-Erkennung</b> mit einem API-Schlüssel ein – das dauert zwei Minuten.</p>' +
+        return sheetWrap('KI einrichten', '<h2 class="sheet-t">Dafür brauchst du die KI</h2><p class="sheet-sub">' + (s.why === 'search' ? 'Die Suche im Internet übernimmt die KI.' : 'Bilder kann nur die KI lesen.') + ' Richte sie einmal unter <b>Mehr → KI-Erkennung</b> mit einem API-Schlüssel ein – das dauert zwei Minuten.</p>' +
           '<button class="btn accent wide" data-a="ai-setup">' + ic('wand', 18) + 'Jetzt einrichten</button>');
       case 'sort':
         return sheetWrap('Sortieren', '<h2 class="sheet-t">Sortieren</h2>' + Object.keys(SORTS).map(function (k) {
@@ -2914,7 +3067,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if ((v === 'detail' || v === 'cook') && !byId(S.id)) v = S.view = S.root;
     if (v === 'cook' && !byId(S.id).steps.length) v = S.view = 'detail';
     if (v === 'form' && !S.form) v = S.view = S.root;
-    var html = v === 'detail' ? viewDetail() : v === 'cook' ? viewCook() : v === 'form' ? viewForm() : v === 'import' ? viewImport()
+    var html = v === 'detail' ? viewDetail() : v === 'cook' ? viewCook() : v === 'form' ? viewForm() : v === 'import' ? viewImport() : v === 'discover' ? viewDiscover()
       : v === 'plan' ? viewPlan() : v === 'shop' ? viewShop() : v === 'more' ? viewMore() : viewRecipes();
     var tabs = !!ROOTS[v];
     var still = S.sheet && lastSheet === S.sheet.type + ':' + v;
@@ -3320,6 +3473,11 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
       }
 
       // Mehr
+      case 'discover': nav('discover', {}, true); break;
+      case 'discover-q': S.disc = { q: S.query, results: null }; nav('discover', {}, true); runDiscover(S.query); break;
+      case 'disc-chip': S.disc = { q: el.getAttribute('data-q'), results: S.disc && S.disc.results }; runDiscover(S.disc.q); rerender(); break;
+      case 'disc-go': runDiscover(S.disc && S.disc.q); break;
+      case 'disc-import': { var dr2 = S.disc && S.disc.results && S.disc.results[+el.getAttribute('data-i')]; if (dr2) runImportUrl(dr2.url, +el.getAttribute('data-i')); break; }
       case 'ai-photos':
         if (!aiOn()) { S.sheet = { type: 'ai-need' }; render(); break; }
         S.sheet = null; render(); document.getElementById('aiFiles').click();
@@ -3376,6 +3534,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if (b === 'importText') S.importText = t.value;
     if (b === 'extraText') S.extraText = t.value;
     if (b === 'aikey') S.aiKey = t.value;
+    if (b === 'discq') { S.disc = S.disc || { q: '', results: null }; S.disc.q = t.value; }
     if (b === 'aimodel') S.aiModel = t.value;
     if (S.sheet) {
       if (b === 'fname') S.sheet.name = t.value;
@@ -3397,6 +3556,7 @@ body.cooking #dock { bottom: calc(96px + env(safe-area-inset-bottom)); }
     if (b === 'extraText') { e.preventDefault(); addExtra(); }
     else if (b === 'fname') { e.preventDefault(); var sv = app.querySelector('[data-a="folder-save"]'); if (sv) sv.click(); }
     else if (b === 'note') { e.preventDefault(); var dn = app.querySelector('[data-a="day-note"]'); if (dn) dn.click(); }
+    else if (b === 'discq') { e.preventDefault(); t.blur(); runDiscover(t.value); }
     else if (t.hasAttribute('data-ing') && S.form) {
       // Enter springt zur nächsten Zutat bzw. legt eine neue an
       e.preventDefault();
