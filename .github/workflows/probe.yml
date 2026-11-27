@@ -2,19 +2,18 @@ name: Preisquellen prüfen (einmalig)
 on:
   push:
     branches: [probe-preise]
+permissions:
+  contents: write
 jobs:
   probe:
+    if: "!contains(github.event.head_commit.message, '[ergebnis]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v5
         with: { node-version: 22 }
       - run: node preise-update.mjs
-      - run: ls -la preise.json produkte.json preise-check.txt && gzip -k produkte.json && ls -la produkte.json.gz
-      - uses: actions/upload-artifact@v4
-        with:
-          name: preise-test
-          path: |
-            preise.json
-            produkte.json
-            preise-check.txt
+      - run: |
+          mkdir -p ergebnis && cp preise.json produkte.json preise-check.txt ergebnis/
+          git config user.name "github-actions" && git config user.email "github-actions@users.noreply.github.com"
+          git add ergebnis && git commit -m "Testergebnis [ergebnis]" && git push
