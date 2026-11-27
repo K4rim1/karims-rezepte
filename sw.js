@@ -1,5 +1,5 @@
 // Offline-Unterstützung: immer zuerst das Netz (damit Updates ankommen), sonst der Zwischenspeicher.
-const CACHE = 'kochbuch-v6';
+const CACHE = 'kochbuch-v7';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
