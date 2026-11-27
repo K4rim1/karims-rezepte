@@ -1,0 +1,15 @@
+chefkoch_rs | 403 https://www.chefkoch.de/rs/s0/h%C3%A4hnchen+curry/Rezepte.html | 0 B | 0 Treffer |  | 
+chefkoch_q | 403 https://www.chefkoch.de/suche?q=h%C3%A4hnchen+curry | 0 B | 0 Treffer |  | 
+gutekueche_s | 404 https://www.gutekueche.at/suche?s=h%C3%A4hnchen+curry | 37283 B | 0 Treffer |  |       2 Star      11 star 
+gutekueche_q | 404 https://www.gutekueche.at/suche?q=h%C3%A4hnchen+curry | 37283 B | 0 Treffer |  |       2 Star      11 star 
+ichkoche_s | 200 https://www.ichkoche.at/suche?search=h%C3%A4hnchen+curry | 212466 B | 0 Treffer |  |      24 star      43 stars 
+ichkoche_q | 200 https://www.ichkoche.at/suche?q=h%C3%A4hnchen+curry | 226801 B | 8 Treffer | /bunte-curry-huehnerspiesse-rezept-10073 /butter-chicken-mit-schwarzwurzeln-rezept-242785 /chili-joghurthuhn-mit-tomaten-paprikasalsa-rezept-9906  |      24 star      43 stars 
+allrecipes | 403 https://www.allrecipes.com/search?q=chicken+curry | 680479 B | 0 Treffer |  |      54 STAR      13 Star     194 star 
+bbcgoodfood | 200 https://www.bbcgoodfood.com/search?q=chicken+curry | 838338 B | 31 Treffer | /recipes/30-minute-chicken-curry /recipes/ayam-kapitan-captains-curry /recipes/cape-malay-chicken-curry-yellow-rice  |      60 RatingCount      86 Star       1 Stars      60 ratingCount      60 ratingValue     217 star     186 stars 
+ddg | 200 https://html.duckduckgo.com/html/?q=h%C3%A4hnchen+curry+rezept | 33622 B | 10 Treffer | uddg=https%3A%2F%2Femmikochteinfach.de%2Fhaehnchen%2Dcurry%2Dgeschnetzeltes%2F uddg=https%3A%2F%2Fwww.chefkoch.de%2Frs%2Fs0%2Fcurry%2Bh%25C3%25A4hnchen%2FRezepte.html uddg=https%3A%2F%2Fwww.chefkoch.de%2Frs%2Fs0%2Fh%25C3%25A4hnchencurry%2FRezepte.html  | 
+bing | 200 https://www.bing.com/search?q=h%C3%A4hnchen+curry+rezept&setlang=de | 120020 B | 1 Treffer | https://www.bing.com/search?q=hähnchen+curry+rezept&amp;setlang=de  |      23 Star       4 star 
+lecker | 200 https://www.lecker.de/suche?search=h%C3%A4hnchen+curry | 124974 B | 0 Treffer |  | 
+eatsmarter | 200 https://eatsmarter.de/suche/rezepte?ft=h%C3%A4hnchen+curry | 316081 B | 55 Treffer | eatsmarter.de/rezepte/asiatische-nudelsuppe-mit-haehnchenfleisch-0 eatsmarter.de/rezepte/brokkoli-quinoa-salat-mit-rote-bete-und-haehnchenbrust eatsmarter.de/rezepte/chicken-burger-mit-ananas  |       1 Bewertung       6 Star    1204 star      48 stars 
+kitchenstories | 200 https://www.kitchenstories.com/?s=h%C3%A4hnchen+curry | 238684 B | 0 Treffer |  |       9 star 
+gutekueche_home | 200 https://www.gutekueche.at/ | 199208 B | 0 Treffer |  |      10 Star      15 star 
+ichkoche_home | 200 https://www.ichkoche.at/ | 294130 B | 1 Treffer | action="/suche"  |      25 star      43 stars 
